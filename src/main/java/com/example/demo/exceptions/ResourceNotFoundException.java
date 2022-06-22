@@ -1,5 +1,6 @@
 package com.example.demo.exceptions;
 
+@SuppressWarnings("serial")
 public class ResourceNotFoundException extends RuntimeException{
 
 	

@@ -18,13 +18,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.CandidateDto;
+import com.example.demo.dto.JobDto;
+import com.example.demo.entities.Candidate;
+import com.example.demo.entities.Job;
+import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.services.CandidateService;
 
 @RestController
 @RequestMapping("/api")
 public class CandidateController {
 
-
+	/*
+	 * @Autowired private CandidateRepository candidateRepository;
+	 */
+	
 	@Autowired
 	private CandidateService candidateService;
 	
@@ -44,11 +51,11 @@ public class CandidateController {
 		
 	}
 	
-	@SuppressWarnings("unchecked")
+	
 	@DeleteMapping("/candidates/{c_id}")
 	public ResponseEntity<?> deleteCandidate(@PathVariable("c_id")Integer c_id){
 		this.candidateService.deleteCandidate(c_id);
-		return new  ResponseEntity(Map.of("message","Candidate delete sucesssfully!!"),HttpStatus.OK);
+		return new  ResponseEntity<>(Map.of("message","Candidate delete sucesssfully!!"),HttpStatus.OK);
 	}
 	
 	@GetMapping("/candidates")
@@ -61,4 +68,14 @@ public class CandidateController {
 		return ResponseEntity.ok(this.candidateService.getCandidateById(c_id));
 		
 	}
+	
+	/*
+	 * @PostMapping("/postAll") public Candidate applyJob(@RequestBody JobDto
+	 * jobDto) { return candidateRepository.save(jobDto.get);
+	 * 
+	 * }
+	 * 
+	 * @GetMapping("/getAll") public List<Candidate> findAllInfo(){ return
+	 * candidateRepository.findAll(); }
+	 */
 }

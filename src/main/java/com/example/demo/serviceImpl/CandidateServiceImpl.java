@@ -42,8 +42,6 @@ public class CandidateServiceImpl implements CandidateService{
 		
 	}
 
-
-	
 	public Candidate dtoToCandidate(CandidateDto candidateDto) {
 		Candidate candidate2=new Candidate();
 		candidate2.setC_id(candidateDto.getC_id());
