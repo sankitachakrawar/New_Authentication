@@ -1,5 +1,7 @@
 package com.example.demo.dto;
 
+
+
 public class JobDto {
 
 	private int j_id;
@@ -7,6 +9,8 @@ public class JobDto {
 	private String title;
 	
 	private String location;
+	private String apply;
+	//private Date postTime;
 
 	public int getJ_id() {
 		return j_id;
@@ -32,5 +36,15 @@ public class JobDto {
 		this.location = location;
 	}
 	
+	public void setApply(String apply) {
+		this.apply = apply;
+	}
+	public String getApply() {
+		return apply;
+	}
 	
+	/*
+	 * public void setPostTime(Date postTime) { this.postTime = postTime; } public
+	 * Date getPostTime() { return postTime; }
+	 */
 }

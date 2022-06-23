@@ -8,6 +8,10 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,13 +21,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.dto.CandidateDto;
-import com.example.demo.dto.JobDto;
-import com.example.demo.entities.Candidate;
-import com.example.demo.entities.Job;
-import com.example.demo.repositories.CandidateRepository;
-import com.example.demo.services.CandidateService;
 
+import com.example.demo.dto.CandidateDto;
+import com.example.demo.entities.Candidate;
+import com.example.demo.services.CandidateService;
 @RestController
 @RequestMapping("/api")
 public class CandidateController {
@@ -31,6 +32,8 @@ public class CandidateController {
 	/*
 	 * @Autowired private CandidateRepository candidateRepository;
 	 */
+
+	
 	
 	@Autowired
 	private CandidateService candidateService;
@@ -68,6 +71,9 @@ public class CandidateController {
 		return ResponseEntity.ok(this.candidateService.getCandidateById(c_id));
 		
 	}
+	
+	
+	
 	
 	/*
 	 * @PostMapping("/postAll") public Candidate applyJob(@RequestBody JobDto

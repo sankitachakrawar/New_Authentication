@@ -105,4 +105,8 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		this.candidateRepository.delete(candidate);
 	}
+
+
+
+	
 }

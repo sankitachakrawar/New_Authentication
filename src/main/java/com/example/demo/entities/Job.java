@@ -1,5 +1,7 @@
 package com.example.demo.entities;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -7,6 +9,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Entity
 @Table
@@ -19,6 +24,10 @@ public class Job {
 	private String title;
 	
 	private String location;
+	@UpdateTimestamp
+	private Date postTime;
+	private String apply;
+	
 	
 	@ManyToOne
 	@JoinColumn(name="candidate_id")
@@ -55,6 +64,18 @@ public class Job {
 	public void setCandidate(Candidate candidate) {
 		this.candidate = candidate;
 	}
-	
+
+	public void setPostTime(Date postTime) {
+		this.postTime = postTime;
+	}
+	public Date getPostTime() {
+		return postTime;
+	}
+	public void setApply(String apply) {
+		this.apply = apply;
+	}
+	public String getApply() {
+		return apply;
+	}
 	
 }
