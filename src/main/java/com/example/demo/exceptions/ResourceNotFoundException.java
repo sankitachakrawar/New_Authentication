@@ -13,6 +13,9 @@ public class ResourceNotFoundException extends RuntimeException{
 		this.fieldName = fieldName;
 		this.fieldvalue = fieldvalue;
 	}
+	public ResourceNotFoundException(String string) {
+		// TODO Auto-generated constructor stub
+	}
 	public String getResourceName() {
 		return resourceName;
 	}

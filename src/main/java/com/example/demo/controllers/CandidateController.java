@@ -1,6 +1,9 @@
 package com.example.demo.controllers;
 
+
 import java.util.List;
+
+
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -8,10 +11,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.mail.MailException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-
 import com.example.demo.dto.CandidateDto;
 import com.example.demo.entities.Candidate;
 import com.example.demo.services.CandidateService;
+
+
 @RestController
 @RequestMapping("/api")
 public class CandidateController {
@@ -33,10 +33,11 @@ public class CandidateController {
 	 * @Autowired private CandidateRepository candidateRepository;
 	 */
 
-	
-	
 	@Autowired
 	private CandidateService candidateService;
+	
+	
+	
 	
 	@PostMapping("/candidates")
 	public ResponseEntity<CandidateDto> createCandidate(@Valid @RequestBody CandidateDto candidateDto){
@@ -72,8 +73,37 @@ public class CandidateController {
 		
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@PostMapping("/login")
+	public ResponseEntity<Candidate> createCandidate(@RequestBody Candidate candidate) throws Exception {
+		String email = candidate.getEmail();
+		String password = candidate.getPassword();
+		candidate = candidateService.loginCandidate(email, password);
+		//logger.info("Login Rest Controller Implementation : createUser() method");
+		//return ResponseEntity.ok().body(candidate);
+		
+		return new  ResponseEntity(Map.of("message","Candidate login sucesssfully!!"),HttpStatus.OK);
+	}
 	
 	
+}
+/*
+ * @RequestMapping("send-mail") public String send(String email) {
+ * 
+ * 
+ * candidate.setEmail("sankitachakrawar@gmail.com");
+ * 
+ * try { mailService.sendEmail(candidate); } catch (MailException mailException)
+ * { System.out.println(mailException); } return
+ * "Congratulations! Your mail has been send to the user."; }
+ * 
+ * }
+ */
+	
+	
+	
+	
+
 	
 	/*
 	 * @PostMapping("/postAll") public Candidate applyJob(@RequestBody JobDto
@@ -84,4 +114,4 @@ public class CandidateController {
 	 * @GetMapping("/getAll") public List<Candidate> findAllInfo(){ return
 	 * candidateRepository.findAll(); }
 	 */
-}
+

@@ -2,6 +2,7 @@ package com.example.demo.serviceImpl;
 
 import java.util.List;
 
+
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,6 +105,30 @@ public class CandidateServiceImpl implements CandidateService{
 		Candidate candidate=this.candidateRepository.findById(c_id).orElseThrow(()->new ResourceNotFoundException("candidate", "c_id", c_id));
 		
 		this.candidateRepository.delete(candidate);
+	}
+
+
+
+	@Override
+	public Candidate loginCandidate(String email, String password) throws Exception {
+		Candidate candidate = candidateRepository.findByEmail(email);
+		if (candidate == null) {
+			throw new Exception("You entered incorrect username.");
+		} else {
+			if (candidate.getEmail().equals(email) && candidate.getPassword().equals(password)) {
+				return candidate;
+			}
+			throw new Exception("You entered incorrect password.");
+		}
+		
+	}
+
+
+
+	@Override
+	public Candidate findByEmail(String email) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

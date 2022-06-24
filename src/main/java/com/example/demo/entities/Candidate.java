@@ -20,7 +20,7 @@ public class Candidate {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int c_id;
+	private long c_id;
 	
 	@Column(name="candidate_name" , nullable=false , length=100)
 	private String name;
@@ -31,11 +31,11 @@ public class Candidate {
 
 	private String address;
 
-	public int getC_id() {
+	public long getC_id() {
 		return c_id;
 	}
 
-	public void setC_id(int c_id) {
+	public void setC_id(long c_id) {
 		this.c_id = c_id;
 	}
 
