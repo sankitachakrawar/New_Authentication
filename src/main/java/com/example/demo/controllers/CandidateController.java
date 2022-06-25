@@ -67,7 +67,7 @@ public class CandidateController {
 		return ResponseEntity.ok(this.candidateService.getAllCandidates());
 		
 	}
-	@GetMapping("candidates/{c_id}")
+	@GetMapping("/candidates/{c_id}")
 	public ResponseEntity<CandidateDto> getSingleCandidate(@PathVariable Integer c_id){
 		return ResponseEntity.ok(this.candidateService.getCandidateById(c_id));
 		

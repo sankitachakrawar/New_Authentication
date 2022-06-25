@@ -1,7 +1,6 @@
 package com.example.demo.entities;
 
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "app_setting")
+@Table
 public class AppSettingsEntity implements Serializable {
 
 	/**
@@ -37,7 +36,7 @@ public class AppSettingsEntity implements Serializable {
 	}
 
 	@Id
-	@Column(name = "id")
+
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 

@@ -44,13 +44,15 @@ public class AuthController {
 	  @Autowired
 	    private AuthenticationManager authenticationManager;
 	
-	 @PostMapping("/signin")
+	 @PostMapping("/token")
 	 public ResponseEntity<String>  authenticateUser(@RequestBody CandidateDto candidate){
 		 Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken( candidate.getEmail(),
 				 				candidate.getPassword()));
 	  
 		 	SecurityContextHolder.getContext().setAuthentication(authentication); 
-		 	return new ResponseEntity<>("Candidate signed-in successfully!.", HttpStatus.OK); }
+		 	return new ResponseEntity<>("Candidate signed-in successfully!.", HttpStatus.OK);
+		
+	 }
 	
 	
 	@PostMapping("/forgot-pass")
