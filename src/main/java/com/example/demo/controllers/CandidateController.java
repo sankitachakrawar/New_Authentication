@@ -4,14 +4,17 @@ package com.example.demo.controllers;
 import java.util.List;
 
 
+
+
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.MailException;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,9 +23,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.example.demo.dto.CandidateDto;
+import com.example.demo.dto.ChangePasswordDto;
+import com.example.demo.dto.ErrorResponseDto;
+import com.example.demo.dto.ForgotPasswordDto;
+import com.example.demo.dto.SuccessResponseDto;
 import com.example.demo.entities.Candidate;
+import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.services.CandidateService;
+import com.example.demo.services.UserService;
 
 
 @RestController
@@ -36,7 +46,8 @@ public class CandidateController {
 	@Autowired
 	private CandidateService candidateService;
 	
-	
+	@Autowired
+	private UserService userService;
 	
 	
 	@PostMapping("/candidates")
@@ -47,7 +58,7 @@ public class CandidateController {
 	}
 	
 	@PutMapping("/candidates/{c_id}")
-	public ResponseEntity<CandidateDto> updateCandidate(@Valid @RequestBody CandidateDto candidateDto,@PathVariable Integer c_id){
+	public ResponseEntity<CandidateDto> updateCandidate(@Valid @RequestBody CandidateDto candidateDto,@PathVariable Long c_id){
 		
 		CandidateDto updatedCandidate=this.candidateService.updateCandidate(candidateDto, c_id);
 		
@@ -57,7 +68,7 @@ public class CandidateController {
 	
 	
 	@DeleteMapping("/candidates/{c_id}")
-	public ResponseEntity<?> deleteCandidate(@PathVariable("c_id")Integer c_id){
+	public ResponseEntity<?> deleteCandidate(@PathVariable("c_id")Long c_id){
 		this.candidateService.deleteCandidate(c_id);
 		return new  ResponseEntity<>(Map.of("message","Candidate delete sucesssfully!!"),HttpStatus.OK);
 	}
@@ -68,7 +79,7 @@ public class CandidateController {
 		
 	}
 	@GetMapping("/candidates/{c_id}")
-	public ResponseEntity<CandidateDto> getSingleCandidate(@PathVariable Integer c_id){
+	public ResponseEntity<CandidateDto> getSingleCandidate(@PathVariable Long c_id){
 		return ResponseEntity.ok(this.candidateService.getCandidateById(c_id));
 		
 	}
@@ -84,7 +95,41 @@ public class CandidateController {
 		
 		return new  ResponseEntity(Map.of("message","Candidate login sucesssfully!!"),HttpStatus.OK);
 	}
-	
+	@PutMapping("/changePass/{id}")
+	public ResponseEntity<?> changePasswords(@PathVariable(value = "id") Long userId,
+			@Valid @RequestBody ChangePasswordDto userBody, HttpServletRequest request)
+			throws ResourceNotFoundException {
+
+		try {
+
+			userService.changePassword(userId, userBody, request);
+			return new ResponseEntity<>(new SuccessResponseDto("password Updated", "password Updated succefully", null),
+					HttpStatus.OK);
+
+		} catch (ResourceNotFoundException e) {
+
+			return new ResponseEntity<>(new ErrorResponseDto(e.getMessage(), "Access Denied"), HttpStatus.BAD_GATEWAY);
+
+		}
+
+	}
+	@PutMapping("/forgot-pass-confirm")
+	public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordDto userBody, HttpServletRequest request)
+			throws ResourceNotFoundException {
+
+		try {
+
+			userService.forgotPasswordConfirm(userBody.getToken(), userBody, request);
+			return new ResponseEntity<>(new SuccessResponseDto("password Updated", "password Updated succefully", null),
+					HttpStatus.OK);
+
+		} catch (ResourceNotFoundException e) {
+
+			return new ResponseEntity<>(new ErrorResponseDto(e.getMessage(), "Access Denied"), HttpStatus.BAD_GATEWAY);
+
+		}
+
+	}
 	
 }
 /*

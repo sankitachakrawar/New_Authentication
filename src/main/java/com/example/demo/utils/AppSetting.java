@@ -1,5 +1,6 @@
 package com.example.demo.utils;
 import java.util.Iterator;
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,6 +24,7 @@ public class AppSetting {
 		// TODO Auto-generated constructor stub
 	}
 
+	@SuppressWarnings("rawtypes")
 	public AppSettingDto getAllAppSetting() {
 
 		AppSettingDto appSettings = new AppSettingDto();

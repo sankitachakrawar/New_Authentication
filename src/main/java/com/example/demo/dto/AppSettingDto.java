@@ -5,6 +5,7 @@ import java.util.Map;
 
 public class AppSettingDto {
 
+	@SuppressWarnings("unused")
 	private static final long serialVersionUID = 1L;
 
 	private final Map<String, String> settings = new HashMap<>();

@@ -1,5 +1,6 @@
 package com.example.demo.entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,14 +14,14 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+@SuppressWarnings("serial")
 @Entity
 @Table
-
-public class Candidate {
+public class Candidate implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long c_id;
+	private Long c_id;
 	
 	@Column(name="candidate_name" , nullable=false , length=100)
 	private String name;
@@ -30,12 +31,15 @@ public class Candidate {
 	private String password;
 
 	private String address;
+	
+	@Column(name = "is_active")
+	private Boolean isActive = true;
 
-	public long getC_id() {
+	public Long getC_id() {
 		return c_id;
 	}
 
-	public void setC_id(long c_id) {
+	public void setC_id(Long c_id) {
 		this.c_id = c_id;
 	}
 
@@ -71,7 +75,24 @@ public class Candidate {
 		this.address = address;
 	}
 	
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+	public Boolean getIsActive() {
+		return isActive;
+	}
+	
 	@OneToMany(mappedBy="candidate",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
 	private List<Job> jobs=new ArrayList<>();
+
+	public List<Job> getJobs() {
+		return jobs;
+	}
+
+	public void setJobs(List<Job> jobs) {
+		this.jobs = jobs;
+	}
+
 	
 }

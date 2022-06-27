@@ -2,7 +2,7 @@ package com.example.demo.services;
 
 public interface EmailServiceIntf {
 
-	//public void sendMessageWithAttachment();
+	public void sendMessageWithAttachment();
 
 	void sendSimpleMessage(String emailTo, String subject, String text);
 

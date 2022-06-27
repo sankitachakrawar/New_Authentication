@@ -1,20 +1,23 @@
 package com.example.demo.controllers;
 import java.util.Calendar;
 
+
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+
 
 import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ErrorResponseDto;
@@ -25,7 +28,7 @@ import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.services.*;
 import com.example.demo.utils.AppSetting;
 import com.example.demo.utils.jwtTokenUtil;
-import org.springframework.security.authentication.AuthenticationManager;
+
 @RestController
 public class AuthController {
 
@@ -41,8 +44,11 @@ public class AuthController {
 	@Autowired
 	private AppSetting appSetting;
 	
-	  @Autowired
-	    private AuthenticationManager authenticationManager;
+	@Autowired
+	 private AuthenticationManager authenticationManager;
+	
+	@Autowired
+	private LoggerServiceInterface loggerServiceInterface;
 	
 	 @PostMapping("/token")
 	 public ResponseEntity<String>  authenticateUser(@RequestBody CandidateDto candidate){
@@ -53,7 +59,13 @@ public class AuthController {
 		 	return new ResponseEntity<>("Candidate signed-in successfully!.", HttpStatus.OK);
 		
 	 }
-	
+	 @GetMapping("/logout")
+		public ResponseEntity<?> logoutUser(@RequestHeader("Authorization") String token, HttpServletRequest request) throws Exception {
+
+			loggerServiceInterface.logoutUser(token, ((CandidateDto) request.getAttribute("candidateData")).getC_id(), ((CandidateDto) request.getAttribute("candidateData")).getEmail());
+			return new ResponseEntity<>(new ErrorResponseDto("Logout Successfully", "logoutSuccess"), HttpStatus.OK);
+
+		}
 	
 	@PostMapping("/forgot-pass")
 	public ResponseEntity<?> forgotPass(@Valid @RequestBody ForgotPasswordRequestDto forgotPassBody, HttpServletRequest request) throws Exception {
@@ -76,7 +88,16 @@ public class AuthController {
 			return new ResponseEntity<>(new ErrorResponseDto(e.getMessage(), "userNotFound"), HttpStatus.NOT_FOUND);
 
 		}
-
+		
 	}
-	 
+	
+	/*
+	 * userServiceInterface.forgotPasswordConfirm(userBody.getToken(), userBody,
+	 * request); return new ResponseEntity<>(new
+	 * SuccessResponseDto("password Updated", "password Updated succefully", null),
+	 * HttpStatus.OK);
+	 * 
+	 */
+	
+	
 }

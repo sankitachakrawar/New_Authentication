@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 
 public class CandidateDto {
 
-	private long c_id;
+	private Long c_id;
 	
 	@NotEmpty
 	@Size(min=4,message="Name must be min of 4 characters !!")
@@ -25,11 +25,11 @@ public class CandidateDto {
 	@NotEmpty
 	private String address;
 
-	public long getC_id() {
+	public Long getC_id() {
 		return c_id;
 	}
 
-	public void setC_id(long c_id) {
+	public void setC_id(Long c_id) {
 		this.c_id = c_id;
 	}
 

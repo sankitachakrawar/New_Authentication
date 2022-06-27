@@ -59,4 +59,5 @@ public class LoggerDto {
 		this.expireAt = expireAt;
 
 	}
+
 }

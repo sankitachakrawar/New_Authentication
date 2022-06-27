@@ -21,7 +21,8 @@ public class CandidateServiceImpl implements CandidateService{
 
 
     private PasswordEncoder passwordEncoder;
-	@Autowired
+
+    @Autowired
 	private CandidateRepository candidateRepository;
 	
 	public CandidateServiceImpl(CandidateRepository candidateRepository) {
@@ -66,7 +67,7 @@ public class CandidateServiceImpl implements CandidateService{
 
 
 	@Override
-	public CandidateDto updateCandidate(CandidateDto candidateDto, Integer c_id) {
+	public CandidateDto updateCandidate(CandidateDto candidateDto, Long c_id) {
 		Candidate candidate = this.candidateRepository.findById(c_id).orElseThrow(()->new ResourceNotFoundException("candidate", "c_id", c_id));
 		candidate.setC_id(candidateDto.getC_id());
 		candidate.setName(candidateDto.getName());
@@ -83,7 +84,7 @@ public class CandidateServiceImpl implements CandidateService{
 
 
 	@Override
-	public CandidateDto getCandidateById(Integer c_id) {
+	public CandidateDto getCandidateById(Long c_id) {
 		Candidate candidate = this.candidateRepository.findById(c_id).orElseThrow(()->new ResourceNotFoundException("candidate", "c_id", c_id));
 		return this.candidateToDto(candidate);
 	}
@@ -101,7 +102,7 @@ public class CandidateServiceImpl implements CandidateService{
 
 
 	@Override
-	public void deleteCandidate(Integer c_id) {
+	public void deleteCandidate(Long c_id) {
 		Candidate candidate=this.candidateRepository.findById(c_id).orElseThrow(()->new ResourceNotFoundException("candidate", "c_id", c_id));
 		
 		this.candidateRepository.delete(candidate);
@@ -127,7 +128,7 @@ public class CandidateServiceImpl implements CandidateService{
 
 	@Override
 	public Candidate findByEmail(String email) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 

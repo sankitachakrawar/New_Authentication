@@ -12,21 +12,16 @@ public interface CandidateService {
 	
 	CandidateDto createCandidate(CandidateDto candidate);
 	
-	CandidateDto updateCandidate(CandidateDto candidate,Integer c_id);
+	CandidateDto updateCandidate(CandidateDto candidate, Long c_id);
 	
-	CandidateDto getCandidateById(Integer c_id);
+	CandidateDto getCandidateById(Long c_id);
 	
 	List<CandidateDto> getAllCandidates();
 	
-	void deleteCandidate(Integer c_id);
+	void deleteCandidate(Long c_id);
 
 	public Candidate loginCandidate(String email, String password) throws Exception;
 	Candidate findByEmail(String email);
 
-
-	
-	
-	
-	
 	
 }

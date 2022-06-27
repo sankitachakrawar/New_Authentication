@@ -1,20 +1,17 @@
 package com.example.demo.services;
 
-import java.util.ArrayList;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
 
-import com.example.demo.entities.User;
+import com.example.demo.dto.ChangePasswordDto;
+import com.example.demo.dto.ForgotPasswordDto;
+import com.example.demo.exceptions.UsernameNotFoundException;
 
-@Service
-public class UserService implements UserDetailsService{
+public interface UserService  {
 
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		 return new User("admin","password",new ArrayList<>());
-	}
-
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
+	public void forgotPasswordConfirm(String token, @Valid ForgotPasswordDto userBody, HttpServletRequest request);
+	public void changePassword(Long userId, @Valid ChangePasswordDto userBody, HttpServletRequest request);
 }

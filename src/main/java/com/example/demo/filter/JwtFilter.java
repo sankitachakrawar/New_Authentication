@@ -2,6 +2,7 @@ package com.example.demo.filter;
 
 import java.io.IOException;
 
+
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +16,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.example.demo.services.UserService;
+import com.example.demo.serviceImpl.UserServiceImpl;
 import com.example.demo.utils.JWTUtility;
 
 @Component
@@ -24,7 +25,7 @@ public class JwtFilter extends OncePerRequestFilter{
 	    private JWTUtility jwtUtility;
 
 	    @Autowired
-	    private UserService userService;
+	    private UserServiceImpl userServiceImpl;
 
 	    @Override
 	    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
@@ -39,7 +40,7 @@ public class JwtFilter extends OncePerRequestFilter{
 
 	        if(null != userName && SecurityContextHolder.getContext().getAuthentication() == null) {
 	            UserDetails userDetails
-	                    = userService.loadUserByUsername(userName);
+	                    = userServiceImpl.loadUserByUsername(userName);
 
 	            if(jwtUtility.validateToken(token,userDetails)) {
 	                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
