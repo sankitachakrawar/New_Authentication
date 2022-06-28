@@ -21,7 +21,7 @@ public interface CandidateService {
 	void deleteCandidate(Long c_id);
 
 	public Candidate loginCandidate(String email, String password) throws Exception;
-	Candidate findByEmail(String email);
+	
 
 	
 }

@@ -34,6 +34,9 @@ public class Candidate implements Serializable{
 	
 	@Column(name = "is_active")
 	private Boolean isActive = true;
+	
+	@SuppressWarnings("unused")
+	private boolean isEnabled;
 
 	public Long getC_id() {
 		return c_id;
@@ -92,6 +95,10 @@ public class Candidate implements Serializable{
 
 	public void setJobs(List<Job> jobs) {
 		this.jobs = jobs;
+	}
+
+	public void setEnabled(boolean isEnabled) {
+		this.isEnabled = isEnabled;
 	}
 
 	

@@ -1,20 +1,11 @@
 package com.example.demo.controllers;
-
-
 import java.util.List;
-
-
-
-
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +14,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ChangePasswordDto;
 import com.example.demo.dto.ErrorResponseDto;
@@ -48,13 +38,17 @@ public class CandidateController {
 	
 	@Autowired
 	private UserService userService;
-	
+	/*
+	 * @Autowired private EmailServiceIntf emailServiceIntf;
+	 */
 	
 	@PostMapping("/candidates")
 	public ResponseEntity<CandidateDto> createCandidate(@Valid @RequestBody CandidateDto candidateDto){
 		
 		CandidateDto createdCandidateDto=this.candidateService.createCandidate(candidateDto);
 		return new ResponseEntity<>(createdCandidateDto,HttpStatus.CREATED);
+		
+		
 	}
 	
 	@PutMapping("/candidates/{c_id}")
@@ -113,50 +107,67 @@ public class CandidateController {
 		}
 
 	}
-	@PutMapping("/forgot-pass-confirm")
-	public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordDto userBody, HttpServletRequest request)
-			throws ResourceNotFoundException {
-
-		try {
-
-			userService.forgotPasswordConfirm(userBody.getToken(), userBody, request);
-			return new ResponseEntity<>(new SuccessResponseDto("password Updated", "password Updated succefully", null),
-					HttpStatus.OK);
-
-		} catch (ResourceNotFoundException e) {
-
-			return new ResponseEntity<>(new ErrorResponseDto(e.getMessage(), "Access Denied"), HttpStatus.BAD_GATEWAY);
-
-		}
-
-	}
+	  @PutMapping("/forgot-pass-confirm") public ResponseEntity<?>
+	  forgotPassword(@Valid @RequestBody ForgotPasswordDto userBody,
+	  HttpServletRequest request) throws ResourceNotFoundException {
+	  
+	  try {
+	  
+	  userService.forgotPasswordConfirm(userBody.getToken(), userBody, request);
+	  return new ResponseEntity<>(new SuccessResponseDto("password Updated",
+	 "password Updated succefully", null), HttpStatus.OK);
+	  
+	  } catch (ResourceNotFoundException e) {
+	  
+	  return new ResponseEntity<>(new ErrorResponseDto(e.getMessage(),
+	  "Access Denied"), HttpStatus.BAD_GATEWAY);
+	  
+	 }
+	  
+ }
 	
 }
+
+
+
 /*
- * @RequestMapping("send-mail") public String send(String email) {
+ * @Autowired private CandidateRepository candidateRepository;
  * 
+ * @Autowired private Candidate candidate;
  * 
- * candidate.setEmail("sankitachakrawar@gmail.com");
+ * @Autowired private ConfirmationTokenRepository confirmationTokenRepository;
  * 
- * try { mailService.sendEmail(candidate); } catch (MailException mailException)
- * { System.out.println(mailException); } return
- * "Congratulations! Your mail has been send to the user."; }
+ * @Autowired private EmailService emailService;
+ * 
+ * public void sendMail() { candidateRepository.save(candidate);
+ * 
+ * ConfirmationToken confirmationToken=new ConfirmationToken(candidate);
+ * 
+ * confirmationTokenRepository.save(confirmationToken);
+ * 
+ * SimpleMailMessage message=new SimpleMailMessage();
+ * message.setTo(candidate.getEmail()); message.setSubject("Apply sucessfully");
+ * message.setText("To confirm your account please click here:"
+ * +"http://localhost:8088/confirm-account?token="+confirmationToken.
+ * getConfirmationtoken());
+ * 
+ * emailService.sendMail(message); System.out.println("sucessfully!!!");
+ * 
  * 
  * }
+ * 
+ * @RequestMapping(value="/confirm-account",method=
+ * {RequestMethod.GET,RequestMethod.POST}) public void
+ * confirmAccount(@RequestParam("token") String confirmationToken) {
+ * 
+ * ConfirmationToken
+ * token=confirmationTokenRepository.findByConfirmationToken(confirmationToken);
+ * 
+ * if(token!=null) { Candidate
+ * candidate=candidateRepository.findByEmailIdIgnoreCase(token.getCandidate().
+ * getEmail()); candidate.setEnabled(true); candidateRepository.save(candidate);
+ * System.out.println("account verified"); }else {
+ * System.out.println("This link is invalid"); } }
  */
-	
-	
-	
-	
-
-	
-	/*
-	 * @PostMapping("/postAll") public Candidate applyJob(@RequestBody JobDto
-	 * jobDto) { return candidateRepository.save(jobDto.get);
-	 * 
-	 * }
-	 * 
-	 * @GetMapping("/getAll") public List<Candidate> findAllInfo(){ return
-	 * candidateRepository.findAll(); }
-	 */
+  
 

@@ -126,11 +126,15 @@ public class CandidateServiceImpl implements CandidateService{
 
 
 
-	@Override
-	public Candidate findByEmail(String email) {
 
-		return null;
-	}
+
+
+
+	/*
+	 * @Override public Candidate findByEmail(String email) {
+	 * 
+	 * return null; }
+	 */
 
 
 

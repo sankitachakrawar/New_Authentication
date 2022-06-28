@@ -3,12 +3,11 @@ package com.example.demo.config;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -31,34 +30,37 @@ import com.example.demo.filter.JwtFilter;
 
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-
-	private UserDetailsService userDetailsService;
-
+	/*
+	 * @Autowired private UserDetailsService userDetailsService;
+	 */
 
     @Autowired
     private JwtFilter jwtFilter;
 
-    @Override
-	@Bean
-	public UserDetailsService userDetailsService() {
+	/*
+	 * @Override
+	 * 
+	 * @Bean public UserDetailsService userDetailsService() {
+	 * 
+	 * return super.userDetailsService();
+	 * 
+	 * }
+	 */
 
-		return super.userDetailsService();
-
-	}
-    @Bean
-	public DaoAuthenticationProvider authenticationProvider() {
-
-		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-		authProvider.setUserDetailsService(userDetailsService);
-		return authProvider;
-
-	}
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
-        auth.authenticationProvider(authenticationProvider());
-    }
-
+	/*
+	 * @Bean public DaoAuthenticationProvider authenticationProvider() {
+	 * 
+	 * DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+	 * authProvider.setUserDetailsService(userDetailsService); return authProvider;
+	 * 
+	 * }
+	 */
+	/*
+	 * @Override protected void configure(AuthenticationManagerBuilder auth) throws
+	 * Exception {
+	 * 
+	 * auth.authenticationProvider(authenticationProvider()); }
+	 */
     @Bean
 	public PasswordEncoder passwordEncoder() {
 
@@ -76,7 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll().antMatchers("/token","/forgot-pass","/api/candidates","/api/candidates/{c_id}","/api/login","/api/jobs").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll().antMatchers("/token","/forgot-pass","/api/candidates","/api/candidates/{c_id}","/api/login","/api/jobs","/api/changePass/{id}","/api/forgot-pass-confirm","/logout","/forgot-pass","/mail","/sendmail").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and().httpBasic().and()      

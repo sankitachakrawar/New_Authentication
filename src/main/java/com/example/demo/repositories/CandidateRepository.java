@@ -19,7 +19,7 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long>{
 
 	public Optional<Candidate> findById(Long c_id);
 
-
+	//Candidate findByEmailIdIgnoreCase(String email);
 
 
 

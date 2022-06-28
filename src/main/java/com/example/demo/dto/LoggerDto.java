@@ -60,4 +60,9 @@ public class LoggerDto {
 
 	}
 
+	public void setOtp(int otp) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
