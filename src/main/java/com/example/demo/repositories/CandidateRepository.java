@@ -19,6 +19,10 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long>{
 
 	public Optional<Candidate> findById(Long c_id);
 
+	
+
+	//public Optional<Candidate> findByEmailContainingIgnoreCase(String email);
+
 	//Candidate findByEmailIdIgnoreCase(String email);
 
 

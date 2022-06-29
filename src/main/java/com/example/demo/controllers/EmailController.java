@@ -20,10 +20,6 @@ public class EmailController {
 	@Autowired
 	private CandidateRepository candidateRepository;
 	
-	
-	
-	
-	
 	  @PostMapping("/sendmail") public String sendMailmessage(@RequestBody Candidate candidate) {
 		  String email=candidate.getEmail();
 		  String emailTo = null; 

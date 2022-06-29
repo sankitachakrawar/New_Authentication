@@ -1,6 +1,8 @@
 package com.example.demo.serviceImpl;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -9,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import com.example.demo.dto.ChangePasswordDto;
 import com.example.demo.dto.ForgotPasswordDto;
+import com.example.demo.dto.IPermissionDto;
 import com.example.demo.services.UserService;
 import com.example.demo.entities.*;
 
@@ -79,6 +82,18 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public void forgotPasswordConfirm(String token, @Valid ForgotPasswordDto userBody, HttpServletRequest request) {
 				
+	}
+
+	@Override
+	public Candidate findByEmail(String email) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<IPermissionDto> getUserPermission(Long c_id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

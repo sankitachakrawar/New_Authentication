@@ -23,7 +23,7 @@ public class EmailServiceImpl implements EmailService{
 	  simpleMailMessage.setTo(candidate.getEmail());
 	  
 	  simpleMailMessage.setSubject("Apply sucessfully");
-	  simpleMailMessage.setText("To confirm click here"+"http://localhost:8088/api/candidates");
+	  simpleMailMessage.setText("Text demo");
 	  javaMailSender.send(simpleMailMessage);
 	  return "Email Send";
 	  }

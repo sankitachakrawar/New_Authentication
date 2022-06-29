@@ -3,17 +3,23 @@ package com.example.demo.serviceImpl;
 import java.util.List;
 
 
+
 import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.example.demo.dto.CandidateDto;
+import com.example.demo.dto.ChangePasswordDto;
 import com.example.demo.entities.Candidate;
 import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.services.CandidateService;
+
 import com.example.demo.exceptions.*;
 
 @Service
@@ -38,9 +44,21 @@ public class CandidateServiceImpl implements CandidateService{
 		Candidate candidate =this.dtoToCandidate(candidateDto);
 		
 		Candidate savedCandidate=this.candidateRepository.save(candidate);
-		
+	
+		  String email=candidateDto.getEmail();
+		  if(candidateDto.getEmail().equals(email)) { 
+		  final String uri= "http://localhost:8088/api/sendmail";
+		  RestTemplate restTemplate=new RestTemplate(); 
+		  String result=restTemplate.getForObject(uri, String.class);
+		  
+		 return null;
+		  
+		  
+		  }else {
+		 
+			
 		return this.candidateToDto(savedCandidate);
-		
+		  }
 		
 	}
 
@@ -51,6 +69,7 @@ public class CandidateServiceImpl implements CandidateService{
 		candidate2.setEmail(candidateDto.getEmail());
 		candidate2.setPassword(passwordEncoder.encode(candidateDto.getPassword()));
 		candidate2.setAddress(candidateDto.getAddress());
+		candidate2.setUsername(candidateDto.getUsername());
 		return candidate2;
 	}
 	public CandidateDto candidateToDto(Candidate candidate) {
@@ -60,6 +79,7 @@ public class CandidateServiceImpl implements CandidateService{
 		candidateDto.setEmail(candidate.getEmail());
 		candidateDto.setPassword(candidate.getPassword());
 		candidateDto.setAddress(candidate.getAddress());
+		candidateDto.setUsername(candidate.getUsername());
 		return candidateDto;
 		
 	}
@@ -114,7 +134,7 @@ public class CandidateServiceImpl implements CandidateService{
 	public Candidate loginCandidate(String email, String password) throws Exception {
 		Candidate candidate = candidateRepository.findByEmail(email);
 		if (candidate == null) {
-			throw new Exception("You entered incorrect username.");
+			throw new Exception("You entered incorrect Email.");
 		} else {
 			if (candidate.getEmail().equals(email) && candidate.getPassword().equals(password)) {
 				return candidate;
@@ -124,6 +144,82 @@ public class CandidateServiceImpl implements CandidateService{
 		
 	}
 
+
+
+	
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*
+	 * @Override public void changePassword(Long userId, ChangePasswordDto userBody,
+	 * HttpServletRequest request) throws ResourceNotFoundException {
+	 * 
+	 * UserEntity userData =
+	 * candidateRepository.findByIdAndIsActiveTrue(userId).orElseThrow(() -> new
+	 * ResourceNotFoundException("User Not Found")); final String requestTokenHeader
+	 * = request.getHeader("Authorization"); String username = null; String jwtToken
+	 * = null; JsonObject jsonObj = null; jwtToken =
+	 * requestTokenHeader.substring(7); username =
+	 * jwtTokenUtil.getEmailFromToken(jwtToken); jsonObj =
+	 * JsonParser.parseString(username).getAsJsonObject(); UserDataDto userDatas =
+	 * new UserDataDto(); userDatas.setUserId((jsonObj.get("id").getAsLong()));
+	 * 
+	 * if (userDatas.getUserId() == userData.getId()) {
+	 * 
+	 * if (!bcryptEncoder.matches(userBody.getNewPassword(),
+	 * userData.getPassword())) {
+	 * 
+	 * System.out.println("." + userBody.getNewPassword()); System.out.println("." +
+	 * userBody.getPassword()); System.out.println("." +
+	 * bcryptEncoder.encode((userBody.getPassword())));
+	 * 
+	 * if (bcryptEncoder.matches(userBody.getPassword(), userData.getPassword())) {
+	 * 
+	 * userData.setPassword(bcryptEncoder.encode(userBody.getNewPassword()));
+	 * System.out.println("New Password" + userData.getPassword());
+	 * 
+	 * } else {
+	 * 
+	 * throw new ResourceNotFoundException("Please enter old password correct");
+	 * 
+	 * }
+	 * 
+	 * } else {
+	 * 
+	 * throw new
+	 * ResourceNotFoundException("password must be differ from old password");
+	 * 
+	 * }
+	 * 
+	 * } else {
+	 * 
+	 * throw new ResourceNotFoundException("Access Denied");
+	 * 
+	 * }
+	 * 
+	 * }
+	 */
 
 
 
@@ -139,4 +235,4 @@ public class CandidateServiceImpl implements CandidateService{
 
 
 	
-}
+

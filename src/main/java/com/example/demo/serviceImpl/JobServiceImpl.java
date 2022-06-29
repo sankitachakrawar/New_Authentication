@@ -64,19 +64,32 @@ public class JobServiceImpl implements JobService{
 		return this.jobToDto(savedJobs);
 	}
 
-	
-	@Override
-	public List<Job> findPaginated(int pageNo, int pageSize) {
-		
-		
-		Sort idSort=Sort.by("postTime").descending();
-		
-		Pageable paging=PageRequest.of(pageNo-1, pageSize,idSort);
-		Page<Job> pagedResult=jobRepository.findAll(paging);
-		
-		
-		return pagedResult.toList();
-		
-	}
+	/*
+	 * @Override public List<Job> findAppliedPaginated(int pageNo, int pageSize) {
+	 * Sort applySort=Sort.by("apply").descending();
+	 * 
+	 * Pageable paging1=PageRequest.of(pageNo-1, pageSize,applySort); Page<Job>
+	 * pagedResult1=jobRepository.findAll(paging1);
+	 * 
+	 * 
+	 * return pagedResult1.toList(); }
+	 */
 
+	
+	
+	  @Override public List<Job> findPaginated(int pageNo, int pageSize) {
+	  
+	  
+	  Sort idSort=Sort.by("postTime").descending();
+	  
+	  Pageable paging=PageRequest.of(pageNo-1, pageSize,idSort); Page<Job>
+	  pagedResult=jobRepository.findAll(paging);
+	  
+	  
+	  return pagedResult.toList();
+	  
+	  }
+	 
+
+	
 }

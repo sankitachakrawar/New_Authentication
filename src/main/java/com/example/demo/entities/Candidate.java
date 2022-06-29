@@ -38,6 +38,7 @@ public class Candidate implements Serializable{
 	@SuppressWarnings("unused")
 	private boolean isEnabled;
 
+	private String username;
 	public Long getC_id() {
 		return c_id;
 	}
@@ -100,6 +101,11 @@ public class Candidate implements Serializable{
 	public void setEnabled(boolean isEnabled) {
 		this.isEnabled = isEnabled;
 	}
-
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	public String getUsername() {
+		return username;
+	}
 	
 }

@@ -1,7 +1,6 @@
 package com.example.demo.controllers;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +21,12 @@ public class JobController {
 	@Autowired
 	private JobService jobService;
 	
+	
 	@PostMapping("/jobs")
 	public ResponseEntity<JobDto> createJob(@RequestBody JobDto jobDto){
 	JobDto createdJobDto=this.jobService.createJob(jobDto);
 	
 	return new ResponseEntity<>(createdJobDto,HttpStatus.CREATED);
-	
-	
 	
 	}
 	@GetMapping("/jobs")
@@ -37,12 +35,21 @@ public class JobController {
 		
 	}
 	
-	@GetMapping("/jobs/{pageNo}/{pageSize}")
-	public List<Job> getPaginated(@PathVariable int pageNo, @PathVariable int pageSize){
-		
-		
-		return jobService.findPaginated(pageNo, pageSize);
-	}
+	  @GetMapping("/jobs/{pageNo}/{pageSize}")
+	  public List<Job> getPaginated(@PathVariable int pageNo, @PathVariable int pageSize){
+	  
+	  
+	 return jobService.findPaginated(pageNo, pageSize); }
+	 
 	
+	/*
+	 * @GetMapping("/jobs/{pageNo}/{pageSize}") public List<Job>
+	 * getPaginated(@PathVariable int pageNo, @PathVariable int pageSize){
+	 * 
+	 * 
+	 * return jobService.findAppliedPaginated(pageNo, pageSize);
+	 * 
+	 * }
+	 */
 	
 }

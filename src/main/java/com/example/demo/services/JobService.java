@@ -10,4 +10,5 @@ public interface JobService {
 	
 	
 	List<Job> findPaginated(int pageNo,int pageSize);
+	//List<Job> findAppliedPaginated(int pageNo, int pageSize);
 }

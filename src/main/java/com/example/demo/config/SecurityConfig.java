@@ -4,10 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 
 
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -55,12 +58,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 * 
 	 * }
 	 */
-	/*
-	 * @Override protected void configure(AuthenticationManagerBuilder auth) throws
-	 * Exception {
-	 * 
-	 * auth.authenticationProvider(authenticationProvider()); }
-	 */
+@Autowired
+private UserDetailsService userDetailsService;
+	  @Override protected void configure(AuthenticationManagerBuilder auth) throws
+	  Exception {
+	  
+		  auth.userDetailsService(userDetailsService);
+	  }
+	 
     @Bean
 	public PasswordEncoder passwordEncoder() {
 
@@ -68,7 +73,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	}
     @Override
-    @Bean
+    @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
@@ -78,10 +83,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll().antMatchers("/token","/forgot-pass","/api/candidates","/api/candidates/{c_id}","/api/login","/api/jobs","/api/changePass/{id}","/api/forgot-pass-confirm","/logout","/forgot-pass","/mail","/sendmail").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll().antMatchers("/authenticate","/login","/token","/forgot-pass","/api/candidates","/api/candidates/{c_id}","/api/login","/api/jobs","/api/jobs/{pageNo}/{pageSize}","/api/changePass/{id}","/api/forgot-pass-confirm","/logout","/forgot-pass","/mail","/api/sendmail").permitAll()
                 .anyRequest()
                 .authenticated()
-                .and().httpBasic().and()      
+                .and().httpBasic().and()
+                .logout().permitAll()
+                .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
                 //.and().exceptionHandling().accessDeniedPage("/err/403");

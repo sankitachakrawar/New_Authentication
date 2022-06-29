@@ -1,6 +1,8 @@
 package com.example.demo.controllers;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+
 import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ChangePasswordDto;
 import com.example.demo.dto.ErrorResponseDto;
@@ -21,7 +25,9 @@ import com.example.demo.dto.ForgotPasswordDto;
 import com.example.demo.dto.SuccessResponseDto;
 import com.example.demo.entities.Candidate;
 import com.example.demo.exceptions.ResourceNotFoundException;
+import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.services.CandidateService;
+import com.example.demo.services.EmailService;
 import com.example.demo.services.UserService;
 
 
@@ -29,28 +35,45 @@ import com.example.demo.services.UserService;
 @RequestMapping("/api")
 public class CandidateController {
 
-	/*
-	 * @Autowired private CandidateRepository candidateRepository;
-	 */
+	
+	  @Autowired
+	  private CandidateRepository candidateRepository;
+	 
 
 	@Autowired
 	private CandidateService candidateService;
 	
 	@Autowired
 	private UserService userService;
-	/*
-	 * @Autowired private EmailServiceIntf emailServiceIntf;
-	 */
 	
-	@PostMapping("/candidates")
+	@Autowired
+	private EmailService emailService;
+	
+	@SuppressWarnings("unchecked")
+	
+	@PostMapping("/candidates") 
 	public ResponseEntity<CandidateDto> createCandidate(@Valid @RequestBody CandidateDto candidateDto){
-		
-		CandidateDto createdCandidateDto=this.candidateService.createCandidate(candidateDto);
-		return new ResponseEntity<>(createdCandidateDto,HttpStatus.CREATED);
-		
-		
-	}
+	  
+	  CandidateDto createdCandidateDto=this.candidateService.createCandidate(candidateDto);
+
+	  return new ResponseEntity(Map.of("message","Candidate created successfully!!"),HttpStatus.OK); 
+	 
+	 }
 	
+	
+	
+	 @PostMapping("/sendmail")
+	 public String sendMailmessage(@RequestBody Candidate candidate) {
+		  String email=candidate.getEmail();
+		  String emailTo = null; 
+		  String subject = null; 
+		  String text = null;
+		  		
+	  emailService.sendMail(emailTo, subject, text, candidate);
+	  return "email Send !!";
+	  
+	  
+	  }
 	@PutMapping("/candidates/{c_id}")
 	public ResponseEntity<CandidateDto> updateCandidate(@Valid @RequestBody CandidateDto candidateDto,@PathVariable Long c_id){
 		
@@ -89,14 +112,14 @@ public class CandidateController {
 		
 		return new  ResponseEntity(Map.of("message","Candidate login sucesssfully!!"),HttpStatus.OK);
 	}
-	@PutMapping("/changePass/{id}")
-	public ResponseEntity<?> changePasswords(@PathVariable(value = "id") Long userId,
+	@PutMapping("/changePass/{c_id}")
+	public ResponseEntity<?> changePasswords(@PathVariable(value = "c_id") Long c_id,
 			@Valid @RequestBody ChangePasswordDto userBody, HttpServletRequest request)
 			throws ResourceNotFoundException {
 
 		try {
 
-			userService.changePassword(userId, userBody, request);
+			userService.changePassword(c_id, userBody, request);
 			return new ResponseEntity<>(new SuccessResponseDto("password Updated", "password Updated succefully", null),
 					HttpStatus.OK);
 
