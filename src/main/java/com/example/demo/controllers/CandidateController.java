@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 import java.util.List;
+
 import java.util.Map;
 import java.util.Optional;
 
@@ -56,8 +57,8 @@ public class CandidateController {
 	  
 	  CandidateDto createdCandidateDto=this.candidateService.createCandidate(candidateDto);
 
-	  return new ResponseEntity(Map.of("message","Candidate created successfully!!"),HttpStatus.OK); 
-	 
+	 // return new ResponseEntity(Map.of("message","Candidate created successfully!!"),HttpStatus.OK); 
+	 return new ResponseEntity("/api/sendmail",HttpStatus.OK);
 	 }
 	
 	
@@ -148,6 +149,23 @@ public class CandidateController {
 	 }
 	  
  }
+	  
+	  
+	 
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
 	
 }
 

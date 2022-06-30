@@ -2,6 +2,7 @@ package com.example.demo.serviceImpl;
 
 import java.util.List;
 
+
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.JobDto;
-
+import com.example.demo.entities.Candidate;
 import com.example.demo.entities.Job;
+import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.repositories.JobRepository;
 import com.example.demo.services.JobService;
+
 
 @Service
 public class JobServiceImpl implements JobService{
@@ -42,8 +45,9 @@ public class JobServiceImpl implements JobService{
 		job.setJ_id(jobDto.getJ_id());
 		job.setTitle(jobDto.getTitle());
 		job.setLocation(jobDto.getLocation());
-		job.setCandidate(job.getCandidate());
+		job.setPostTime(jobDto.getPostTime());
 		job.setApply(jobDto.getApply());
+		job.setCandidate(job.getCandidate());
 		return job;
 	}
 	public JobDto jobToDto(Job job) {
@@ -52,7 +56,8 @@ public class JobServiceImpl implements JobService{
 		jobDto.setTitle(job.getTitle());
 		jobDto.setLocation(job.getLocation());
 		jobDto.setApply(job.getApply());
-		
+		jobDto.setPostTime(job.getPostTime());
+		jobDto.setCandidate(job.getCandidate());
 		return jobDto;
 		
 	}
@@ -61,6 +66,7 @@ public class JobServiceImpl implements JobService{
 	public JobDto createJob(JobDto jobDto) {
 		Job job=this.dtoToJob(jobDto);
 		Job savedJobs=this.jobRepository.save(job);
+	
 		return this.jobToDto(savedJobs);
 	}
 
@@ -82,13 +88,33 @@ public class JobServiceImpl implements JobService{
 	  
 	  Sort idSort=Sort.by("postTime").descending();
 	  
-	  Pageable paging=PageRequest.of(pageNo-1, pageSize,idSort); Page<Job>
-	  pagedResult=jobRepository.findAll(paging);
+	  Pageable paging=PageRequest.of(pageNo-1, pageSize,idSort); 
+	  Page<Job> pagedResult=jobRepository.findAll(paging);
 	  
 	  
 	  return pagedResult.toList();
 	  
 	  }
+
+	@Override
+	public JobDto getJobById(Integer j_id) {
+		Job job = this.jobRepository.findById(j_id).orElseThrow(()->new ResourceNotFoundException("job", "j_id", j_id));
+		return this.jobToDto(job);
+		
+	}
+
+	@Override
+	public List<Job> findPaginatedByApply(int pageNo, int pageSize) {
+		
+		 Sort sort=Sort.by("apply").descending();
+		 Pageable paging1=PageRequest.of(pageNo-1, pageSize, sort);
+		 Page<Job> pageResult1=jobRepository.findAll(paging1);
+		 
+		 return pageResult1.toList();
+	}
+
+
+	
 	 
 
 	

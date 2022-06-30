@@ -39,6 +39,8 @@ public class Candidate implements Serializable{
 	private boolean isEnabled;
 
 	private String username;
+	
+	
 	public Long getC_id() {
 		return c_id;
 	}
@@ -87,8 +89,8 @@ public class Candidate implements Serializable{
 		return isActive;
 	}
 	
-	@OneToMany(mappedBy="candidate",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
-	private List<Job> jobs=new ArrayList<>();
+	@OneToMany(mappedBy="candidate",cascade = CascadeType.ALL)
+	private List<Job> jobs;
 
 	public List<Job> getJobs() {
 		return jobs;
@@ -107,5 +109,6 @@ public class Candidate implements Serializable{
 	public String getUsername() {
 		return username;
 	}
+	
 	
 }

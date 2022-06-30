@@ -1,9 +1,7 @@
 package com.example.demo.serviceImpl;
 
 import java.util.List;
-
-
-
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,20 +43,20 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		Candidate savedCandidate=this.candidateRepository.save(candidate);
 	
-		  String email=candidateDto.getEmail();
-		  if(candidateDto.getEmail().equals(email)) { 
-		  final String uri= "http://localhost:8088/api/sendmail";
-		  RestTemplate restTemplate=new RestTemplate(); 
-		  String result=restTemplate.getForObject(uri, String.class);
-		  
-		 return null;
-		  
-		  
-		  }else {
-		 
+		/*
+		 * String email=candidateDto.getEmail();
+		 * if(candidateDto.getEmail().equals(email)) { final String uri=
+		 * "http://localhost:8088/api/sendmail"; RestTemplate restTemplate=new
+		 * RestTemplate(); String result=restTemplate.getForObject(uri, String.class);
+		 * 
+		 * return null;
+		 * 
+		 * 
+		 * }else {
+		 */
 			
 		return this.candidateToDto(savedCandidate);
-		  }
+		 // }
 		
 	}
 
@@ -143,6 +141,23 @@ public class CandidateServiceImpl implements CandidateService{
 		}
 		
 	}
+
+
+
+	@Override
+	public Candidate logout(String email, String password) throws Exception {
+		
+		Candidate candidate=new Candidate();
+		if((candidate.getEmail().equals(email)) && (candidate.getPassword().equals(password))) {
+			return candidate;
+		}else {
+			throw new Exception("Invalid username and password!!!");
+		}
+		
+	}
+
+
+
 
 
 

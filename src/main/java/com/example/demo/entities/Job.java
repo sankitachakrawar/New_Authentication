@@ -26,7 +26,7 @@ public class Job {
 	private String location;
 	@UpdateTimestamp
 	private Date postTime;
-	private String apply;
+	private boolean apply;
 	
 	
 	@ManyToOne
@@ -71,11 +71,19 @@ public class Job {
 	public Date getPostTime() {
 		return postTime;
 	}
-	public void setApply(String apply) {
+	
+	
+	public boolean getApply() {
+		return apply;
+	}
+
+	public void setApply(boolean apply) {
 		this.apply = apply;
 	}
-	public String getApply() {
-		return apply;
+
+	public Job() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 	
 }

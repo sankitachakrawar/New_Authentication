@@ -1,6 +1,8 @@
 package com.example.demo.dto;
 
+import java.util.Date;
 
+import com.example.demo.entities.Candidate;
 
 public class JobDto {
 
@@ -9,8 +11,9 @@ public class JobDto {
 	private String title;
 	
 	private String location;
-	private String apply;
-	//private Date postTime;
+	private Boolean apply;
+	private Date postTime;
+	private Candidate candidate;
 
 	public int getJ_id() {
 		return j_id;
@@ -36,15 +39,23 @@ public class JobDto {
 		this.location = location;
 	}
 	
-	public void setApply(String apply) {
+	public void setApply(Boolean apply) {
 		this.apply = apply;
 	}
-	public String getApply() {
+	public Boolean getApply() {
 		return apply;
 	}
 	
-	/*
-	 * public void setPostTime(Date postTime) { this.postTime = postTime; } public
-	 * Date getPostTime() { return postTime; }
-	 */
+	public void setPostTime(Date postTime) {
+		this.postTime = postTime;
+	}
+	public Date getPostTime() {
+		return postTime;
+	}
+	public void setCandidate(Candidate candidate) {
+		this.candidate = candidate;
+	}
+	public Candidate getCandidate() {
+		return candidate;
+	}
 }

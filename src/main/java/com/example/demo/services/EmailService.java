@@ -5,4 +5,5 @@ public interface EmailService {
 
 	public String sendMail(String emailTo,String subject,String text,Candidate candidate);
 
+	
 }

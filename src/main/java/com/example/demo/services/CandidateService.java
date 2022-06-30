@@ -1,7 +1,7 @@
 package com.example.demo.services;
 
 import java.util.List;
-
+import java.util.Optional;
 
 import com.example.demo.dto.CandidateDto;
 import com.example.demo.entities.Candidate;
@@ -22,5 +22,6 @@ public interface CandidateService {
 
 	public Candidate loginCandidate(String email, String password) throws Exception;
 
+	public Candidate logout(String email,String password) throws Exception;
 	
 }

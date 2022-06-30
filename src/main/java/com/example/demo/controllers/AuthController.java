@@ -3,6 +3,7 @@ import java.util.Calendar;
 
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -14,7 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -62,30 +63,7 @@ public class AuthController {
 	@Autowired
 	private LoggerServiceInterface loggerServiceInterface;
 	
-	/*
-	 * @PostMapping("/token") public ResponseEntity<String>
-	 * authenticateUser(@RequestBody CandidateDto candidate){ Authentication
-	 * authentication = authenticationManager.authenticate(new
-	 * UsernamePasswordAuthenticationToken( candidate.getEmail(),
-	 * candidate.getPassword()));
-	 * 
-	 * SecurityContextHolder.getContext().setAuthentication(authentication); return
-	 * new ResponseEntity<>("Candidate signed-in successfully!.", HttpStatus.OK);
-	 * 
-	 * }
-	 */
-		
-		  @PostMapping("/logout") public ResponseEntity<?>
-		  logoutUser(@RequestHeader("Authorization") String token, HttpServletRequest
-		  request) throws Exception {
-		  
-		  loggerServiceInterface.logoutUser(token, ((CandidateDto)
-		  request.getAttribute("candidateData")).getC_id(), ((CandidateDto)
-		  request.getAttribute("candidateData")).getEmail()); return new
-		  ResponseEntity<>(new ErrorResponseDto("Logout Successfully",
-		  "logoutSuccess"), HttpStatus.OK);
-		  
-		  }
+	
 		 
 	
 	 
@@ -142,12 +120,23 @@ public class AuthController {
 	    }
 
 	
+	
+	@PostMapping("/logout")
+	 public ResponseEntity<?> logoutCandidate(@PathVariable String email,@PathVariable String password) throws Exception{
+		return new ResponseEntity<>(candidateService.logout(email, password),HttpStatus.OK);
+		
+ } 
 	 
-	 
-	 
-	 
-	 
-	 
+	 /*
+		 * if((candidate.getEmail().equals(email)) &&
+		 * (candidate.getPassword().equals(password))) { return new
+		 * ResponseEntity<>(Map.of("message","Candidate logout sucesssfully!!"),
+		 * HttpStatus.OK);
+		 * 
+		 * }else { return new
+		 * ResponseEntity<>(Map.of("message","Invalid email and password"),HttpStatus.
+		 * BAD_REQUEST); }
+		 */ 
 	 
 	 
 	 
@@ -208,6 +197,30 @@ public class AuthController {
 	 * HttpStatus.OK);
 	 * 
 	 */
-	
+	 /*
+		 * @PostMapping("/token") public ResponseEntity<String>
+		 * authenticateUser(@RequestBody CandidateDto candidate){ Authentication
+		 * authentication = authenticationManager.authenticate(new
+		 * UsernamePasswordAuthenticationToken( candidate.getEmail(),
+		 * candidate.getPassword()));
+		 * 
+		 * SecurityContextHolder.getContext().setAuthentication(authentication); return
+		 * new ResponseEntity<>("Candidate signed-in successfully!.", HttpStatus.OK);
+		 * 
+		 * }
+		 */
+		/*
+		 * @PostMapping("/logout") public ResponseEntity<?>
+		 * logoutUser(@RequestHeader("Authorization") String token, HttpServletRequest
+		 * request) throws Exception {
+		 * 
+		 * loggerServiceInterface.logoutUser(token, ((CandidateDto)
+		 * request.getAttribute("candidateData")).getC_id(), ((CandidateDto)
+		 * request.getAttribute("candidateData")).getEmail()); return new
+		 * ResponseEntity<>(new ErrorResponseDto("Logout Successfully",
+		 * "logoutSuccess"), HttpStatus.OK);
+		 * 
+		 * }
+		 */
 	
 }

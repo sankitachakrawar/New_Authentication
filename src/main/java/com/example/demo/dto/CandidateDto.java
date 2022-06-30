@@ -1,6 +1,7 @@
 package com.example.demo.dto;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -14,6 +15,7 @@ public class CandidateDto {
 	private String name;
 	
 	@Email(message="Email address is not valid!!")
+	@NotBlank(message="email is mandatory")
 	@Pattern(regexp = "^(.+)@(.+)$")
 	private String email;
 	
