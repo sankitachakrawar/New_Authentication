@@ -9,10 +9,11 @@ import org.springframework.stereotype.Service;
 import com.example.demo.entities.Forgot_password_request;
 import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.repositories.ForgotPasswordRequestRepository;
-import com.example.demo.services.forgotPasswordServiceIntf;
+import com.example.demo.services.ForgotPasswordServiceIntf;
+
 
 @Service("forgotPasswordRequestServiceImpl")
-public class ForgotPasswordRequestServiceImpl implements forgotPasswordServiceIntf {
+public class ForgotPasswordRequestServiceImpl implements ForgotPasswordServiceIntf {
 
 	public ForgotPasswordRequestServiceImpl() {
 
@@ -30,7 +31,14 @@ public class ForgotPasswordRequestServiceImpl implements forgotPasswordServiceIn
 
 	}
 
-	
+	@Override
+	public void createForgotPasswordRequest(Long userId, String token, Date expireAt) {
+
+		Forgot_password_request newRequest = new Forgot_password_request();
+		newRequest.setToken(token);
+		newRequest.setUserId(userId);
+		forgotPasswordRequestRepository.save(newRequest);
+	}
 
 	@Override
 	public void markRequestAsSuccess(Long userId, String token) throws ResourceNotFoundException {
@@ -51,19 +59,5 @@ public class ForgotPasswordRequestServiceImpl implements forgotPasswordServiceIn
 		forgotPasswordRequestRepository.save(request);
 
 	}
-
-	@Override
-	public void createForgotPasswordRequest(Long userId, String token, Date time) {
-		Forgot_password_request newRequest = new Forgot_password_request();
-		newRequest.setToken(token);
-		newRequest.setUserId(userId);
-		forgotPasswordRequestRepository.save(newRequest);
-		
-	}
-
-
-
-
-
 
 }

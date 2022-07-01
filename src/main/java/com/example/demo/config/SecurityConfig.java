@@ -83,12 +83,10 @@ private UserDetailsService userDetailsService;
         http.csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll().antMatchers("/api/getinfo","/api/jobs/{j_id}","/authenticate","/login","/token","/forgot-pass","/api/candidates","/api/candidates/{c_id}","/api/login","/api/jobs","/api/jobs/{pageNo}/{pageSize}","/api/jobs/apply/{pageNo}/{pageSize}","/api/changePass/{id}","/api/forgot-pass-confirm","/logout","/forgot-pass","/mail","/api/sendmail").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll().antMatchers("/api/getinfo","/api/jobs/{j_id}","/authenticate","/token","/forgot-pass","/api/candidates","/api/candidates/{c_id}","/api/login","/api/jobs","/api/jobs/{pageNo}/{pageSize}","/api/jobs/apply/{pageNo}/{pageSize}","/api/changePass/{id}","/api/forgot-pass-confirm","/api/logout","/forgot-pass","/mail","/api/sendmail").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and().httpBasic().and()
-                .logout().permitAll()
-                .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
                 //.and().exceptionHandling().accessDeniedPage("/err/403");

@@ -23,5 +23,8 @@ public interface CandidateService {
 	public Candidate loginCandidate(String email, String password) throws Exception;
 
 	public Candidate logout(String email,String password) throws Exception;
+
+	Candidate findByEmail(String email);
+	
 	
 }

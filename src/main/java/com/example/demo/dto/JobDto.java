@@ -11,8 +11,9 @@ public class JobDto {
 	private String title;
 	
 	private String location;
-	private Boolean apply;
+	private Boolean apply=false;
 	private Date postTime;
+	
 	private Candidate candidate;
 
 	public int getJ_id() {

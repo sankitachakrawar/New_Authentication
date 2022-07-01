@@ -5,5 +5,7 @@ public interface EmailService {
 
 	public String sendMail(String emailTo,String subject,String text,Candidate candidate);
 
+	public void sendSimpleMessage(String email, String string, String url);
+
 	
 }

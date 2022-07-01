@@ -24,10 +24,25 @@ public class EmailServiceImpl implements EmailService{
 	  
 	  simpleMailMessage.setSubject("Apply sucessfully");
 	  simpleMailMessage.setText("Text demo");
-	  javaMailSender.send(simpleMailMessage); return "Email Send"; }
+	  javaMailSender.send(simpleMailMessage); 
+	  return "Email Send";
+	  }
+
+	  @Override
+		public void sendSimpleMessage(String emailTo, String subject, String text) {
+
+			SimpleMailMessage message = new SimpleMailMessage();
+			 message.setFrom("sankitachakrawar6255@gmail.com");
+			message.setTo(emailTo);
+			message.setSubject("Apply sucessfully");
+			message.setText("Text demo");
+			javaMailSender.send(message);
+
+		}
+
+
+		
+	}
 	 
-
 	
 
-	
-}

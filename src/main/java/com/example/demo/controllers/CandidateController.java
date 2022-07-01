@@ -111,8 +111,18 @@ public class CandidateController {
 		//logger.info("Login Rest Controller Implementation : createUser() method");
 		//return ResponseEntity.ok().body(candidate);
 		
-		return new  ResponseEntity(Map.of("message","Candidate login sucesssfully!!"),HttpStatus.OK);
+		return new  ResponseEntity("Candidate login sucesssfully!!",HttpStatus.OK);
 	}
+	
+	
+	@PostMapping("/logout")
+	 public ResponseEntity<?> logoutCandidate(@RequestBody Candidate candidate) throws Exception{
+		String email=candidate.getEmail();
+		String password=candidate.getPassword();
+				candidate=candidateService.logout(email, password);
+				return new ResponseEntity<>("Candidate logout successfully!!",HttpStatus.OK);
+	} 
+	
 	@PutMapping("/changePass/{c_id}")
 	public ResponseEntity<?> changePasswords(@PathVariable(value = "c_id") Long c_id,
 			@Valid @RequestBody ChangePasswordDto userBody, HttpServletRequest request)

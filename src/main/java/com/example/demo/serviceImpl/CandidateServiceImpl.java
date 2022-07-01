@@ -1,23 +1,15 @@
 package com.example.demo.serviceImpl;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
 import com.example.demo.dto.CandidateDto;
-import com.example.demo.dto.ChangePasswordDto;
 import com.example.demo.entities.Candidate;
 import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.services.CandidateService;
-
 import com.example.demo.exceptions.*;
 
 @Service
@@ -41,22 +33,9 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		Candidate candidate =this.dtoToCandidate(candidateDto);
 		
-		Candidate savedCandidate=this.candidateRepository.save(candidate);
-	
-		/*
-		 * String email=candidateDto.getEmail();
-		 * if(candidateDto.getEmail().equals(email)) { final String uri=
-		 * "http://localhost:8088/api/sendmail"; RestTemplate restTemplate=new
-		 * RestTemplate(); String result=restTemplate.getForObject(uri, String.class);
-		 * 
-		 * return null;
-		 * 
-		 * 
-		 * }else {
-		 */
-			
+		Candidate savedCandidate=this.candidateRepository.save(candidate);	
 		return this.candidateToDto(savedCandidate);
-		 // }
+	
 		
 	}
 
@@ -144,17 +123,36 @@ public class CandidateServiceImpl implements CandidateService{
 
 
 
+	
 	@Override
 	public Candidate logout(String email, String password) throws Exception {
 		
-		Candidate candidate=new Candidate();
-		if((candidate.getEmail().equals(email)) && (candidate.getPassword().equals(password))) {
-			return candidate;
+		Candidate candidate=candidateRepository.findByEmail(email);
+		if (candidate == null) {
+			throw new Exception("You entered incorrect Email.");
 		}else {
+			if((candidate.getEmail().equals(email)) && (candidate.getPassword().equals(password))) {
+				return candidate;
+				
+			}
 			throw new Exception("Invalid username and password!!!");
+			
 		}
 		
 	}
+
+
+
+	@Override
+	public Candidate findByEmail(String email){
+		Candidate candidate = candidateRepository.findByEmailAndIsActiveTrue(email);//.orElseThrow(() -> new ResourceNotFoundException("candidate Not Found"));
+		return candidate;
+		
+	}
+
+
+
+	
 
 
 
