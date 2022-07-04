@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 import java.util.Calendar;
 
 
+
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import com.example.demo.dto.AuthRequestDto;
 import com.example.demo.dto.AuthResponseDto;
 import com.example.demo.dto.CandidateDto;
@@ -37,7 +39,7 @@ import com.example.demo.serviceImpl.AuthServiceImpl;
 import com.example.demo.services.*;
 import com.example.demo.utils.AppSetting;
 import com.example.demo.utils.JwtUtil;
-import com.example.demo.utils.jwtTokenUtil;
+import com.example.demo.utils.JwtTokenUtil;
 
 
 
@@ -63,51 +65,42 @@ public class AuthController {
 	@Autowired
 	private LoggerServiceInterface loggerServiceInterface;
 	
-	@Autowired
-	private UserService userService;
+	
 	
 	@Autowired
-	private AuthServiceImpl userDetailsService;
+	private AuthServiceImpl authService;
 	 
-	/*
-	 * @PostMapping("/login") public ResponseEntity<?>
-	 * createAuthenticationToken(@Valid @RequestBody AuthRequestDto
-	 * authenticationRequest) throws Exception, ResourceNotFoundException {
-	 * 
-	 * try {
-	 * 
-	 * Candidate candidate =
-	 * userService.findByEmail(authenticationRequest.getEmail());
-	 * 
-	 * if (!userDetailsService.comparePassword(authenticationRequest.getPassword(),
-	 * candidate.getPassword())) {
-	 * 
-	 * return new ResponseEntity<>(new ErrorResponseDto("Invalid Credential",
-	 * "invalidCreds"), HttpStatus.UNAUTHORIZED); }
-	 * 
-	 * System.out.println("DATa"+candidate.getEmail()); final String token =
-	 * jwtTokenUtil.generateToken(candidate);
-	 * 
-	 * List<IPermissionDto> permissions =
-	 * userService.getUserPermission(candidate.getC_id()); LoggerDto logger = new
-	 * LoggerDto(); logger.setToken(token); Calendar calender =
-	 * Calendar.getInstance(); calender.add(Calendar.HOUR_OF_DAY, 5);
-	 * logger.setExpireAt(calender.getTime());
-	 * loggerServiceInterface.createLogger(logger, candidate); return new
-	 * ResponseEntity<>(new SuccessResponseDto("Success", "success", new
-	 * AuthResponseDto(token,
-	 * permissions,candidate.getEmail(),candidate.getName(),candidate.getC_id())),
-	 * HttpStatus.OK);
-	 * 
-	 * } catch (ResourceNotFoundException e) {
-	 * 
-	 * return new ResponseEntity<>(new ErrorResponseDto(e.getMessage(),
-	 * "userNotFound"), HttpStatus.NOT_FOUND);
-	 * 
-	 * }
-	 * 
-	 * }
-	 */
+	@PostMapping("/login")
+	public ResponseEntity<?> createAuthenticationToken(@Valid @RequestBody AuthRequestDto authenticationRequest) throws Exception, ResourceNotFoundException {
+
+		try {
+
+			Candidate candidate =candidateService.findByEmail(authenticationRequest.getEmail());
+
+			if (!authService.comparePassword(authenticationRequest.getPassword(), candidate.getPassword())) {
+
+				return new ResponseEntity<>(new ErrorResponseDto("Invalid Credential", "invalidCreds"), HttpStatus.UNAUTHORIZED);
+			}
+			
+			System.out.println("DATa"+candidate.getEmail());
+			final String token = JwtTokenUtil.generateToken(candidate);
+			 
+			List<IPermissionDto> permissions = candidateService.getUserPermission(candidate.getC_id());
+			LoggerDto logger = new LoggerDto();
+			logger.setToken(token);
+			Calendar calender = Calendar.getInstance();
+			calender.add(Calendar.HOUR_OF_DAY, 5);
+			logger.setExpireAt(calender.getTime());
+			loggerServiceInterface.createLogger(logger, candidate);
+			return new ResponseEntity<>(new SuccessResponseDto("Success", "success", new AuthResponseDto(token, permissions,candidate.getEmail(),candidate.getName(),candidate.getC_id())), HttpStatus.OK);
+			
+		} catch (ResourceNotFoundException e) {
+
+			return new ResponseEntity<>(new ErrorResponseDto(e.getMessage(), "userNotFound"), HttpStatus.NOT_FOUND);
+
+		}
+
+	}
 	 @Autowired
 	 private JwtUtil jwtUtil;
 	 
@@ -131,7 +124,7 @@ public class AuthController {
 		  try {
 		  
 		  Candidate candidate =candidateService.findByEmail(forgotPassBody.getEmail()); 
-		 final String token =jwtTokenUtil.generateTokenOnForgotPass(candidate.getEmail()); 
+		 final String token =JwtTokenUtil.generateTokenOnForgotPass(candidate.getEmail()); 
 		  final String baseUrl = appSetting.getAllAppSetting().getSettings().get("frontendbaseurl");
 		  final String passUrl = appSetting.getAllAppSetting().getSettings().get("forgotpasswordurl"); final
 		 String url = "To confirm your account, please click here : " + baseUrl + passUrl + "?token=" + token;

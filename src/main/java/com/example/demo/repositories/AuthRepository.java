@@ -5,6 +5,6 @@ import com.example.demo.entities.Candidate;
 
 public interface AuthRepository extends JpaRepository<Candidate, Long> {
 
-	Candidate findByUsername(String username);
+	Candidate findByEmail(String email);
 
 }

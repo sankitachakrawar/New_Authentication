@@ -1,10 +1,6 @@
 package com.example.demo.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-
-
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -21,10 +17,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.example.demo.filter.JwtFilter;
-
-
-
 @SuppressWarnings("deprecation")
 @Configuration
 @EnableWebSecurity
@@ -33,35 +25,31 @@ import com.example.demo.filter.JwtFilter;
 
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	/*
-	 * @Autowired private UserDetailsService userDetailsService;
-	 */
 
-    @Autowired
-    private JwtFilter jwtFilter;
+	private JwtRequestFilter jwtRequestFilter;
+	
+	@Autowired
+	private UserDetailsService userDetailsService;
+	
+	@Override
+	@Bean
+	public UserDetailsService userDetailsService() {
 
-	/*
-	 * @Override
-	 * 
-	 * @Bean public UserDetailsService userDetailsService() {
-	 * 
-	 * return super.userDetailsService();
-	 * 
-	 * }
-	 */
+		return super.userDetailsService();
 
-	/*
-	 * @Bean public DaoAuthenticationProvider authenticationProvider() {
-	 * 
-	 * DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-	 * authProvider.setUserDetailsService(userDetailsService); return authProvider;
-	 * 
-	 * }
-	 */
-@Autowired
-private UserDetailsService userDetailsService;
-	  @Override protected void configure(AuthenticationManagerBuilder auth) throws
-	  Exception {
+	}
+	@Autowired
+	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+
+		// configure AuthenticationManager so that it knows from where to load
+		// user for matching credentials
+		// Use BCryptPasswordEncoder
+		auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
+
+	}
+	
+	  @Override 
+	  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 	  
 		  auth.userDetailsService(userDetailsService);
 	  }
@@ -90,7 +78,7 @@ private UserDetailsService userDetailsService;
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
                 //.and().exceptionHandling().accessDeniedPage("/err/403");
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
 	

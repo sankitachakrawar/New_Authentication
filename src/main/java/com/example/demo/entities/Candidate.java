@@ -1,6 +1,7 @@
 package com.example.demo.entities;
 
 import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
 
 @SuppressWarnings("serial")
 @Entity
@@ -40,6 +42,8 @@ public class Candidate implements Serializable{
 
 	private String username;
 	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.user", cascade = CascadeType.ALL)
+	private List<UserRoleEntity> userRole;
 	
 	public Long getC_id() {
 		return c_id;
@@ -109,6 +113,13 @@ public class Candidate implements Serializable{
 	public String getUsername() {
 		return username;
 	}
+
+	public void setUserRole(List<UserRoleEntity> userRole) {
+		this.userRole = userRole;
+	}
 	
+	public List<UserRoleEntity> getUserRole() {
+		return userRole;
+	}
 	
 }

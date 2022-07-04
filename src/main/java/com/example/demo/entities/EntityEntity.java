@@ -11,52 +11,44 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
-@Table(name = "forgot_password_request")
-public class Forgot_password_request implements Serializable {
+@Table(name = "entities")
+public class EntityEntity implements Serializable {
 
 	/**
 	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Forgot_password_request() {
-
-		super();
+	public EntityEntity() {
 
 		// TODO Auto-generated constructor stub
 	}
 
-	public Forgot_password_request(Long id, Long c_id, String token, Date linkUsedAt, Date successAt, Boolean isActive, Date createdAt) {
+	public EntityEntity(Long id, String entityName, String description, Boolean isActive, Date createdAt, Date updatedAt) {
 
 		super();
 		this.id = id;
-		this.c_id=c_id;
-		this.token = token;
-		this.linkUsedAt = linkUsedAt;
-		this.successAt = successAt;
+		this.entityName = entityName;
+		this.description = description;
 		this.isActive = isActive;
 		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
 
 	}
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "c_id")
-	private Long c_id;
+	@Column(name = "entity_name")
+	private String entityName;
 
-	@Column(name = "token", length = 512)
-	private String token;
-
-	@Column(name = "link_used_at")
-	private Date linkUsedAt;
-
-	@Column(name = "success_at")
-	private Date successAt;
+	@Column(name = "description")
+	private String description;
 
 	@Column(name = "is_active")
 	private Boolean isActive = true;
@@ -64,6 +56,10 @@ public class Forgot_password_request implements Serializable {
 	@Column(name = "created_at")
 	@CreationTimestamp
 	private Date createdAt;
+
+	@Column(name = "updated_at")
+	@UpdateTimestamp
+	private Date updatedAt;
 
 	public Long getId() {
 
@@ -77,46 +73,27 @@ public class Forgot_password_request implements Serializable {
 
 	}
 
-	public Long getC_id() {
-		return c_id;
-	}
-	public void setC_id(Long c_id) {
-		this.c_id = c_id;
-	}
+	public String getEntityName() {
 
-	public String getToken() {
-
-		return token;
+		return entityName;
 
 	}
 
-	public void setToken(String token) {
+	public void setEntityName(String entityName) {
 
-		this.token = token;
-
-	}
-
-	public Date getLinkUsedAt() {
-
-		return linkUsedAt;
+		this.entityName = entityName;
 
 	}
 
-	public void setLinkUsedAt(Date linkUsedAt) {
+	public String getDescription() {
 
-		this.linkUsedAt = linkUsedAt;
-
-	}
-
-	public Date getSuccessAt() {
-
-		return successAt;
+		return description;
 
 	}
 
-	public void setSuccessAt(Date successAt) {
+	public void setDescription(String description) {
 
-		this.successAt = successAt;
+		this.description = description;
 
 	}
 
@@ -141,6 +118,18 @@ public class Forgot_password_request implements Serializable {
 	public void setCreatedAt(Date createdAt) {
 
 		this.createdAt = createdAt;
+
+	}
+
+	public Date getUpdatedAt() {
+
+		return updatedAt;
+
+	}
+
+	public void setUpdatedAt(Date updatedAt) {
+
+		this.updatedAt = updatedAt;
 
 	}
 
