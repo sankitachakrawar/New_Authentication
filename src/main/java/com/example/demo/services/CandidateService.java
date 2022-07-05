@@ -1,15 +1,12 @@
 package com.example.demo.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import com.example.demo.dto.CandidateDto;
-import com.example.demo.dto.ChangePasswordDto;
 import com.example.demo.dto.ForgotPasswordDto;
-import com.example.demo.dto.IPermissionDto;
 import com.example.demo.entities.Candidate;
 
 
@@ -32,11 +29,13 @@ public interface CandidateService {
 
 	Candidate findByEmail(String email);
 
-	List<IPermissionDto> getUserPermission(Long c_id);
-
-	void changePassword(Long c_id, @Valid ChangePasswordDto userBody, HttpServletRequest request);
-
 	void forgotPasswordConfirm(String token, @Valid ForgotPasswordDto userBody, HttpServletRequest request);
+
+	//List<IPermissionDto> getUserPermission(Long c_id);
+
+	//void changePassword(Long c_id, @Valid ChangePasswordDto userBody, HttpServletRequest request);
+
+	//void forgotPasswordConfirm(String token, @Valid ForgotPasswordDto userBody, HttpServletRequest request);
 	
 	
 }

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ErrorResponseDto;
+import com.example.demo.dto.IJobListDto;
 import com.example.demo.dto.JobDto;
 import com.example.demo.dto.ListResponseDto;
 import com.example.demo.dto.SuccessResponseDto;
@@ -51,11 +52,8 @@ public class JobController {
 	}
 
 	
-	  @GetMapping("/jobs/{pageNo}/{pageSize}")
-	  public List<Job> getPaginated(@PathVariable int pageNo, @PathVariable int pageSize){
-	  
-	  return jobService.findPaginated(pageNo, pageSize); 
-	  }
+	
+	 
 	  
 	  
 	  @GetMapping("/jobs/{j_id}")
@@ -84,26 +82,29 @@ public class JobController {
 	  
 	  
 	  
-	  @GetMapping("/jobs")
-		public ResponseEntity<?> getAllJobDetails(@RequestParam(defaultValue = "") String search,
-				@RequestParam(defaultValue = "1") String pageNo, @RequestParam(defaultValue = "25") String size) {
-
-			Page<JobDto> jobs = jobService.getAllJobs(search, pageNo, size);
-
-			if (jobs.getTotalElements() != 0) {
-
-				return new ResponseEntity<>(new SuccessResponseDto("Success", "success",
-						new ListResponseDto(jobs.getContent(), jobs.getTotalElements())), HttpStatus.OK);
-
-			}
-
-			return new ResponseEntity<>(new ErrorResponseDto("Data Not Found", "dataNotFound"), HttpStatus.NOT_FOUND);
-
-		}
+		//Pagination
+		  @GetMapping("/jobs")
+		  public ResponseEntity<?>getAllJobDetails(@RequestParam(defaultValue = "") String search,
+		  
+				  @RequestParam(defaultValue = "1") String pageNo, @RequestParam(defaultValue = "25") String size) {
+		  
+		  Page<IJobListDto> jobs = jobService.getAllJobs(search, pageNo, size);
+		  
+		  if (jobs.getTotalElements() != 0) {
+		  
+		  return new ResponseEntity<>(new SuccessResponseDto("Success", "success", new
+		  ListResponseDto(jobs.getContent(), jobs.getTotalElements())), HttpStatus.OK);
+		  
+		  }
+		  
+		  return new ResponseEntity<>(new ErrorResponseDto("Data Not Found","dataNotFound"), HttpStatus.NOT_FOUND);
+		  
+		  }
+		 
 	  
 	  
 	  
-	  
+}
 	  
 	  
 	  
@@ -132,12 +133,15 @@ public class JobController {
 	 * 
 	 * 
 	 * 
-	 * @GetMapping("/jobs/apply/{pageNo}/{pageSize}") public List<Job>
-	 * getPaginatedByApply(@PathVariable int pageNo,@PathVariable int pageSize){
 	 * 
-	 * return jobService.findPaginatedByApply(pageNo, pageSize);
 	 * 
 	 * }
 	 */
 
-}
+
+		/*
+		 * @GetMapping("/jobs/{pageNo}/{pageSize}") public List<Job>
+		 * getPaginated(@PathVariable int pageNo, @PathVariable int pageSize){
+		 * 
+		 * return jobService.findPaginated(pageNo, pageSize); }
+		 */

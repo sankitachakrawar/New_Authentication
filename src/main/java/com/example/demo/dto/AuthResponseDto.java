@@ -1,7 +1,6 @@
 package com.example.demo.dto;
 
 import java.io.Serializable;
-import com.example.demo.dto.IPermissionDto;
 import java.util.List;
 
 public class AuthResponseDto implements Serializable {
@@ -10,14 +9,15 @@ public class AuthResponseDto implements Serializable {
 
 	private final String jwttoken;
 
-	private List<IPermissionDto> permission;
+	//private List<IPermissionDto> permission;
 
-	public List<IPermissionDto> getPermission() {
-
-		return permission;
-
-	}
-
+	/*
+	 * public List<IPermissionDto> getPermission() {
+	 * 
+	 * return permission;
+	 * 
+	 * }
+	 */
 	private String email;
 
 	private String name;
@@ -47,21 +47,30 @@ public class AuthResponseDto implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+	
+	
 
-	public AuthResponseDto(String jwttoken, List<IPermissionDto> permission, String email, String name, Long id) {
+	public AuthResponseDto(String jwttoken, String email, String name, Long id) {
 		super();
 		this.jwttoken = jwttoken;
-		this.permission = permission;
 		this.email = email;
 		this.name = name;
 		this.id = id;
 	}
 
-	public void setPermission(List<IPermissionDto> permission) {
-
-		this.permission = permission;
-
-	}
+	/*
+	 * public AuthResponseDto(String jwttoken, List<IPermissionDto> permission,
+	 * String email, String name, Long id) { super(); this.jwttoken = jwttoken;
+	 * this.permission = permission; this.email = email; this.name = name; this.id =
+	 * id; }
+	 * 
+	 * public void setPermission(List<IPermissionDto> permission) {
+	 * 
+	 * this.permission = permission;
+	 * 
+	 * }
+	 */
 
 	public String getToken() {
 

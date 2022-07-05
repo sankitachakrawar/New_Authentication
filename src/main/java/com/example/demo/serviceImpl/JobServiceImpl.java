@@ -1,6 +1,7 @@
 package com.example.demo.serviceImpl;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.dto.IJobListDto;
 import com.example.demo.dto.JobDto;
 import com.example.demo.entities.Candidate;
 import com.example.demo.entities.Job;
@@ -18,10 +20,11 @@ import com.example.demo.services.JobService;
 import com.example.demo.utils.PaginationUsingFromTo;
 
 
+
 @Service
 public class JobServiceImpl implements JobService {
 
-	@Autowired
+	//@Autowired
 	private JobRepository jobRepository;
 	
 	@Override
@@ -83,21 +86,17 @@ public class JobServiceImpl implements JobService {
 		 return this.jobToDto(job);
 	}
 
-	@Override
-	public List<Job> findPaginatedByApply(int pageNo, int pageSize) {
-		
-		return null;
-	}
-	@Override
-	public List<Job> findPaginated(int pageNo, int pageSize) {
-		Sort idSort=Sort.by("postTime").descending();
-		 
-		  Pageable paging=PageRequest.of(pageNo-1, pageSize,idSort);
-		  Page<Job> pagedResult=jobRepository.findAll(paging);
-		  
-		  return pagedResult.toList();
-	}
-
+	
+	
+	/*
+	 * @Override public List<Job> findPaginated(int pageNo, int pageSize) { Sort
+	 * idSort=Sort.by("postTime").descending();
+	 * 
+	 * Pageable paging=PageRequest.of(pageNo-1, pageSize,idSort); Page<Job>
+	 * pagedResult=jobRepository.findAll(paging);
+	 * 
+	 * return pagedResult.toList(); }
+	 */
 	@Override
 	public JobDto updateJobDetails(JobDto job, Integer j_id) {
 		Job jobs = this.jobRepository.findById(j_id).orElseThrow(()->new ResourceNotFoundException("job", "j_id", j_id));
@@ -122,25 +121,29 @@ public class JobServiceImpl implements JobService {
 	}
 
 	
-	  @Override public Page<JobDto> getAllJobs(String search, String from, String to) {
+	
+	  @Override
+	  public Page<IJobListDto> getAllJobs(String search, String from, String to) { 
+		  
 		  Pageable paging = new PaginationUsingFromTo().getPagination(from, to);
-	  Page<JobDto> jobs;
+	       Page<IJobListDto> jobs;
 	  
-	 if ((search == "") || (search == null) || (search.length() == 0)) {
- 
-	  jobs = jobRepository.findByOrderByPostTimeDesc(paging, JobDto.class);
+	  if ((search == "") || (search == null) || (search.length() == 0)) {
+	  
+	           jobs = jobRepository.findByOrderByj_idDesc(paging, IJobListDto.class);
 	  
 	  } else {
 	  
+	
+	       jobs=jobRepository.findByOrderByApplyDesc(paging,IJobListDto.class);
 	  
-		  jobs=jobRepository.findByOrderByApply(paging,JobDto.class);
+	  } System.out.println(jobRepository.findAll().size()); 
 	  
-	 }
-	 System.out.println(jobRepository.findAll().size()); 
-	  return jobs;
+	  			return jobs;
 	  
 	  
 	  }
+	
 	 
 
 	

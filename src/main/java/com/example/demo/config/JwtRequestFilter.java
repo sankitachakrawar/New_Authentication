@@ -1,23 +1,18 @@
 package com.example.demo.config;
 
 import java.io.IOException;
-
-
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import com.example.demo.dto.UserDataDto;
+import com.example.demo.dto.CandidateDto;
 import com.example.demo.serviceImpl.AuthServiceImpl;
 import com.example.demo.utils.JwtTokenUtil;
 import com.google.gson.JsonObject;
@@ -90,7 +85,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 				// After setting the Authentication in the context, we specify
 				// that the current user is authenticated. So it passes the
 				// Spring Security Configurations successfully.
-				UserDataDto userData = new UserDataDto();
+				CandidateDto userData = new CandidateDto();
 				userData.setC_id(jsonObj.get("c_id").getAsLong());
 				userData.setName(jsonObj.get("name").getAsString());
 				userData.setEmail(jsonObj.get("email").getAsString());

@@ -30,7 +30,7 @@ public class AuthRequest {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getUserame() {
+	public String getUsername() {
 		return username;
 	}
 	public void setUsername(String username) {

@@ -3,6 +3,7 @@ package com.example.demo.serviceImpl;
 import java.util.ArrayList;
 
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.entities.Candidate;
 import com.example.demo.repositories.AuthRepository;
 import com.example.demo.services.AuthInterface;
-import com.example.demo.services.RoleServiceInterface;
+
 import com.example.demo.utils.CacheOperation;
 
 
@@ -31,8 +32,8 @@ public class AuthServiceImpl implements AuthInterface {
 	@Autowired
 	private PasswordEncoder bcryptEncoder;
 
-	@Autowired
-	private RoleServiceInterface roleServiceInterface;
+	
+	 
 
 	@Autowired
 	private CacheOperation cache;
@@ -88,12 +89,14 @@ public class AuthServiceImpl implements AuthInterface {
 		if (!cache.isKeyExist(candidate.getC_id() + "permission", candidate.getC_id() + "permission")) {
 
 			ArrayList<SimpleGrantedAuthority> authorities1 = new ArrayList<>();
-			ArrayList<String> permissions = roleServiceInterface.getPermissionByUserId(candidate.getC_id());
-			permissions.forEach(permission -> {
-
-				authorities1.add(new SimpleGrantedAuthority("ROLE_" + permission));
-
-			});
+			//ArrayList<String> permissions = roleServiceInterface.getPermissionByUserId(candidate.getC_id());
+			/*
+			 * permissions.forEach(permission -> {
+			 * 
+			 * authorities1.add(new SimpleGrantedAuthority("ROLE_" + permission));
+			 * 
+			 * });
+			 */
 			authorities = authorities1;
 			cache.addInCache(candidate.getC_id() + "permission", candidate.getC_id() + "permission", authorities1);
 

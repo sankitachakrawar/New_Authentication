@@ -26,7 +26,7 @@ public class Job {
 	private String location;
 	@UpdateTimestamp
 	private Date postTime;
-	private boolean apply=false;
+	private boolean apply;
 	
 	
 	@ManyToOne
