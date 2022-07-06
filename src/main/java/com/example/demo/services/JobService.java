@@ -1,28 +1,27 @@
 package com.example.demo.services;
 import java.util.List;
 
-import org.springframework.data.domain.Page;
 
-import com.example.demo.dto.IJobListDto;
+
+import org.springframework.data.domain.Page;
 import com.example.demo.dto.JobDto;
 import com.example.demo.entities.Job;
 
 public interface JobService {
 
-	public void  createJob(JobDto jobDto,Integer j_id);
-	//List<JobDto> getAllJobs();
+	public void  createJob(JobDto jobDto,Long id);
 	
-	Page<IJobListDto> getAllJobs(String search, String from, String to);
+	 public List<JobDto> getAllJobs();
 	
-	//List<Job> findPaginated(int pageNo,int pageSize);
+	public JobDto getJobById(Long id);
 	
-	public JobDto getJobById(Integer j_id);
 	
-	//List<Job> findPaginatedByApply(int pageNo,int pageSize);
 	
-	JobDto updateJobDetails(JobDto job, Integer j_id);
+	JobDto updateJobDetails(JobDto job, Long id);
 	
-	void deleteJobDetails(Integer j_id);
+	void deleteJobDetails(Long id);
 
-	//Page<JobDto> getAllJobs(String search, String from, String to);
+	Page<Job> getAllJobs(String search, String from, String to);
+
+	void addJobToCandidate(String name, String title);
 }

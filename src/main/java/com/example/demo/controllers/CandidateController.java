@@ -42,10 +42,10 @@ public class CandidateController {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	
 	@PostMapping("/candidates") 
-	public ResponseEntity<CandidateDto> createCandidate(@Valid @RequestBody CandidateDto candidateDto){
+	public ResponseEntity<Candidate> addCandidate(@Valid @RequestBody Candidate candidate){
 	  
 	  @SuppressWarnings("unused")
-	CandidateDto createdCandidateDto=this.candidateService.createCandidate(candidateDto);
+	Candidate createdCandidate=this.candidateService.addCandidate(candidate);
 
 	 // return new ResponseEntity(Map.of("message","Candidate created successfully!!"),HttpStatus.OK); 
 	 return new ResponseEntity("Candidate Register Successfully",HttpStatus.OK);
@@ -66,9 +66,9 @@ public class CandidateController {
 	  
 	  }
 	@PutMapping("/candidates/{c_id}")
-	public ResponseEntity<CandidateDto> updateCandidate(@Valid @RequestBody CandidateDto candidateDto,@PathVariable Long c_id){
+	public ResponseEntity<Candidate> updateCandidate(@Valid @RequestBody Candidate candidate,@PathVariable Long c_id){
 		
-		CandidateDto updatedCandidate=this.candidateService.updateCandidate(candidateDto, c_id);
+		Candidate updatedCandidate=this.candidateService.updateCandidate(candidate, c_id);
 		
 		return ResponseEntity.ok(updatedCandidate);	
 		
@@ -82,12 +82,12 @@ public class CandidateController {
 	}
 	
 	@GetMapping("/candidates")
-	public ResponseEntity<List<CandidateDto>> getAllCandidates(){
+	public ResponseEntity<List<Candidate>> getAllCandidates(){
 		return ResponseEntity.ok(this.candidateService.getAllCandidates());
 		
 	}
 	@GetMapping("/candidates/{c_id}")
-	public ResponseEntity<CandidateDto> getSingleCandidate(@PathVariable Long c_id){
+	public ResponseEntity<Candidate> getSingleCandidate(@PathVariable Long c_id){
 		return ResponseEntity.ok(this.candidateService.getCandidateById(c_id));
 		
 	}

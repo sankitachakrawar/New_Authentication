@@ -2,39 +2,34 @@ package com.example.demo.serviceImpl;
 
 import java.util.List;
 
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
-
-import com.example.demo.dto.IJobListDto;
 import com.example.demo.dto.JobDto;
 import com.example.demo.entities.Candidate;
 import com.example.demo.entities.Job;
 import com.example.demo.exceptions.ResourceNotFoundException;
+import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.repositories.JobRepository;
 import com.example.demo.services.JobService;
 import com.example.demo.utils.PaginationUsingFromTo;
 
-
-
 @Service
 public class JobServiceImpl implements JobService {
 
-	//@Autowired
+	@Autowired
 	private JobRepository jobRepository;
 	
 	@Override
-	public void createJob(JobDto jobDto,Integer j_id) {
+	public void createJob(JobDto jobDto, Long id) {
 		Job job=new Job();
 		job.setTitle(jobDto.getTitle());
 		job.setLocation(jobDto.getLocation());
 		job.setPostTime(jobDto.getPostTime());
 		job.setApply(jobDto.getApply());
-		job.setCandidate(jobDto.getCandidate());
+		//job.setCandidate(jobDto.getCandidate());
 		
 		jobRepository.save(job);
 		
@@ -59,7 +54,7 @@ public class JobServiceImpl implements JobService {
 
 	public Job dtoToJob(JobDto jobDto)
 	{ Job job=new Job();
-	  job.setJ_id(jobDto.getJ_id()); 
+	  job.setId(jobDto.getId()); 
 	  job.setTitle(jobDto.getTitle());
 	  job.setLocation(jobDto.getLocation()); 
 	  job.setPostTime(jobDto.getPostTime());
@@ -68,21 +63,21 @@ public class JobServiceImpl implements JobService {
 	 } 
 	public JobDto jobToDto(Job job) {
 		JobDto jobDto=new JobDto();
-	  jobDto.setJ_id(job.getJ_id()); 
+	  jobDto.setId(job.getId()); 
 	  jobDto.setTitle(job.getTitle());
 	  jobDto.setLocation(job.getLocation()); 
-	  //jobDto.setApply(job.getApply());
+	  jobDto.setApply(job.getApply());
 	  jobDto.setPostTime(job.getPostTime());
-	  jobDto.setCandidate(job.getCandidate()); 
+	  //jobDto.setCandidate(job.getCandidate()); 
 	  return jobDto;
 	  
 	  }
 	
 	
 	@Override
-	public JobDto getJobById(Integer j_id) {
+	public JobDto getJobById(Long id) {
 		
-		Job job=this.jobRepository.findById(j_id).orElseThrow(()->new ResourceNotFoundException("job", "j_id", j_id));
+		Job job=this.jobRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("job", "id", id));
 		 return this.jobToDto(job);
 	}
 
@@ -98,13 +93,13 @@ public class JobServiceImpl implements JobService {
 	 * return pagedResult.toList(); }
 	 */
 	@Override
-	public JobDto updateJobDetails(JobDto job, Integer j_id) {
-		Job jobs = this.jobRepository.findById(j_id).orElseThrow(()->new ResourceNotFoundException("job", "j_id", j_id));
+	public JobDto updateJobDetails(JobDto job, Long id) {
+		Job jobs = this.jobRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("job", "id", id));
 		jobs.setTitle(job.getTitle());
 		jobs.setLocation(job.getLocation());
 		jobs.setPostTime(job.getPostTime());
 		jobs.setApply(job.getApply());
-		jobs.setCandidate(job.getCandidate());
+		//jobs.setCandidate(job.getCandidate());
 			Job updatedJob=this.jobRepository.save(jobs);
 			JobDto job2=this.jobToDto(updatedJob);
 			
@@ -113,39 +108,48 @@ public class JobServiceImpl implements JobService {
 	}
 
 	@Override
-	public void deleteJobDetails(Integer j_id) {
-		Job job=this.jobRepository.findById(j_id).orElseThrow(()->new ResourceNotFoundException("job", "j_id", j_id));
+	public void deleteJobDetails(Long id) {
+		Job job=this.jobRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("job", "id", id));
 		
 		this.jobRepository.delete(job);
 		
 	}
 
-	
-	
-	  @Override
-	  public Page<IJobListDto> getAllJobs(String search, String from, String to) { 
-		  
-		  Pageable paging = new PaginationUsingFromTo().getPagination(from, to);
-	       Page<IJobListDto> jobs;
-	  
-	  if ((search == "") || (search == null) || (search.length() == 0)) {
-	  
-	           jobs = jobRepository.findByOrderByj_idDesc(paging, IJobListDto.class);
-	  
-	  } else {
-	  
-	
-	       jobs=jobRepository.findByOrderByApplyDesc(paging,IJobListDto.class);
-	  
-	  } System.out.println(jobRepository.findAll().size()); 
-	  
-	  			return jobs;
-	  
-	  
-	  }
-	
-	 
+	@Override
+	public List<JobDto> getAllJobs() {
+		
+		List<Job> jobs=this.jobRepository.findAll();
+		List<JobDto> jobDtos=jobs.stream().map(job->this.jobToDto(job)).collect(Collectors.toList());
+		return jobDtos;
+	}
 
+	@Override
+	public Page<Job> getAllJobs(String search, String from, String to) {
+		
+		Pageable paging = new PaginationUsingFromTo().getPagination(from, to);
+		if ((search == "") || (search == null) || (search.length() == 0)) {
+			return jobRepository.findAll(paging);
+		} else {
+			//search = StringUtils.trimLeadingWhitespace(search);
+			//search = StringUtils.trimTrailingWhitespace(search);
+			return jobRepository.findByTitleContainingIgnoreCaseOrderByIdDesc(search, paging, Job.class);
+			
+			//return jobRepository.findByTitleContainingIgnoreCaseOrderByPostTimeDesc(search, paging, Job.class);
+			
+		}
+		
+
+	}
+	@Autowired
+	private CandidateRepository candidateRepository;
+	 
+	@Override
+	public void addJobToCandidate(String email, String title) {
+		Candidate candidate = candidateRepository.findByEmailContainingIgnoreCase(email);
+		Job job = jobRepository.findByTitleContainingIgnoreCase(title);
+		candidate.getJobs().add(job);
+	}
+}
 	
 	
 	
@@ -276,4 +280,4 @@ public class JobServiceImpl implements JobService {
 	 * 
 	 */
 
-}
+

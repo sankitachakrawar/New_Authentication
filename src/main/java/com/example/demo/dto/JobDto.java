@@ -6,7 +6,7 @@ import com.example.demo.entities.Candidate;
 
 public class JobDto {
 
-	private int j_id;
+	private Long id;
 	
 	private String title;
 	
@@ -16,12 +16,12 @@ public class JobDto {
 	
 	private Candidate candidate;
 
-	public int getJ_id() {
-		return j_id;
+	public Long getId() {
+		return id;
 	}
 
-	public void setJ_id(int j_id) {
-		this.j_id = j_id;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getTitle() {

@@ -1,8 +1,10 @@
 package com.example.demo.controllers;
 
 import java.util.List;
+
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +20,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.dto.AssignJob;
 import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ErrorResponseDto;
-import com.example.demo.dto.IJobListDto;
 import com.example.demo.dto.JobDto;
 import com.example.demo.dto.ListResponseDto;
 import com.example.demo.dto.SuccessResponseDto;
@@ -45,7 +48,7 @@ public class JobController {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping("/jobs")
 	public ResponseEntity<JobDto> createJob(@RequestBody JobDto jobDto) {
-		jobService.createJob(jobDto, jobDto.getJ_id());
+		jobService.createJob(jobDto, jobDto.getId());
 
 		return new ResponseEntity("Candidate applied to job successfully!!", HttpStatus.CREATED);
 
@@ -56,54 +59,71 @@ public class JobController {
 	 
 	  
 	  
-	  @GetMapping("/jobs/{j_id}")
-	  public ResponseEntity<?> getSingleJob(@PathVariable ("j_id") int j_id){
-		  return ResponseEntity.ok(this.jobService.getJobById(j_id));
+	  @GetMapping("/jobs/{id}")
+	  public ResponseEntity<?> getSingleJob(@PathVariable ("id") Long id){
+		  return ResponseEntity.ok(this.jobService.getJobById(id));
 		  
 	  }
 	  
 	  
 	  
-	  @PutMapping("/jobs/{j_id}")
-		public ResponseEntity<?> updateJob(@Valid @RequestBody JobDto jobDto,@PathVariable Integer j_id){
+	  @PutMapping("/jobs/{id}")
+		public ResponseEntity<?> updateJob(@Valid @RequestBody JobDto jobDto,@PathVariable Long id){
 			
-			JobDto updatedJob=this.jobService.updateJobDetails(jobDto, j_id);
+			JobDto updatedJob=this.jobService.updateJobDetails(jobDto, id);
 			
 			return new ResponseEntity<>("Data Updated Successfully!!",HttpStatus.OK);	
 			
 		}
 	  
-	  @DeleteMapping("/jobs/{j_id}")
-		public ResponseEntity<?> deleteJobDetails(@PathVariable("j_id")Integer j_id){
-			this.jobService.deleteJobDetails(j_id);
+	  @DeleteMapping("/jobs/{id}")
+		public ResponseEntity<?> deleteJobDetails(@PathVariable("id")Long id){
+			this.jobService.deleteJobDetails(id);
 			return new  ResponseEntity<>("Job details delete sucesssfully!!",HttpStatus.OK);
 		}
-		
-	  
-	  
-	  
-		//Pagination
+	
+		  
 		  @GetMapping("/jobs")
-		  public ResponseEntity<?>getAllJobDetails(@RequestParam(defaultValue = "") String search,
+			public ResponseEntity<List<JobDto>> getAllJobs(){
+				return ResponseEntity.ok(this.jobService.getAllJobs());
+				
+			}
 		  
-				  @RequestParam(defaultValue = "1") String pageNo, @RequestParam(defaultValue = "25") String size) {
-		  
-		  Page<IJobListDto> jobs = jobService.getAllJobs(search, pageNo, size);
-		  
-		  if (jobs.getTotalElements() != 0) {
-		  
-		  return new ResponseEntity<>(new SuccessResponseDto("Success", "success", new
-		  ListResponseDto(jobs.getContent(), jobs.getTotalElements())), HttpStatus.OK);
-		  
-		  }
-		  
-		  return new ResponseEntity<>(new ErrorResponseDto("Data Not Found","dataNotFound"), HttpStatus.NOT_FOUND);
-		  
-		  }
-		 
+		  @GetMapping()
+			public ResponseEntity<?> getAllJobs(@RequestParam(defaultValue = "") String search,
+					@RequestParam(defaultValue = "1") String pageNo, @RequestParam(defaultValue = "25") String size) {
+				Page<Job> users = jobService.getAllJobs(search, pageNo, size);
+				if (users.getTotalElements() != 0) {
+					return new ResponseEntity<>(new SuccessResponseDto("Success", "success",
+							new ListResponseDto(users.getContent(), users.getTotalElements())), HttpStatus.OK);
+				}
+				return new ResponseEntity<>(new ErrorResponseDto("Data Not Found", "dataNotFound"), HttpStatus.NOT_FOUND);
+			}
 	  
-	  
-	  
+		  
+		  @PostMapping("/assignJob")
+			public ResponseEntity<?> assignJob(@Valid @RequestBody AssignJob assignJob, HttpServletRequest request)
+					throws Exception {
+				try {
+					String email = assignJob.getEmail();
+					System.out.println(email);
+				
+					String title = assignJob.getTitle();
+					System.out.println(title);
+		jobService.addJobToCandidate(email, title);
+					return new ResponseEntity<>(new SuccessResponseDto("Job Assign to Candidate", "jobAssignToCandidate", assignJob),
+							HttpStatus.CREATED);
+
+				} catch (Exception e) {
+					e.printStackTrace();
+					return new ResponseEntity<>(new ErrorResponseDto("Job Not Assign to Candidate", "jobNotAssignToCandidate"),
+							HttpStatus.NOT_ACCEPTABLE);
+				}
+
+			}
+		  
+		  
+		  
 }
 	  
 	  

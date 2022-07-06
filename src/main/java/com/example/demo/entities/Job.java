@@ -19,7 +19,7 @@ public class Job {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int j_id;
+	private Long id;
 	
 	private String title;
 	
@@ -29,16 +29,16 @@ public class Job {
 	private boolean apply;
 	
 	
-	@ManyToOne
-	@JoinColumn(name="candidate_id")
-	private Candidate candidate;
+	//@ManyToOne
+	//@JoinColumn(name="candidate_id")
+	//private Candidate candidate;
 
-	public int getJ_id() {
-		return j_id;
+	public Long getId() {
+		return id;
 	}
 
-	public void setJ_id(int j_id) {
-		this.j_id = j_id;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getTitle() {
@@ -57,13 +57,7 @@ public class Job {
 		this.location = location;
 	}
 
-	public Candidate getCandidate() {
-		return candidate;
-	}
-
-	public void setCandidate(Candidate candidate) {
-		this.candidate = candidate;
-	}
+	
 
 	public void setPostTime(Date postTime) {
 		this.postTime = postTime;
@@ -85,5 +79,16 @@ public class Job {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
+	public Job(Long id, String title, String location, Date postTime, boolean apply) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.location = location;
+		this.postTime = postTime;
+		this.apply = apply;
+		
+	}
+
 	
 }

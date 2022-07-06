@@ -1,10 +1,10 @@
 package com.example.demo.entities;
 
 import java.io.Serializable;
-
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-
+import javax.persistence.JoinColumn;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +12,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -91,25 +93,30 @@ public class Candidate implements Serializable{
 		return isActive;
 	}
 	
-	@OneToMany(mappedBy="candidate",cascade = CascadeType.ALL)
-	private List<Job> jobs;
+	@ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	//@JoinTable(name = "candidate_jobs", joinColumns = @JoinColumn(name = "candidate_id", referencedColumnName = "c_id"), inverseJoinColumns = @JoinColumn(name = "job_id", referencedColumnName = "id"))
+	private final Collection<Job> jobs = new ArrayList<>();
+	
+	//private List<Job> jobs;
 
-	public List<Job> getJobs() {
-		return jobs;
-	}
 
-	public void setJobs(List<Job> jobs) {
-		this.jobs = jobs;
-	}
-
-	public void setEnabled(boolean isEnabled) {
-		this.isEnabled = isEnabled;
-	}
 	public void setUsername(String username) {
 		this.username = username;
 	}
 	public String getUsername() {
 		return username;
+	}
+
+	public boolean isEnabled() {
+		return isEnabled;
+	}
+
+	public void setEnabled(boolean isEnabled) {
+		this.isEnabled = isEnabled;
+	}
+
+	public Collection<Job> getJobs() {
+		return jobs;
 	}
 	
 	

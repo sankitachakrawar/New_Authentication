@@ -46,12 +46,18 @@ public class CandidateServiceImpl implements CandidateService{
 	
 	
 	@Override
-	public CandidateDto createCandidate(CandidateDto candidateDto) {
+	public Candidate addCandidate(Candidate candidate) {
 		
-		Candidate candidate =this.dtoToCandidate(candidateDto);
+		//Candidate candidate =this.dtoToCandidate(candidateDto);
+		Candidate candidate1=new Candidate();
+		candidate1.setName(candidate.getName());
+		candidate1.setEmail(candidate.getEmail());
+		candidate1.setPassword(passwordEncoder.encode(candidate.getAddress()));
+		candidate1.setAddress(candidate.getAddress());
+		candidate1.setUsername(candidate.getUsername());
 		
-		Candidate savedCandidate=this.candidateRepository.save(candidate);	
-		return this.candidateToDto(savedCandidate);
+		Candidate savedCandidate=this.candidateRepository.save(candidate1);	
+		return savedCandidate;
 	
 		
 	}
@@ -64,6 +70,7 @@ public class CandidateServiceImpl implements CandidateService{
 		candidate2.setPassword(passwordEncoder.encode(candidateDto.getPassword()));
 		candidate2.setAddress(candidateDto.getAddress());
 		candidate2.setUsername(candidateDto.getUsername());
+	
 		return candidate2;
 	}
 	public CandidateDto candidateToDto(Candidate candidate) {
@@ -81,40 +88,53 @@ public class CandidateServiceImpl implements CandidateService{
 
 
 	@Override
-	public CandidateDto updateCandidate(CandidateDto candidateDto, Long c_id) {
+	public Candidate updateCandidate(Candidate candidate1, Long c_id) {
 		Candidate candidate = this.candidateRepository.findById(c_id).orElseThrow(()->new ResourceNotFoundException("candidate", "c_id", c_id));
-		candidate.setC_id(candidateDto.getC_id());
-		candidate.setName(candidateDto.getName());
-		candidate.setEmail(candidateDto.getEmail());
-		candidate.setPassword(candidateDto.getPassword());
-		candidate.setAddress(candidateDto.getAddress());
+		candidate.setC_id(candidate1.getC_id());
+		candidate.setName(candidate1.getName());
+		candidate.setEmail(candidate1.getEmail());
+		candidate.setPassword(candidate1.getPassword());
+		candidate.setAddress(candidate1.getAddress());
 			Candidate updatedCandidate=this.candidateRepository.save(candidate);
-			CandidateDto candidateDto2=this.candidateToDto(updatedCandidate);
+			//CandidateDto candidateDto2=this.candidateToDto(updatedCandidate);
 			
-			return candidateDto2;
+			return updatedCandidate;
 			
 	}
 
 
 
 	@Override
-	public CandidateDto getCandidateById(Long c_id) {
+	public Candidate getCandidateById(Long c_id) {
 		Candidate candidate = this.candidateRepository.findById(c_id).orElseThrow(()->new ResourceNotFoundException("candidate", "c_id", c_id));
-		return this.candidateToDto(candidate);
+		return candidate;
 	}
 
 
 
+	/*
+	 * @Override public List<CandidateDto> getAllCandidates() { List<Candidate>
+	 * candidates=this.candidateRepository.findAll();
+	 * 
+	 * List<CandidateDto>
+	 * candidateDtos=candidates.stream().map(candidate->this.candidateToDto(
+	 * candidate)).collect(Collectors.toList()); return candidateDtos; }
+	 */
+
+
 	@Override
-	public List<CandidateDto> getAllCandidates() {
+	public List<Candidate> getAllCandidates() {
 		List<Candidate> candidates=this.candidateRepository.findAll();
 		
-		List<CandidateDto> candidateDtos=candidates.stream().map(candidate->this.candidateToDto(candidate)).collect(Collectors.toList());
-		return candidateDtos;
+		//List<CandidateDto> candidateDtos=candidates.stream().map(candidate->this.candidateToDto(candidate)).collect(Collectors.toList());
+		return candidates;
 	}
-
-
-
+	
+	
+	
+	
+	
+	
 	@Override
 	public void deleteCandidate(Long c_id) {
 		Candidate candidate=this.candidateRepository.findById(c_id).orElseThrow(()->new ResourceNotFoundException("candidate", "c_id", c_id));
@@ -181,6 +201,14 @@ public class CandidateServiceImpl implements CandidateService{
 	public void forgotPasswordConfirm(String token, @Valid ForgotPasswordDto userBody, HttpServletRequest request) {
 		
 		
+	}
+
+
+
+	@Override
+	public CandidateDto createCandidate(CandidateDto candidate) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/*
@@ -272,26 +300,8 @@ public class CandidateServiceImpl implements CandidateService{
 	 * ResourceNotFoundException("Reset the password time out");
 	 * 
 	 * } }
-	 * 
-	 * @Autowired private RolePermissionRepository rolePermissionRepository;
-	 * 
-	 * 
-	 * 
-	 * @Override public List<IPermissionDto> getUserPermission(Long userId) {
-	 * ArrayList<RoleIdListDto> roleIds = candidateRepository.findByPkUserId(userId,
-	 * RoleIdListDto.class); ArrayList<Long> roles = new ArrayList<>();
-	 * 
-	 * for (int i = 0; i < roleIds.size(); i++) {
-	 * 
-	 * roles.add(roleIds.get(i).getPkRoleId());
-	 * 
-	 * }
-	 * 
-	 * return rolePermissionRepository.findByPkRoleIdIn(roles,
-	 * IPermissionDto.class); }
 	 */
-
-
+	 
 
 	
 

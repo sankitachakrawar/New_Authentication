@@ -12,14 +12,20 @@ import com.example.demo.entities.Candidate;
 
 public interface CandidateService {
 
-	
+	Candidate addCandidate(Candidate candidate);
 	CandidateDto createCandidate(CandidateDto candidate);
 	
-	CandidateDto updateCandidate(CandidateDto candidate, Long c_id);
+	//CandidateDto updateCandidate(CandidateDto candidate, Long c_id);
+	Candidate updateCandidate(Candidate candidate, Long c_id);
 	
-	CandidateDto getCandidateById(Long c_id);
+	//CandidateDto getCandidateById(Long c_id);
+	Candidate getCandidateById(Long c_id);
 	
-	List<CandidateDto> getAllCandidates();
+	
+	
+	List<Candidate> getAllCandidates();
+	
+	//List<CandidateDto> getAllCandidates();
 	
 	void deleteCandidate(Long c_id);
 
