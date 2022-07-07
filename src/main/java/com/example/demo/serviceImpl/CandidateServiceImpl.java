@@ -1,80 +1,86 @@
 package com.example.demo.serviceImpl;
 
 import java.util.ArrayList;
-
-
-
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ChangePasswordDto;
 import com.example.demo.dto.ForgotPasswordDto;
 import com.example.demo.entities.Candidate;
+import com.example.demo.entities.Forgot_password_request;
 import com.example.demo.repositories.CandidateRepository;
+import com.example.demo.repositories.ForgotPasswordRequestRepository;
 import com.example.demo.services.CandidateService;
+
 import com.example.demo.utils.JwtTokenUtil;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.example.demo.exceptions.*;
 
 @Service
-public class CandidateServiceImpl implements CandidateService{
+public class CandidateServiceImpl implements CandidateService {
 
+	private PasswordEncoder passwordEncoder;
 
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
+	@Autowired
 	private CandidateRepository candidateRepository;
-	
+
+	@Autowired
+	private ForgotPasswordRequestRepository forgotPasswordRequestRepository;
+
+	@Autowired
+	private PasswordEncoder bcryptEncoder;
+
+	@Autowired
+	private JwtTokenUtil jwttokenUtil;
+
+
 	public CandidateServiceImpl(CandidateRepository candidateRepository) {
-		this.candidateRepository=candidateRepository;
-		this.passwordEncoder=new BCryptPasswordEncoder();
+		this.candidateRepository = candidateRepository;
+		this.passwordEncoder = new BCryptPasswordEncoder();
 	}
-	
-	
-	
+
 	@Override
 	public Candidate addCandidate(Candidate candidate) {
-		
-		//Candidate candidate =this.dtoToCandidate(candidateDto);
-		Candidate candidate1=new Candidate();
+
+		// Candidate candidate =this.dtoToCandidate(candidateDto);
+		Candidate candidate1 = new Candidate();
 		candidate1.setName(candidate.getName());
 		candidate1.setEmail(candidate.getEmail());
 		candidate1.setPassword(passwordEncoder.encode(candidate.getAddress()));
 		candidate1.setAddress(candidate.getAddress());
 		candidate1.setUsername(candidate.getUsername());
-		
-		Candidate savedCandidate=this.candidateRepository.save(candidate1);	
+
+		Candidate savedCandidate = this.candidateRepository.save(candidate1);
 		return savedCandidate;
-	
-		
+
 	}
 
 	public Candidate dtoToCandidate(CandidateDto candidateDto) {
-		Candidate candidate2=new Candidate();
+		Candidate candidate2 = new Candidate();
 		candidate2.setC_id(candidateDto.getC_id());
 		candidate2.setName(candidateDto.getName());
 		candidate2.setEmail(candidateDto.getEmail());
 		candidate2.setPassword(passwordEncoder.encode(candidateDto.getPassword()));
 		candidate2.setAddress(candidateDto.getAddress());
 		candidate2.setUsername(candidateDto.getUsername());
-	
+
 		return candidate2;
 	}
+
 	public CandidateDto candidateToDto(Candidate candidate) {
-		CandidateDto candidateDto=new CandidateDto();
+		CandidateDto candidateDto = new CandidateDto();
 		candidateDto.setC_id(candidate.getC_id());
 		candidateDto.setName(candidate.getName());
 		candidateDto.setEmail(candidate.getEmail());
@@ -82,35 +88,31 @@ public class CandidateServiceImpl implements CandidateService{
 		candidateDto.setAddress(candidate.getAddress());
 		candidateDto.setUsername(candidate.getUsername());
 		return candidateDto;
-		
+
 	}
-
-
 
 	@Override
 	public Candidate updateCandidate(Candidate candidate1, Long c_id) {
-		Candidate candidate = this.candidateRepository.findById(c_id).orElseThrow(()->new ResourceNotFoundException("candidate", "c_id", c_id));
+		Candidate candidate = this.candidateRepository.findById(c_id)
+				.orElseThrow(() -> new ResourceNotFoundException("candidate", "c_id", c_id));
 		candidate.setC_id(candidate1.getC_id());
 		candidate.setName(candidate1.getName());
 		candidate.setEmail(candidate1.getEmail());
 		candidate.setPassword(candidate1.getPassword());
 		candidate.setAddress(candidate1.getAddress());
-			Candidate updatedCandidate=this.candidateRepository.save(candidate);
-			//CandidateDto candidateDto2=this.candidateToDto(updatedCandidate);
-			
-			return updatedCandidate;
-			
+		Candidate updatedCandidate = this.candidateRepository.save(candidate);
+		// CandidateDto candidateDto2=this.candidateToDto(updatedCandidate);
+
+		return updatedCandidate;
+
 	}
-
-
 
 	@Override
 	public Candidate getCandidateById(Long c_id) {
-		Candidate candidate = this.candidateRepository.findById(c_id).orElseThrow(()->new ResourceNotFoundException("candidate", "c_id", c_id));
+		Candidate candidate = this.candidateRepository.findById(c_id)
+				.orElseThrow(() -> new ResourceNotFoundException("candidate", "c_id", c_id));
 		return candidate;
 	}
-
-
 
 	/*
 	 * @Override public List<CandidateDto> getAllCandidates() { List<Candidate>
@@ -121,28 +123,22 @@ public class CandidateServiceImpl implements CandidateService{
 	 * candidate)).collect(Collectors.toList()); return candidateDtos; }
 	 */
 
-
 	@Override
 	public List<Candidate> getAllCandidates() {
-		List<Candidate> candidates=this.candidateRepository.findAll();
-		
-		//List<CandidateDto> candidateDtos=candidates.stream().map(candidate->this.candidateToDto(candidate)).collect(Collectors.toList());
+		List<Candidate> candidates = this.candidateRepository.findAll();
+
+		// List<CandidateDto>
+		// candidateDtos=candidates.stream().map(candidate->this.candidateToDto(candidate)).collect(Collectors.toList());
 		return candidates;
 	}
-	
-	
-	
-	
-	
-	
+
 	@Override
 	public void deleteCandidate(Long c_id) {
-		Candidate candidate=this.candidateRepository.findById(c_id).orElseThrow(()->new ResourceNotFoundException("candidate", "c_id", c_id));
-		
+		Candidate candidate = this.candidateRepository.findById(c_id)
+				.orElseThrow(() -> new ResourceNotFoundException("candidate", "c_id", c_id));
+
 		this.candidateRepository.delete(candidate);
 	}
-
-
 
 	@Override
 	public Candidate loginCandidate(String email, String password) throws Exception {
@@ -155,55 +151,71 @@ public class CandidateServiceImpl implements CandidateService{
 			}
 			throw new Exception("You entered incorrect password.");
 		}
-		
+
 	}
 
-
-
-	
 	@Override
 	public Candidate logout(String email, String password) throws Exception {
-		
-		Candidate candidate=candidateRepository.findByEmail(email);
+
+		Candidate candidate = candidateRepository.findByEmail(email);
 		if (candidate == null) {
 			throw new Exception("You entered incorrect Email.");
-		}else {
-			if((candidate.getEmail().equals(email)) && (candidate.getPassword().equals(password))) {
+		} else {
+			if ((candidate.getEmail().equals(email)) && (candidate.getPassword().equals(password))) {
 				return candidate;
-				
+
 			}
 			throw new Exception("Invalid username and password!!!");
-			
+
 		}
-		
+
 	}
-
-
 
 	@Override
-	public Candidate findByEmail(String email){
-		Candidate candidate = candidateRepository.findByEmailAndIsActiveTrue(email);//.orElseThrow(() -> new ResourceNotFoundException("candidate Not Found"));
+	public Candidate findByEmail(String email) {
+		Candidate candidate = candidateRepository.findByEmailContainingIgnoreCase(email);
 		return candidate;
-		
+
 	}
-
-
-	
-
-
-	@Autowired
-	private PasswordEncoder bcryptEncoder;
-	
-	@Autowired 
-	private JwtTokenUtil jwttokenUtil;
 
 	@Override
 	public void forgotPasswordConfirm(String token, @Valid ForgotPasswordDto userBody, HttpServletRequest request) {
-		
-		
+		DecodedJWT jwt = JWT.decode(token); // give the current date
+		Date CurrentDate = new Date(System.currentTimeMillis());
+
+		// compare current date and expiredDate.
+		if (CurrentDate.before(jwt.getExpiresAt())) {
+
+			if (userBody.getPassword().equals(userBody.getConfirmpassword())) {
+
+				// extract the email from token
+				String username = null;
+				String jwtToken = null; // get the token from payload
+				jwtToken = userBody.getToken(); // get the email from token
+				username = jwttokenUtil.getEmailFromToken(jwtToken); // check if that email exist in database
+				// grab the the user entity if email exist in db.
+				Candidate candidate = candidateRepository.findByEmail(username);// .orElseThrow(() ->new
+																				// ResourceNotFoundException("Candidate
+																				// Not Found"));
+				// encode the newpassword
+				// update the entity with new password
+				candidate.setPassword(bcryptEncoder.encode(userBody.getPassword()));
+
+			} else {
+
+				throw new ResourceNotFoundException("password and confirm password must be a same");
+
+			}
+
+		} else {
+
+			Forgot_password_request forgot_password_request = forgotPasswordRequestRepository
+					.getByTokenOrderByIdDesc(token).orElseThrow(() -> new ResourceNotFoundException("Invalid Request"));
+			forgot_password_request.setIsActive(false);
+			throw new ResourceNotFoundException("Reset the password time out");
+
+		}
 	}
-
-
 
 	@Override
 	public CandidateDto createCandidate(CandidateDto candidate) {
@@ -211,192 +223,175 @@ public class CandidateServiceImpl implements CandidateService{
 		return null;
 	}
 
-	/*
-	 * @Override public void changePassword(Long c_id, @Valid ChangePasswordDto
-	 * userBody, HttpServletRequest request) { Candidate candidate =
-	 * candidateRepository.findByIdAndIsActiveTrue(c_id).orElseThrow(() -> new
-	 * ResourceNotFoundException("User Not Found")); final String requestTokenHeader
-	 * = request.getHeader("Authorization"); String username = null; String jwtToken
-	 * = null; JsonObject jsonObj = null; jwtToken =
-	 * requestTokenHeader.substring(7); username =
-	 * jwttokenUtil.getEmailFromToken(jwtToken); jsonObj =
-	 * JsonParser.parseString(username).getAsJsonObject(); UserDataDto userDatas =
-	 * new UserDataDto(); userDatas.setC_id((jsonObj.get("id").getAsLong()));
-	 * 
-	 * if (userDatas.getC_id() == candidate.getC_id()) {
-	 * 
-	 * if (!bcryptEncoder.matches(userBody.getNewPassword(),
-	 * candidate.getPassword())) {
-	 * 
-	 * System.out.println("." + userBody.getNewPassword()); System.out.println("." +
-	 * userBody.getPassword()); System.out.println("." +
-	 * bcryptEncoder.encode((userBody.getPassword())));
-	 * 
-	 * if (bcryptEncoder.matches(userBody.getPassword(), candidate.getPassword())) {
-	 * 
-	 * candidate.setPassword(bcryptEncoder.encode(userBody.getNewPassword()));
-	 * System.out.println("New Password" + candidate.getPassword());
-	 * 
-	 * } else {
-	 * 
-	 * throw new ResourceNotFoundException("Please enter old password correct");
-	 * 
-	 * }
-	 * 
-	 * } else {
-	 * 
-	 * throw new
-	 * ResourceNotFoundException("password must be differ from old password");
-	 * 
-	 * }
-	 * 
-	 * } else {
-	 * 
-	 * throw new ResourceNotFoundException("Access Denied");
-	 * 
-	 * }
-	 * 
-	 * }
-	 */
+	@Override
+	public void changePassword(Long c_id, @Valid ChangePasswordDto userBody, HttpServletRequest request) {
+		Candidate candidate = candidateRepository.findById(c_id)
+				.orElseThrow(() -> new ResourceNotFoundException("Candidate Not Found"));
 
-	/*
-	 * @Autowired private ForgotPasswordRequestRepository
-	 * forgotPasswordRequestRepository;
-	 * 
-	 * @Override public void forgotPasswordConfirm(String token, @Valid
-	 * ForgotPasswordDto userBody, HttpServletRequest request) { // Java JWT »
-	 * 3.19.2 dependancy for get the token from expired token DecodedJWT jwt =
-	 * JWT.decode(token); // give the current date Date CurrentDate = new
-	 * Date(System.currentTimeMillis());
-	 * 
-	 * // compare current date and expiredDate. if
-	 * (CurrentDate.before(jwt.getExpiresAt())) {
-	 * 
-	 * if (userBody.getPassword().equals(userBody.getConfirmpassword())) {
-	 * 
-	 * // extract the email from token String username = null; String jwtToken =
-	 * null; // get the token from payload jwtToken = userBody.getToken(); // get
-	 * the email from token username = jwttokenUtil.getEmailFromToken(jwtToken); //
-	 * check if that email exist in database // grab the the user entity if email
-	 * exist in db. Candidate candidate =
-	 * candidateRepository.findByEmailAndIsActiveTrue(username);//.orElseThrow(() ->
-	 * new ResourceNotFoundException("Candidate Not Found")); // encode the new
-	 * password // update the entity with new password
-	 * candidate.setPassword(bcryptEncoder.encode(userBody.getPassword()));
-	 * 
-	 * } else {
-	 * 
-	 * throw new
-	 * ResourceNotFoundException("password and confirm password must be a same");
-	 * 
-	 * }
-	 * 
-	 * } else {
-	 * 
-	 * Forgot_password_request forgot_password_request =
-	 * forgotPasswordRequestRepository.getByTokenOrderByIdDesc(token).orElseThrow(()
-	 * -> new ResourceNotFoundException("Invalid Request"));
-	 * forgot_password_request.setIsActive(false); throw new
-	 * ResourceNotFoundException("Reset the password time out");
-	 * 
-	 * } }
-	 */
-	 
+		final String requestTokenHeader = request.getHeader("Authorization");
+		String username = null;
+		String jwtToken = null;
+		JsonObject jsonObj = null;
+		jwtToken = requestTokenHeader.substring(7);
+		username = jwttokenUtil.getEmailFromToken(jwtToken);
+		jsonObj = JsonParser.parseString(username).getAsJsonObject();
+		CandidateDto candidateData = new CandidateDto();
+		candidateData.setC_id((jsonObj.get("id").getAsLong()));
 
-	
+		if (candidateData.getC_id() == candidate.getC_id()) {
 
+			if (!bcryptEncoder.matches(userBody.getNewPassword(), candidate.getPassword())) {
 
+				System.out.println("." + userBody.getNewPassword());
+				System.out.println("." + userBody.getPassword());
+				System.out.println("." + bcryptEncoder.encode((userBody.getPassword())));
 
+				if (bcryptEncoder.matches(userBody.getPassword(), candidate.getPassword())) {
 
+					candidate.setPassword(bcryptEncoder.encode(userBody.getNewPassword()));
+					System.out.println("New Password" + candidate.getPassword());
 
+				} else {
 
-	
-		
+					throw new ResourceNotFoundException("Please enter old password correct");
+
+				}
+
+			} else {
+
+				throw new ResourceNotFoundException("password must be differ from old password");
+
+			}
+
+		} else {
+
+			throw new ResourceNotFoundException("Access Denied");
+
+		}
+
 	}
+
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	/*
-	 * @Override public void changePassword(Long userId, ChangePasswordDto userBody,
-	 * HttpServletRequest request) throws ResourceNotFoundException {
+	 * @Override public UserDetails loadUserByUsername(String username) throws
+	 * UsernameNotFoundException {
 	 * 
-	 * UserEntity userData =
-	 * candidateRepository.findByIdAndIsActiveTrue(userId).orElseThrow(() -> new
-	 * ResourceNotFoundException("User Not Found")); final String requestTokenHeader
-	 * = request.getHeader("Authorization"); String username = null; String jwtToken
-	 * = null; JsonObject jsonObj = null; jwtToken =
-	 * requestTokenHeader.substring(7); username =
-	 * jwtTokenUtil.getEmailFromToken(jwtToken); jsonObj =
-	 * JsonParser.parseString(username).getAsJsonObject(); UserDataDto userDatas =
-	 * new UserDataDto(); userDatas.setUserId((jsonObj.get("id").getAsLong()));
+	 * Candidate candidate;
 	 * 
-	 * if (userDatas.getUserId() == userData.getId()) {
+	 * if (!cache.isKeyExist(username, username)) {
 	 * 
-	 * if (!bcryptEncoder.matches(userBody.getNewPassword(),
-	 * userData.getPassword())) {
-	 * 
-	 * System.out.println("." + userBody.getNewPassword()); System.out.println("." +
-	 * userBody.getPassword()); System.out.println("." +
-	 * bcryptEncoder.encode((userBody.getPassword())));
-	 * 
-	 * if (bcryptEncoder.matches(userBody.getPassword(), userData.getPassword())) {
-	 * 
-	 * userData.setPassword(bcryptEncoder.encode(userBody.getNewPassword()));
-	 * System.out.println("New Password" + userData.getPassword());
+	 * candidate = candidateRepository.findByUsername(username);
+	 * cache.addInCache(username, username,candidate);
 	 * 
 	 * } else {
 	 * 
-	 * throw new ResourceNotFoundException("Please enter old password correct");
+	 * candidate = (Candidate) cache.getFromCache(username, username); //
+	 * redisTemplate.opsForHash().get(email, email);
 	 * 
 	 * }
+	 * 
+	 * if (candidate == null) {
+	 * 
+	 * throw new UsernameNotFoundException("candidate not found with Username: " +
+	 * username);
+	 * 
+	 * }
+	 * 
+	 * return new
+	 * org.springframework.security.core.userdetails.User(candidate.getUsername(),
+	 * candidate.getPassword(), getAuthority(candidate));
+	 * 
+	 * }
+	 * 
+	 * @SuppressWarnings("unchecked") private ArrayList<SimpleGrantedAuthority>
+	 * getAuthority(Candidate candidate) {
+	 * 
+	 * ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<>();
+	 * 
+	 * if (!cache.isKeyExist(candidate.getC_id() + "permission", candidate.getC_id()
+	 * + "permission")) {
+	 * 
+	 * ArrayList<SimpleGrantedAuthority> authorities1 = new ArrayList<>();
+	 * //ArrayList<String> permissions =
+	 * roleServiceInterface.getPermissionByUserId(candidate.getC_id());
+	 * 
+	 * permissions.forEach(permission -> {
+	 * 
+	 * authorities1.add(new SimpleGrantedAuthority("ROLE_" + permission));
+	 * 
+	 * });
+	 * 
+	 * authorities = authorities1; cache.addInCache(candidate.getC_id() +
+	 * "permission", candidate.getC_id() + "permission", authorities1);
 	 * 
 	 * } else {
 	 * 
-	 * throw new
-	 * ResourceNotFoundException("password must be differ from old password");
+	 * authorities = (ArrayList<SimpleGrantedAuthority>)
+	 * cache.getFromCache(candidate.getC_id() + "permission", candidate.getC_id() +
+	 * "permission");
 	 * 
 	 * }
 	 * 
-	 * } else {
-	 * 
-	 * throw new ResourceNotFoundException("Access Denied");
-	 * 
-	 * }
+	 * return authorities;
 	 * 
 	 * }
 	 */
 
+}
 
+/*
+ * @Override public void changePassword(Long userId, ChangePasswordDto userBody,
+ * HttpServletRequest request) throws ResourceNotFoundException {
+ * 
+ * UserEntity userData =
+ * candidateRepository.findByIdAndIsActiveTrue(userId).orElseThrow(() -> new
+ * ResourceNotFoundException("User Not Found")); final String requestTokenHeader
+ * = request.getHeader("Authorization"); String username = null; String jwtToken
+ * = null; JsonObject jsonObj = null; jwtToken =
+ * requestTokenHeader.substring(7); username =
+ * jwtTokenUtil.getEmailFromToken(jwtToken); jsonObj =
+ * JsonParser.parseString(username).getAsJsonObject(); UserDataDto userDatas =
+ * new UserDataDto(); userDatas.setUserId((jsonObj.get("id").getAsLong()));
+ * 
+ * if (userDatas.getUserId() == userData.getId()) {
+ * 
+ * if (!bcryptEncoder.matches(userBody.getNewPassword(),
+ * userData.getPassword())) {
+ * 
+ * System.out.println("." + userBody.getNewPassword()); System.out.println("." +
+ * userBody.getPassword()); System.out.println("." +
+ * bcryptEncoder.encode((userBody.getPassword())));
+ * 
+ * if (bcryptEncoder.matches(userBody.getPassword(), userData.getPassword())) {
+ * 
+ * userData.setPassword(bcryptEncoder.encode(userBody.getNewPassword()));
+ * System.out.println("New Password" + userData.getPassword());
+ * 
+ * } else {
+ * 
+ * throw new ResourceNotFoundException("Please enter old password correct");
+ * 
+ * }
+ * 
+ * } else {
+ * 
+ * throw new
+ * ResourceNotFoundException("password must be differ from old password");
+ * 
+ * }
+ * 
+ * } else {
+ * 
+ * throw new ResourceNotFoundException("Access Denied");
+ * 
+ * }
+ * 
+ * }
+ */
 
-
-
-
-	/*
-	 * @Override public Candidate findByEmail(String email) {
-	 * 
-	 * return null; }
-	 */
-
-
-
-	
-
+/*
+ * @Override public Candidate findByEmail(String email) {
+ * 
+ * return null; }
+ */

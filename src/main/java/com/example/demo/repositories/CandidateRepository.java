@@ -16,6 +16,9 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long>{
 	public Candidate findByEmailAndIsActiveTrue(String username) throws ResourceNotFoundException;
 
 	public Candidate findByEmailContainingIgnoreCase(String email);
+	
+	
+	public Candidate findByUsername(String username);
 
 	//public Candidate findByEmailAndIsActiveTrue(Long userId);
 

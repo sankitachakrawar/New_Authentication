@@ -128,7 +128,8 @@ public class JobServiceImpl implements JobService {
 		
 		Pageable paging = new PaginationUsingFromTo().getPagination(from, to);
 		if ((search == "") || (search == null) || (search.length() == 0)) {
-			return jobRepository.findAll(paging);
+			//return jobRepository.findAll(paging);
+			return jobRepository.findByOrderByIdDesc(paging, Job.class);
 		} else {
 			//search = StringUtils.trimLeadingWhitespace(search);
 			//search = StringUtils.trimTrailingWhitespace(search);
@@ -142,12 +143,17 @@ public class JobServiceImpl implements JobService {
 	}
 	@Autowired
 	private CandidateRepository candidateRepository;
-	 
+	//assignJob
 	@Override
 	public void addJobToCandidate(String email, String title) {
 		Candidate candidate = candidateRepository.findByEmailContainingIgnoreCase(email);
 		Job job = jobRepository.findByTitleContainingIgnoreCase(title);
+		
+		System.out.println("candidate>> "+candidate+"\nJob>> "+job);
+		
 		candidate.getJobs().add(job);
+		
+		System.out.println("candidate2>>"+candidate.getJobs().add(job));
 	}
 }
 	

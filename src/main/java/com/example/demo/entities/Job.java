@@ -1,12 +1,16 @@
 package com.example.demo.entities;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -33,6 +37,9 @@ public class Job {
 	//@JoinColumn(name="candidate_id")
 	//private Candidate candidate;
 
+	@ManyToMany(mappedBy="jobs")
+	private final Collection<Candidate> candidate = new ArrayList<>();
+	
 	public Long getId() {
 		return id;
 	}
@@ -89,6 +96,8 @@ public class Job {
 		this.apply = apply;
 		
 	}
-
+public Collection<Candidate> getCandidate() {
+	return candidate;
+}
 	
 }

@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entities.Candidate;
@@ -48,12 +49,14 @@ public class JwtUtil {
 
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
-                .signWith(SignatureAlgorithm.HS512, secret).compact();
+                .signWith(SignatureAlgorithm.HS256, secret).compact();
     }
 
-    public Boolean validateToken(String token, Candidate userDetails) {
+    public Boolean validateToken(String token, UserDetails userDetails) {
         final String name = extractUsername(token);
-        return (name.equals(userDetails.getName())) && !isTokenExpired(token);
+        return (name.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
+   
+
 }
 

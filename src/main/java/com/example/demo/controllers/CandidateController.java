@@ -7,6 +7,8 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,12 +18,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.dto.CandidateDto;
+import com.example.demo.dto.ChangePasswordDto;
+import com.example.demo.dto.ErrorResponseDto;
 import com.example.demo.dto.ForgotPasswordDto;
+import com.example.demo.dto.SuccessResponseDto;
+import com.example.demo.entities.AuthRequest;
 import com.example.demo.entities.Candidate;
 import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.services.CandidateService;
 import com.example.demo.services.EmailService;
+import com.example.demo.utils.JwtUtil;
 
 @RestController
 @RequestMapping("/api")
@@ -113,7 +120,7 @@ public class CandidateController {
 				return new ResponseEntity<>("Candidate logout successfully!!",HttpStatus.OK);
 	} 
 	
-	/*@PutMapping("/changePass/{c_id}")
+	@PutMapping("/changePass/{c_id}")
 	public ResponseEntity<?> changePasswords(@PathVariable(value = "c_id") Long c_id,
 			@Valid @RequestBody ChangePasswordDto userBody, HttpServletRequest request)
 			throws ResourceNotFoundException {
@@ -130,13 +137,13 @@ public class CandidateController {
 
 		}
 
-	}*/
+	}
 	  @PutMapping("/forgot-pass-confirm")
 	  public ResponseEntity<?>
 	  forgotPassword(@Valid @RequestBody ForgotPasswordDto userBody,HttpServletRequest request) throws ResourceNotFoundException {
 	  
 	  try {
-	  
+	  System.out.println("password");
 	  candidateService.forgotPasswordConfirm(userBody.getToken(), userBody, request);
 	  return new ResponseEntity<>("password Updated",HttpStatus.OK);
 	  
@@ -146,6 +153,27 @@ public class CandidateController {
 	  
 	 }
 	  }
+	  
+	  @Autowired
+		 private AuthenticationManager authenticationManager;
+		
+	  @Autowired
+		 private JwtUtil jwtUtil;
+	  
+	  @PostMapping("/authenticate")
+	    public String generateToken(@RequestBody AuthRequest authRequest) throws Exception {
+	        try {
+	        	System.out.println("token01");
+
+	        	authenticationManager.authenticate(	    		 
+	            new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+	        	
+	        	System.out.println("token1");
+	        } catch (Exception ex) {
+	            throw new Exception("inavalid username/password");
+	        }
+	        return jwtUtil.generateToken(authRequest.getUsername());
+	    }
 }
  
 	  

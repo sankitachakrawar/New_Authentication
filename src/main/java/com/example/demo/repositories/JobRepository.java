@@ -17,6 +17,12 @@ import com.example.demo.entities.Job;
 public interface JobRepository extends JpaRepository<Job, Long>{
 
 	Page<Job> findByTitleContainingIgnoreCaseOrderByIdDesc(String title,Pageable paging,Class<Job> jobDtos);
+	
+	Page<Job> findByOrderByIdDesc(Pageable paging,Class<Job> jobDtos);
+	//Page<Job> findByLocationContainingIgnoreCaseOrderByIdDesc(String location,Pageable paging ,Class<Job> jobDtos);
 
+	
+	
+	
 	Job findByTitleContainingIgnoreCase(String title);
 }

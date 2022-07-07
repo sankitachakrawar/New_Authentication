@@ -22,7 +22,7 @@ public class JwtTokenUtil implements Serializable{
 
 	public static final long JWT_TOKEN_VALIDITY_FORGOT_PASS = 5 * 60;
 	
-	private static String secret;
+	private static String secret="t>+l:Y%puW~oGl";
 	
 	
 	public String getEmailFromToken(String token) {
