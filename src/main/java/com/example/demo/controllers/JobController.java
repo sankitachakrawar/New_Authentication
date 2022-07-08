@@ -1,12 +1,8 @@
 package com.example.demo.controllers;
 
 import java.util.List;
-
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -20,14 +16,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.example.demo.dto.AssignJob;
-import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ErrorResponseDto;
 import com.example.demo.dto.JobDto;
 import com.example.demo.dto.ListResponseDto;
 import com.example.demo.dto.SuccessResponseDto;
 import com.example.demo.entities.Job;
+import com.example.demo.services.EmailService;
 import com.example.demo.services.JobService;
 
 @RestController
@@ -36,29 +31,18 @@ public class JobController {
 
 	@Autowired
 	private JobService jobService;
-
-	/*
-	 * @PostMapping("/jobs") public String createJob(@Valid @RequestBody Job job) {
-	 * 
-	 * Job job1=jobRepository.save(job);
-	 * 
-	 * return ("Data added successfully!!"); }
-	 */
+	@Autowired
+	private EmailService emailService;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@PostMapping("/jobs")
+	@PostMapping("/jobs/apply")
 	public ResponseEntity<JobDto> createJob(@RequestBody JobDto jobDto) {
 		jobService.createJob(jobDto, jobDto.getId());
-
-		return new ResponseEntity("Candidate applied to job successfully!!", HttpStatus.CREATED);
+				
+		return new ResponseEntity("Applied to job successfully!!", HttpStatus.CREATED);
 
 	}
 
-	
-	
-	 
-	  
-	  
 	  @GetMapping("/jobs/{id}")
 	  public ResponseEntity<?> getSingleJob(@PathVariable ("id") Long id){
 		  return ResponseEntity.ok(this.jobService.getJobById(id));
@@ -70,6 +54,7 @@ public class JobController {
 	  @PutMapping("/jobs/{id}")
 		public ResponseEntity<?> updateJob(@Valid @RequestBody JobDto jobDto,@PathVariable Long id){
 			
+			@SuppressWarnings("unused")
 			JobDto updatedJob=this.jobService.updateJobDetails(jobDto, id);
 			
 			return new ResponseEntity<>("Data Updated Successfully!!",HttpStatus.OK);	
@@ -88,7 +73,7 @@ public class JobController {
 				return ResponseEntity.ok(this.jobService.getAllJobs());
 				
 			}
-		  
+		  //Pagination of job list
 		  @GetMapping()
 			public ResponseEntity<?> getAllJobs(@RequestParam(defaultValue = "") String search,
 					@RequestParam(defaultValue = "1") String pageNo, @RequestParam(defaultValue = "25") String size) {
@@ -100,7 +85,7 @@ public class JobController {
 				return new ResponseEntity<>(new ErrorResponseDto("Data Not Found", "dataNotFound"), HttpStatus.NOT_FOUND);
 			}
 	  
-		  
+		  //Job asssign to candidate
 		  @PostMapping("/assignJob")
 			public ResponseEntity<?> assignJob(@Valid @RequestBody AssignJob assignJob, HttpServletRequest request)
 					throws Exception {
@@ -110,7 +95,12 @@ public class JobController {
 				
 					String title = assignJob.getTitle();
 					System.out.println(title);
-		jobService.addJobToCandidate(email, title);
+					
+					final String url="Job applied successfully!!";
+					emailService.sendSimpleMessage(assignJob.getEmail(), "subject", url);
+					jobService.addJobToCandidate(email, title);
+		
+
 					return new ResponseEntity<>(new SuccessResponseDto("Job Assign to Candidate", "jobAssignToCandidate", assignJob),
 							HttpStatus.CREATED);
 
@@ -122,8 +112,17 @@ public class JobController {
 
 			}
 		  
-		  
-		  
+		  //Pagination of Applied jobs
+		  @GetMapping("/jobs/applied")
+			public ResponseEntity<?> getAllJobsApplied(@RequestParam(defaultValue = "") String search,
+					@RequestParam(defaultValue = "1") String pageNo, @RequestParam(defaultValue = "25") String size) {
+				Page<Job> users = jobService.getAllJobsApplied(search, pageNo, size);
+				if (users.getTotalElements() != 0) {
+					return new ResponseEntity<>(new SuccessResponseDto("Success", "success",
+							new ListResponseDto(users.getContent(), users.getTotalElements())), HttpStatus.OK);
+				}
+				return new ResponseEntity<>(new ErrorResponseDto("Data Not Found", "dataNotFound"), HttpStatus.NOT_FOUND);
+			}
 }
 	  
 	  

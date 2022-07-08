@@ -22,6 +22,11 @@ public class JobServiceImpl implements JobService {
 	@Autowired
 	private JobRepository jobRepository;
 	
+	@Autowired
+	private CandidateRepository candidateRepository;
+	
+	
+	//apply Job
 	@Override
 	public void createJob(JobDto jobDto, Long id) {
 		Job job=new Job();
@@ -73,7 +78,7 @@ public class JobServiceImpl implements JobService {
 	  
 	  }
 	
-	
+	//get job details by id
 	@Override
 	public JobDto getJobById(Long id) {
 		
@@ -83,15 +88,7 @@ public class JobServiceImpl implements JobService {
 
 	
 	
-	/*
-	 * @Override public List<Job> findPaginated(int pageNo, int pageSize) { Sort
-	 * idSort=Sort.by("postTime").descending();
-	 * 
-	 * Pageable paging=PageRequest.of(pageNo-1, pageSize,idSort); Page<Job>
-	 * pagedResult=jobRepository.findAll(paging);
-	 * 
-	 * return pagedResult.toList(); }
-	 */
+	//update job details
 	@Override
 	public JobDto updateJobDetails(JobDto job, Long id) {
 		Job jobs = this.jobRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("job", "id", id));
@@ -107,6 +104,7 @@ public class JobServiceImpl implements JobService {
 	
 	}
 
+	//delete job details
 	@Override
 	public void deleteJobDetails(Long id) {
 		Job job=this.jobRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("job", "id", id));
@@ -115,6 +113,7 @@ public class JobServiceImpl implements JobService {
 		
 	}
 
+	//get all job details
 	@Override
 	public List<JobDto> getAllJobs() {
 		
@@ -123,26 +122,24 @@ public class JobServiceImpl implements JobService {
 		return jobDtos;
 	}
 
+	//get all jobs with pagination
 	@Override
 	public Page<Job> getAllJobs(String search, String from, String to) {
 		
 		Pageable paging = new PaginationUsingFromTo().getPagination(from, to);
 		if ((search == "") || (search == null) || (search.length() == 0)) {
-			//return jobRepository.findAll(paging);
+			
 			return jobRepository.findByOrderByIdDesc(paging, Job.class);
 		} else {
-			//search = StringUtils.trimLeadingWhitespace(search);
-			//search = StringUtils.trimTrailingWhitespace(search);
+			
 			return jobRepository.findByTitleContainingIgnoreCaseOrderByIdDesc(search, paging, Job.class);
 			
-			//return jobRepository.findByTitleContainingIgnoreCaseOrderByPostTimeDesc(search, paging, Job.class);
-			
+				
 		}
 		
 
 	}
-	@Autowired
-	private CandidateRepository candidateRepository;
+	
 	//assignJob
 	@Override
 	public void addJobToCandidate(String email, String title) {
@@ -154,6 +151,22 @@ public class JobServiceImpl implements JobService {
 		candidate.getJobs().add(job);
 		
 		System.out.println("candidate2>>"+candidate.getJobs().add(job));
+	}
+
+	//get all jobs with apply pagination
+	@Override
+	public Page<Job> getAllJobsApplied(String search, String from, String to) {
+		Pageable paging = new PaginationUsingFromTo().getPagination(from, to);
+		if ((search == "") || (search == null) || (search.length() == 0)) {
+			
+			return jobRepository.findByOrderByApply(paging, Job.class);
+		} else {
+			
+			return jobRepository.findByTitleContainingIgnoreCaseOrderByApply(search, paging, Job.class);
+			
+			
+			
+		}
 	}
 }
 	
@@ -184,7 +197,15 @@ public class JobServiceImpl implements JobService {
 	
 	
 	
-	
+/*
+ * @Override public List<Job> findPaginated(int pageNo, int pageSize) { Sort
+ * idSort=Sort.by("postTime").descending();
+ * 
+ * Pageable paging=PageRequest.of(pageNo-1, pageSize,idSort); Page<Job>
+ * pagedResult=jobRepository.findAll(paging);
+ * 
+ * return pagedResult.toList(); }
+ */	
 	
 	
 	

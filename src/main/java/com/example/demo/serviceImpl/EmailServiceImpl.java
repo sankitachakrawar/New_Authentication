@@ -3,7 +3,6 @@ package com.example.demo.serviceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import com.example.demo.entities.Candidate;
 import com.example.demo.services.EmailService;

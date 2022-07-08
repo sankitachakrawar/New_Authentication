@@ -22,6 +22,8 @@ public interface JobService {
 	void deleteJobDetails(Long id);
 
 	Page<Job> getAllJobs(String search, String from, String to);
+	
+	Page<Job> getAllJobsApplied(String search,String from,String to);
 
 	void addJobToCandidate(String name, String title);
 }

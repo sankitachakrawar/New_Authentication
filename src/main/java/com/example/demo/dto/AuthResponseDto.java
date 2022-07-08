@@ -1,7 +1,6 @@
 package com.example.demo.dto;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class AuthResponseDto implements Serializable {
 

@@ -13,11 +13,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 import com.example.demo.services.CustomUserDetailsService;
 
 @SuppressWarnings("deprecation")
@@ -64,6 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		  return NoOpPasswordEncoder.getInstance();
 	  }
 	  
+	
 	  
     @Override
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
@@ -79,7 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	  "/api/candidates","/api/candidates/{c_id}","/api/login","/api/jobs",
 	  "/api/jobs/{pageNo}/{pageSize}","/api/jobs/apply/{pageNo}/{pageSize}",
 	  "/api/changePass/{c_id}","/api/forgot-pass-confirm","/api/logout",
-	  "/forgot-pass","/mail","/api/sendmail").permitAll() .anyRequest()
+	  "/forgot-pass","/mail","/api/sendmail","/api/jobs/applied","/api/jobs/apply").permitAll() .anyRequest()
 	  .authenticated() .and().httpBasic().and() .sessionManagement()
 	  .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	  //.and().exceptionHandling().accessDeniedPage("/err/403");

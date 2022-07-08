@@ -1,14 +1,10 @@
 package com.example.demo.serviceImpl;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,7 +18,6 @@ import com.example.demo.entities.Forgot_password_request;
 import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.repositories.ForgotPasswordRequestRepository;
 import com.example.demo.services.CandidateService;
-
 import com.example.demo.utils.JwtTokenUtil;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -270,7 +265,16 @@ public class CandidateServiceImpl implements CandidateService {
 		}
 
 	}
+	
+	
+	@Override
+	public Boolean comparePassword(String password, String hashPassword) {
 
+		return bcryptEncoder.matches(password, hashPassword);
+
+	}
+	
+}
 	
 
 	/*
@@ -338,7 +342,7 @@ public class CandidateServiceImpl implements CandidateService {
 	 * }
 	 */
 
-}
+
 
 /*
  * @Override public void changePassword(Long userId, ChangePasswordDto userBody,

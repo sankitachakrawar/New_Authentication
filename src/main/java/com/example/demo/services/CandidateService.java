@@ -1,14 +1,8 @@
 package com.example.demo.services;
 
 import java.util.List;
-import java.util.Optional;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
 import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ChangePasswordDto;
 import com.example.demo.dto.ForgotPasswordDto;
@@ -47,6 +41,8 @@ public interface CandidateService {
 	void changePassword(Long c_id, @Valid ChangePasswordDto userBody, HttpServletRequest request);
 
 	public void forgotPasswordConfirm(String token, @Valid ForgotPasswordDto userBody, HttpServletRequest request);
+	
+	Boolean comparePassword(String password, String hashPassword);
 	
 	
 }

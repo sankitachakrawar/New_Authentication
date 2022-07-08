@@ -1,7 +1,8 @@
 package com.example.demo.controllers;
+import java.util.Calendar;
+
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ChangePasswordDto;
 import com.example.demo.dto.ErrorResponseDto;
 import com.example.demo.dto.ForgotPasswordDto;
@@ -28,6 +28,7 @@ import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.services.CandidateService;
 import com.example.demo.services.EmailService;
+import com.example.demo.utils.JwtTokenUtil;
 import com.example.demo.utils.JwtUtil;
 
 @RestController
@@ -35,7 +36,8 @@ import com.example.demo.utils.JwtUtil;
 public class CandidateController {
 
 	
-	  @Autowired
+	  @SuppressWarnings("unused")
+	@Autowired
 	  private CandidateRepository candidateRepository;
 	 
 
@@ -46,12 +48,19 @@ public class CandidateController {
 	@Autowired
 	private EmailService emailService;
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Autowired
+	private AuthenticationManager authenticationManager;
+		
+	@Autowired
+	private JwtUtil jwtUtil;
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" }) 
 	
 	@PostMapping("/candidates") 
 	public ResponseEntity<Candidate> addCandidate(@Valid @RequestBody Candidate candidate){
 	  
-	  @SuppressWarnings("unused")
+	 
+	@SuppressWarnings("unused")
 	Candidate createdCandidate=this.candidateService.addCandidate(candidate);
 
 	 // return new ResponseEntity(Map.of("message","Candidate created successfully!!"),HttpStatus.OK); 
@@ -62,7 +71,8 @@ public class CandidateController {
 	
 	 @PostMapping("/sendmail")
 	 public String sendMailmessage(@RequestBody Candidate candidate) {
-		  String email=candidate.getEmail();
+		  @SuppressWarnings("unused")
+		String email=candidate.getEmail();
 		  String emailTo = null; 
 		  String subject = null; 
 		  String text = null;
@@ -72,12 +82,13 @@ public class CandidateController {
 	  
 	  
 	  }
+	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
 	@PutMapping("/candidates/{c_id}")
 	public ResponseEntity<Candidate> updateCandidate(@Valid @RequestBody Candidate candidate,@PathVariable Long c_id){
 		
 		Candidate updatedCandidate=this.candidateService.updateCandidate(candidate, c_id);
 		
-		return ResponseEntity.ok(updatedCandidate);	
+		return new ResponseEntity("candidate deleted successfully",HttpStatus.OK);	
 		
 	}
 	
@@ -98,19 +109,6 @@ public class CandidateController {
 		return ResponseEntity.ok(this.candidateService.getCandidateById(c_id));
 		
 	}
-	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@PostMapping("/login")
-	public ResponseEntity<Candidate> createCandidate(@RequestBody Candidate candidate) throws Exception {
-		String email = candidate.getEmail();
-		String password = candidate.getPassword();
-		candidate = candidateService.loginCandidate(email, password);
-		//logger.info("Login Rest Controller Implementation : createUser() method");
-		//return ResponseEntity.ok().body(candidate);
-		
-		return new  ResponseEntity("Candidate login sucesssfully!!",HttpStatus.OK);
-	}
-	
 	
 	@PostMapping("/logout")
 	 public ResponseEntity<?> logoutCandidate(@RequestBody Candidate candidate) throws Exception{
@@ -154,11 +152,7 @@ public class CandidateController {
 	 }
 	  }
 	  
-	  @Autowired
-		 private AuthenticationManager authenticationManager;
-		
-	  @Autowired
-		 private JwtUtil jwtUtil;
+	
 	  
 	  @PostMapping("/authenticate")
 	    public String generateToken(@RequestBody AuthRequest authRequest) throws Exception {
@@ -174,6 +168,31 @@ public class CandidateController {
 	        }
 	        return jwtUtil.generateToken(authRequest.getUsername());
 	    }
+	  
+	  @Autowired
+	  private JwtTokenUtil jwtTokenUtil;
+	  
+	  @SuppressWarnings({ "rawtypes", "unchecked", "static-access" })
+		@PostMapping("/login")
+		public ResponseEntity<Candidate> createCandidate(@RequestBody Candidate candidate) throws Exception {
+			
+		try {
+			String email = candidate.getEmail();
+			String password = candidate.getPassword();
+			candidate = candidateService.loginCandidate(email, password);
+			final String token=jwtTokenUtil.generateTokenOnLogin(candidate.getEmail(),candidate.getPassword());
+			final String url = "To confirm your account, please click here : " + "http://localhost:8088" + "/api/jobs/apply" + "?token=" + token;
+			Calendar calender = Calendar.getInstance();
+			calender.add(Calendar.MINUTE, 15);
+			
+			//candidateService.addCandidate(candidate);
+			emailService.sendSimpleMessage(candidate.getEmail(), "subject", url);
+			return new ResponseEntity(new SuccessResponseDto("Token send on your registered email id","loginLinkMail",null), HttpStatus.OK);
+	  } catch(ResourceNotFoundException e) {
+			return new  ResponseEntity(new ErrorResponseDto(e.getMessage(), "candidateNotFound"), HttpStatus.NOT_FOUND);
+		}
+	}
+	  
 }
  
 	  
