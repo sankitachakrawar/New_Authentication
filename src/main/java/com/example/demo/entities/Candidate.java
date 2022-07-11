@@ -91,7 +91,7 @@ public class Candidate implements Serializable{
 	
 	@ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	//@JoinTable(name = "candidate_jobs", joinColumns = @JoinColumn(name = "candidate_id", referencedColumnName = "c_id"), inverseJoinColumns = @JoinColumn(name = "job_id", referencedColumnName = "id"))
-	private final Collection<Job> jobs = new ArrayList<>();
+	private Collection<Job> jobs = new ArrayList<>();
 	
 	//private List<Job> jobs;
 
@@ -115,5 +115,7 @@ public class Candidate implements Serializable{
 		return jobs;
 	}
 	
-	
+	public void setJobs(Collection<Job> jobs) {
+		this.jobs = jobs;
+	}
 }

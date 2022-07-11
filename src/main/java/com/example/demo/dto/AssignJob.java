@@ -5,7 +5,7 @@ public class AssignJob {
 
 	private String email;
 	
-	private String title;
+	private String name;
 
 	public String getEmail() {
 		return email;
@@ -15,13 +15,11 @@ public class AssignJob {
 		this.email = email;
 	}
 
-	public String getTitle() {
-		return title;
+	public void setName(String name) {
+		this.name = name;
 	}
-
-	public void setTitle(String title) {
-		this.title = title;
+	public String getName() {
+		return name;
 	}
-	
 	
 }

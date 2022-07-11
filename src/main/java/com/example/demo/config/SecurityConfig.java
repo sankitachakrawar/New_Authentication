@@ -78,7 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	  "/api/candidates","/api/candidates/{c_id}","/api/login","/api/jobs",
 	  "/api/jobs/{pageNo}/{pageSize}","/api/jobs/apply/{pageNo}/{pageSize}",
 	  "/api/changePass/{c_id}","/api/forgot-pass-confirm","/api/logout",
-	  "/forgot-pass","/mail","/api/sendmail","/api/jobs/applied","/api/jobs/apply").permitAll() .anyRequest()
+	  "/mail","/api/sendmail","/api/jobs/applied","/api/jobs/apply").permitAll() .anyRequest()
 	  .authenticated() .and().httpBasic().and() .sessionManagement()
 	  .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	  //.and().exceptionHandling().accessDeniedPage("/err/403");

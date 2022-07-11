@@ -21,7 +21,7 @@ public class Job {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private String title;
+	private String name;
 	
 	private String location;
 	@UpdateTimestamp
@@ -34,7 +34,7 @@ public class Job {
 	//private Candidate candidate;
 
 	@ManyToMany(mappedBy="jobs")
-	private final Collection<Candidate> candidate = new ArrayList<>();
+	private Collection<Candidate> candidate = new ArrayList<>();
 	
 	public Long getId() {
 		return id;
@@ -44,12 +44,11 @@ public class Job {
 		this.id = id;
 	}
 
-	public String getTitle() {
-		return title;
+	public void setName(String name) {
+		this.name = name;
 	}
-
-	public void setTitle(String title) {
-		this.title = title;
+	public String getName() {
+		return name;
 	}
 
 	public String getLocation() {
@@ -83,10 +82,10 @@ public class Job {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Job(Long id, String title, String location, Date postTime, boolean apply) {
+	public Job(Long id, String name, String location, Date postTime, boolean apply) {
 		super();
 		this.id = id;
-		this.title = title;
+		this.name = name;
 		this.location = location;
 		this.postTime = postTime;
 		this.apply = apply;
@@ -94,6 +93,9 @@ public class Job {
 	}
 public Collection<Candidate> getCandidate() {
 	return candidate;
+}
+public void setCandidate(Collection<Candidate> candidate) {
+	this.candidate = candidate;
 }
 	
 }

@@ -91,14 +91,14 @@ public class JobController {
 					throws Exception {
 				try {
 					String email = assignJob.getEmail();
-					System.out.println(email);
+					System.out.println("email>>"+email);
 				
-					String title = assignJob.getTitle();
-					System.out.println(title);
+					String name = assignJob.getName();
+					System.out.println("name>>"+name);
 					
 					final String url="Job applied successfully!!";
 					emailService.sendSimpleMessage(assignJob.getEmail(), "subject", url);
-					jobService.addJobToCandidate(email, title);
+					jobService.addJobToCandidate(email, name);
 		
 
 					return new ResponseEntity<>(new SuccessResponseDto("Job Assign to Candidate", "jobAssignToCandidate", assignJob),

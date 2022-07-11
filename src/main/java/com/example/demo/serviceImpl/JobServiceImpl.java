@@ -1,16 +1,19 @@
 package com.example.demo.serviceImpl;
 
 import java.util.List;
-
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import com.example.demo.dto.AssignJob;
 import com.example.demo.dto.JobDto;
 import com.example.demo.entities.Candidate;
 import com.example.demo.entities.Job;
 import com.example.demo.exceptions.ResourceNotFoundException;
+import com.example.demo.repositories.CandidateJobRepository;
 import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.repositories.JobRepository;
 import com.example.demo.services.JobService;
@@ -30,7 +33,7 @@ public class JobServiceImpl implements JobService {
 	@Override
 	public void createJob(JobDto jobDto, Long id) {
 		Job job=new Job();
-		job.setTitle(jobDto.getTitle());
+		job.setName(jobDto.getName());
 		job.setLocation(jobDto.getLocation());
 		job.setPostTime(jobDto.getPostTime());
 		job.setApply(jobDto.getApply());
@@ -60,7 +63,7 @@ public class JobServiceImpl implements JobService {
 	public Job dtoToJob(JobDto jobDto)
 	{ Job job=new Job();
 	  job.setId(jobDto.getId()); 
-	  job.setTitle(jobDto.getTitle());
+	  job.setName(jobDto.getName());
 	  job.setLocation(jobDto.getLocation()); 
 	  job.setPostTime(jobDto.getPostTime());
 	  //job.setApply(jobDto.getApply()); job.setCandidate(job.getCandidate());
@@ -69,7 +72,7 @@ public class JobServiceImpl implements JobService {
 	public JobDto jobToDto(Job job) {
 		JobDto jobDto=new JobDto();
 	  jobDto.setId(job.getId()); 
-	  jobDto.setTitle(job.getTitle());
+	  jobDto.setName(job.getName());
 	  jobDto.setLocation(job.getLocation()); 
 	  jobDto.setApply(job.getApply());
 	  jobDto.setPostTime(job.getPostTime());
@@ -92,7 +95,7 @@ public class JobServiceImpl implements JobService {
 	@Override
 	public JobDto updateJobDetails(JobDto job, Long id) {
 		Job jobs = this.jobRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("job", "id", id));
-		jobs.setTitle(job.getTitle());
+		jobs.setName(job.getName());
 		jobs.setLocation(job.getLocation());
 		jobs.setPostTime(job.getPostTime());
 		jobs.setApply(job.getApply());
@@ -132,7 +135,7 @@ public class JobServiceImpl implements JobService {
 			return jobRepository.findByOrderByIdDesc(paging, Job.class);
 		} else {
 			
-			return jobRepository.findByTitleContainingIgnoreCaseOrderByIdDesc(search, paging, Job.class);
+			return jobRepository.findByNameContainingIgnoreCaseOrderByIdDesc(search, paging, Job.class);
 			
 				
 		}
@@ -140,11 +143,24 @@ public class JobServiceImpl implements JobService {
 
 	}
 	
+	@Autowired
+	private CandidateJobRepository candidateJobRepository;
 	//assignJob
 	@Override
-	public void addJobToCandidate(String email, String title) {
+	public void addJobToCandidate(String email, String name) {
 		Candidate candidate = candidateRepository.findByEmailContainingIgnoreCase(email);
-		Job job = jobRepository.findByTitleContainingIgnoreCase(title);
+		//Job job = jobRepository.findByTitleContainingIgnoreCase(title);
+		Job job=jobRepository.findByNameContainingIgnoreCase(name);
+		
+		/*
+		 * AssignJob assignJob
+		 * =candidateJobRepository.findByEmailAndNameContainingIgnoreCase(email, name);
+		 * AssignJob assignJob=new AssignJob(); assignJob.getEmail();
+		 * assignJob.getName();
+		 * 
+		 * AssignJob saved=candidateJobRepository.save(assignJob);
+		 * System.out.println(saved);
+		 */
 		
 		System.out.println("candidate>> "+candidate+"\nJob>> "+job);
 		
@@ -162,7 +178,7 @@ public class JobServiceImpl implements JobService {
 			return jobRepository.findByOrderByApply(paging, Job.class);
 		} else {
 			
-			return jobRepository.findByTitleContainingIgnoreCaseOrderByApply(search, paging, Job.class);
+			return jobRepository.findByNameContainingIgnoreCaseOrderByApply(search, paging, Job.class);
 			
 			
 			

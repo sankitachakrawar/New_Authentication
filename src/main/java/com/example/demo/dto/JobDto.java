@@ -8,7 +8,7 @@ public class JobDto {
 
 	private Long id;
 	
-	private String title;
+	private String name;
 	
 	private String location;
 	private Boolean apply=false;
@@ -24,12 +24,11 @@ public class JobDto {
 		this.id = id;
 	}
 
-	public String getTitle() {
-		return title;
+	public void setName(String name) {
+		this.name = name;
 	}
-
-	public void setTitle(String title) {
-		this.title = title;
+	public String getName() {
+		return name;
 	}
 
 	public String getLocation() {
