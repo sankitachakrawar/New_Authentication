@@ -1,6 +1,8 @@
 package com.example.demo.serviceImpl;
 
 import java.util.Date;
+
+
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -11,16 +13,15 @@ import org.springframework.stereotype.Service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.demo.dto.CandidateDto;
-import com.example.demo.dto.ChangePasswordDto;
 import com.example.demo.dto.ForgotPasswordDto;
 import com.example.demo.entities.Candidate;
 import com.example.demo.entities.Forgot_password_request;
+import com.example.demo.entities.Job;
 import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.repositories.ForgotPasswordRequestRepository;
+import com.example.demo.repositories.JobRepository;
 import com.example.demo.services.CandidateService;
 import com.example.demo.utils.JwtTokenUtil;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.example.demo.exceptions.*;
 
 @Service
@@ -39,7 +40,9 @@ public class CandidateServiceImpl implements CandidateService {
 
 	@Autowired
 	private JwtTokenUtil jwttokenUtil;
-
+	
+	@Autowired
+	private JobRepository jobRepository;
 
 	public CandidateServiceImpl(CandidateRepository candidateRepository) {
 		this.candidateRepository = candidateRepository;
@@ -56,7 +59,8 @@ public class CandidateServiceImpl implements CandidateService {
 		candidate1.setPassword(passwordEncoder.encode(candidate.getAddress()));
 		candidate1.setAddress(candidate.getAddress());
 		candidate1.setUsername(candidate.getUsername());
-
+		candidate1.setJobs(candidate.getJobs());
+		candidate1.setRecruiters(candidate.getRecruiters());
 		Candidate savedCandidate = this.candidateRepository.save(candidate1);
 		return savedCandidate;
 
@@ -108,15 +112,6 @@ public class CandidateServiceImpl implements CandidateService {
 				.orElseThrow(() -> new ResourceNotFoundException("candidate", "c_id", c_id));
 		return candidate;
 	}
-
-	/*
-	 * @Override public List<CandidateDto> getAllCandidates() { List<Candidate>
-	 * candidates=this.candidateRepository.findAll();
-	 * 
-	 * List<CandidateDto>
-	 * candidateDtos=candidates.stream().map(candidate->this.candidateToDto(
-	 * candidate)).collect(Collectors.toList()); return candidateDtos; }
-	 */
 
 	@Override
 	public List<Candidate> getAllCandidates() {
@@ -189,11 +184,10 @@ public class CandidateServiceImpl implements CandidateService {
 				jwtToken = userBody.getToken(); // get the email from token
 				username = jwttokenUtil.getEmailFromToken(jwtToken); // check if that email exist in database
 				// grab the the user entity if email exist in db.
-				Candidate candidate = candidateRepository.findByEmail(username);// .orElseThrow(() ->new
-																				// ResourceNotFoundException("Candidate
-																				// Not Found"));
-				// encode the newpassword
-				// update the entity with new password
+				Candidate candidate = candidateRepository.findByEmail(username);
+																				
+																				
+				
 				candidate.setPassword(bcryptEncoder.encode(userBody.getPassword()));
 
 			} else {
@@ -214,57 +208,10 @@ public class CandidateServiceImpl implements CandidateService {
 
 	@Override
 	public CandidateDto createCandidate(CandidateDto candidate) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
-	@Override
-	public void changePassword(Long c_id, @Valid ChangePasswordDto userBody, HttpServletRequest request) {
-		Candidate candidate = candidateRepository.findById(c_id)
-				.orElseThrow(() -> new ResourceNotFoundException("Candidate Not Found"));
-
-		final String requestTokenHeader = request.getHeader("Authorization");
-		String username = null;
-		String jwtToken = null;
-		JsonObject jsonObj = null;
-		jwtToken = requestTokenHeader.substring(7);
-		username = jwttokenUtil.getEmailFromToken(jwtToken);
-		jsonObj = JsonParser.parseString(username).getAsJsonObject();
-		CandidateDto candidateData = new CandidateDto();
-		candidateData.setC_id((jsonObj.get("id").getAsLong()));
-
-		if (candidateData.getC_id() == candidate.getC_id()) {
-
-			if (!bcryptEncoder.matches(userBody.getNewPassword(), candidate.getPassword())) {
-
-				System.out.println("." + userBody.getNewPassword());
-				System.out.println("." + userBody.getPassword());
-				System.out.println("." + bcryptEncoder.encode((userBody.getPassword())));
-
-				if (bcryptEncoder.matches(userBody.getPassword(), candidate.getPassword())) {
-
-					candidate.setPassword(bcryptEncoder.encode(userBody.getNewPassword()));
-					System.out.println("New Password" + candidate.getPassword());
-
-				} else {
-
-					throw new ResourceNotFoundException("Please enter old password correct");
-
-				}
-
-			} else {
-
-				throw new ResourceNotFoundException("password must be differ from old password");
-
-			}
-
-		} else {
-
-			throw new ResourceNotFoundException("Access Denied");
-
-		}
-
-	}
 	
 	
 	@Override
@@ -273,129 +220,31 @@ public class CandidateServiceImpl implements CandidateService {
 		return bcryptEncoder.matches(password, hashPassword);
 
 	}
+
+	@Override
+	public void addJobToCandidate(String email, String name) {
+		
+		Candidate candidate = candidateRepository.findByEmail(email);
+		
+		Job job = jobRepository.findByName(name);
 	
-}
-	
+		candidate.getJobs().add(job);
+		
+		
+		
+	}
+
 
 	/*
-	 * @Override public UserDetails loadUserByUsername(String username) throws
-	 * UsernameNotFoundException {
-	 * 
-	 * Candidate candidate;
-	 * 
-	 * if (!cache.isKeyExist(username, username)) {
-	 * 
-	 * candidate = candidateRepository.findByUsername(username);
-	 * cache.addInCache(username, username,candidate);
-	 * 
-	 * } else {
-	 * 
-	 * candidate = (Candidate) cache.getFromCache(username, username); //
-	 * redisTemplate.opsForHash().get(email, email);
-	 * 
-	 * }
-	 * 
-	 * if (candidate == null) {
-	 * 
-	 * throw new UsernameNotFoundException("candidate not found with Username: " +
-	 * username);
-	 * 
-	 * }
-	 * 
-	 * return new
-	 * org.springframework.security.core.userdetails.User(candidate.getUsername(),
-	 * candidate.getPassword(), getAuthority(candidate));
-	 * 
-	 * }
-	 * 
-	 * @SuppressWarnings("unchecked") private ArrayList<SimpleGrantedAuthority>
-	 * getAuthority(Candidate candidate) {
-	 * 
-	 * ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<>();
-	 * 
-	 * if (!cache.isKeyExist(candidate.getC_id() + "permission", candidate.getC_id()
-	 * + "permission")) {
-	 * 
-	 * ArrayList<SimpleGrantedAuthority> authorities1 = new ArrayList<>();
-	 * //ArrayList<String> permissions =
-	 * roleServiceInterface.getPermissionByUserId(candidate.getC_id());
-	 * 
-	 * permissions.forEach(permission -> {
-	 * 
-	 * authorities1.add(new SimpleGrantedAuthority("ROLE_" + permission));
-	 * 
-	 * });
-	 * 
-	 * authorities = authorities1; cache.addInCache(candidate.getC_id() +
-	 * "permission", candidate.getC_id() + "permission", authorities1);
-	 * 
-	 * } else {
-	 * 
-	 * authorities = (ArrayList<SimpleGrantedAuthority>)
-	 * cache.getFromCache(candidate.getC_id() + "permission", candidate.getC_id() +
-	 * "permission");
-	 * 
-	 * }
-	 * 
-	 * return authorities;
-	 * 
-	 * }
+	 * @Override public Candidate registerCandidate(Candidate candidate) { Candidate
+	 * candidate1 = new Candidate(); candidate1.setName(candidate.getName());
+	 * candidate1.setEmail(candidate.getEmail());
+	 * candidate1.setPassword(passwordEncoder.encode(candidate.getAddress()));
+	 * candidate1.setAddress(candidate.getAddress());
+	 * candidate1.setUsername(candidate.getUsername());
+	 * candidate1.setJobs(candidate.getJobs());
+	 * System.out.println(candidate.getJobs()); Candidate savedCandidate =
+	 * this.candidateRepository.save(candidate1); return savedCandidate; }
 	 */
-
-
-
-/*
- * @Override public void changePassword(Long userId, ChangePasswordDto userBody,
- * HttpServletRequest request) throws ResourceNotFoundException {
- * 
- * UserEntity userData =
- * candidateRepository.findByIdAndIsActiveTrue(userId).orElseThrow(() -> new
- * ResourceNotFoundException("User Not Found")); final String requestTokenHeader
- * = request.getHeader("Authorization"); String username = null; String jwtToken
- * = null; JsonObject jsonObj = null; jwtToken =
- * requestTokenHeader.substring(7); username =
- * jwtTokenUtil.getEmailFromToken(jwtToken); jsonObj =
- * JsonParser.parseString(username).getAsJsonObject(); UserDataDto userDatas =
- * new UserDataDto(); userDatas.setUserId((jsonObj.get("id").getAsLong()));
- * 
- * if (userDatas.getUserId() == userData.getId()) {
- * 
- * if (!bcryptEncoder.matches(userBody.getNewPassword(),
- * userData.getPassword())) {
- * 
- * System.out.println("." + userBody.getNewPassword()); System.out.println("." +
- * userBody.getPassword()); System.out.println("." +
- * bcryptEncoder.encode((userBody.getPassword())));
- * 
- * if (bcryptEncoder.matches(userBody.getPassword(), userData.getPassword())) {
- * 
- * userData.setPassword(bcryptEncoder.encode(userBody.getNewPassword()));
- * System.out.println("New Password" + userData.getPassword());
- * 
- * } else {
- * 
- * throw new ResourceNotFoundException("Please enter old password correct");
- * 
- * }
- * 
- * } else {
- * 
- * throw new
- * ResourceNotFoundException("password must be differ from old password");
- * 
- * }
- * 
- * } else {
- * 
- * throw new ResourceNotFoundException("Access Denied");
- * 
- * }
- * 
- * }
- */
-
-/*
- * @Override public Candidate findByEmail(String email) {
- * 
- * return null; }
- */
+}
+	

@@ -1,8 +1,5 @@
 package com.example.demo.services;
 import java.util.List;
-
-
-
 import org.springframework.data.domain.Page;
 import com.example.demo.dto.JobDto;
 import com.example.demo.entities.Job;
@@ -15,8 +12,6 @@ public interface JobService {
 	
 	public JobDto getJobById(Long id);
 	
-	
-	
 	JobDto updateJobDetails(JobDto job, Long id);
 	
 	void deleteJobDetails(Long id);
@@ -25,5 +20,4 @@ public interface JobService {
 	
 	Page<Job> getAllJobsApplied(String search,String from,String to);
 
-	void addJobToCandidate(String name, String title);
 }

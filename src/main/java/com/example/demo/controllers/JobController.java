@@ -31,8 +31,7 @@ public class JobController {
 
 	@Autowired
 	private JobService jobService;
-	@Autowired
-	private EmailService emailService;
+
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping("/jobs/apply")
@@ -85,32 +84,7 @@ public class JobController {
 				return new ResponseEntity<>(new ErrorResponseDto("Data Not Found", "dataNotFound"), HttpStatus.NOT_FOUND);
 			}
 	  
-		  //Job asssign to candidate
-		  @PostMapping("/assignJob")
-			public ResponseEntity<?> assignJob(@Valid @RequestBody AssignJob assignJob, HttpServletRequest request)
-					throws Exception {
-				try {
-					String email = assignJob.getEmail();
-					System.out.println("email>>"+email);
-				
-					String name = assignJob.getName();
-					System.out.println("name>>"+name);
-					
-					final String url="Job applied successfully!!";
-					emailService.sendSimpleMessage(assignJob.getEmail(), "subject", url);
-					jobService.addJobToCandidate(email, name);
 		
-
-					return new ResponseEntity<>(new SuccessResponseDto("Job Assign to Candidate", "jobAssignToCandidate", assignJob),
-							HttpStatus.CREATED);
-
-				} catch (Exception e) {
-					e.printStackTrace();
-					return new ResponseEntity<>(new ErrorResponseDto("Job Not Assign to Candidate", "jobNotAssignToCandidate"),
-							HttpStatus.NOT_ACCEPTABLE);
-				}
-
-			}
 		  
 		  //Pagination of Applied jobs
 		  @GetMapping("/jobs/applied")

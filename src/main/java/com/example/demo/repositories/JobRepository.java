@@ -18,5 +18,7 @@ public interface JobRepository extends JpaRepository<Job, Long>{
 	Page<Job> findByOrderByApply(Pageable paging,Class<Job> jobDto);
 	Page<Job> findByNameContainingIgnoreCaseOrderByApply(String title,Pageable paging,Class<Job> jobDtos);
 	
-	Job findByNameContainingIgnoreCase(String name);
+	//Job findByNameContainingIgnoreCase(String name);
+	
+	Job findByName(String name);
 }

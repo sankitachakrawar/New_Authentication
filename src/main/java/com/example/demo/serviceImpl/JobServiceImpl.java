@@ -1,20 +1,21 @@
 package com.example.demo.serviceImpl;
 
+
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
+
+
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.dto.AssignJob;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.demo.dto.JobDto;
-import com.example.demo.entities.Candidate;
 import com.example.demo.entities.Job;
 import com.example.demo.exceptions.ResourceNotFoundException;
-import com.example.demo.repositories.CandidateJobRepository;
-import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.repositories.JobRepository;
 import com.example.demo.services.JobService;
 import com.example.demo.utils.PaginationUsingFromTo;
@@ -25,9 +26,7 @@ public class JobServiceImpl implements JobService {
 	@Autowired
 	private JobRepository jobRepository;
 	
-	@Autowired
-	private CandidateRepository candidateRepository;
-	
+
 	
 	//apply Job
 	@Override
@@ -74,7 +73,7 @@ public class JobServiceImpl implements JobService {
 	  jobDto.setId(job.getId()); 
 	  jobDto.setName(job.getName());
 	  jobDto.setLocation(job.getLocation()); 
-	  jobDto.setApply(job.getApply());
+	  jobDto.setApply(job.isApply());
 	  jobDto.setPostTime(job.getPostTime());
 	  //jobDto.setCandidate(job.getCandidate()); 
 	  return jobDto;
@@ -143,31 +142,7 @@ public class JobServiceImpl implements JobService {
 
 	}
 	
-	@Autowired
-	private CandidateJobRepository candidateJobRepository;
-	//assignJob
-	@Override
-	public void addJobToCandidate(String email, String name) {
-		Candidate candidate = candidateRepository.findByEmailContainingIgnoreCase(email);
-		//Job job = jobRepository.findByTitleContainingIgnoreCase(title);
-		Job job=jobRepository.findByNameContainingIgnoreCase(name);
-		
-		/*
-		 * AssignJob assignJob
-		 * =candidateJobRepository.findByEmailAndNameContainingIgnoreCase(email, name);
-		 * AssignJob assignJob=new AssignJob(); assignJob.getEmail();
-		 * assignJob.getName();
-		 * 
-		 * AssignJob saved=candidateJobRepository.save(assignJob);
-		 * System.out.println(saved);
-		 */
-		
-		System.out.println("candidate>> "+candidate+"\nJob>> "+job);
-		
-		candidate.getJobs().add(job);
-		
-		System.out.println("candidate2>>"+candidate.getJobs().add(job));
-	}
+
 
 	//get all jobs with apply pagination
 	@Override

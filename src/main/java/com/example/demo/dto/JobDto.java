@@ -2,8 +2,16 @@ package com.example.demo.dto;
 
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+
 import com.example.demo.entities.Candidate;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class JobDto {
 
 	private Long id;
@@ -16,46 +24,24 @@ public class JobDto {
 	
 	private Candidate candidate;
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getName() {
-		return name;
-	}
-
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
-	}
-	
-	public void setApply(Boolean apply) {
-		this.apply = apply;
-	}
-	public Boolean getApply() {
-		return apply;
-	}
-	
-	public void setPostTime(Date postTime) {
-		this.postTime = postTime;
-	}
-	public Date getPostTime() {
-		return postTime;
-	}
-	public void setCandidate(Candidate candidate) {
-		this.candidate = candidate;
-	}
-	public Candidate getCandidate() {
-		return candidate;
-	}
+	/*
+	 * public Long getId() { return id; }
+	 * 
+	 * public void setId(Long id) { this.id = id; }
+	 * 
+	 * public void setName(String name) { this.name = name; } public String
+	 * getName() { return name; }
+	 * 
+	 * public String getLocation() { return location; }
+	 * 
+	 * public void setLocation(String location) { this.location = location; }
+	 * 
+	 * public void setApply(Boolean apply) { this.apply = apply; } public Boolean
+	 * getApply() { return apply; }
+	 * 
+	 * public void setPostTime(Date postTime) { this.postTime = postTime; } public
+	 * Date getPostTime() { return postTime; } public void setCandidate(Candidate
+	 * candidate) { this.candidate = candidate; } public Candidate getCandidate() {
+	 * return candidate; }
+	 */
 }

@@ -1,6 +1,7 @@
 package com.example.demo.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Repository;
 import com.example.demo.entities.Candidate;
@@ -14,8 +15,8 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long>{
 
 	public Candidate findByEmailAndIsActiveTrue(String username) throws ResourceNotFoundException;
 
-	public Candidate findByEmailContainingIgnoreCase(String email);
-	
+	Candidate findByEmailContainingIgnoreCase(String email);
+	Candidate findByEmailContainingIgnoreCaseAndIsActiveTrue(String search);
 	
 	public Candidate findByUsername(String username);
 

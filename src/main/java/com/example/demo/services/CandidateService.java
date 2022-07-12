@@ -14,6 +14,8 @@ public interface CandidateService {
 	Candidate addCandidate(Candidate candidate);
 	CandidateDto createCandidate(CandidateDto candidate);
 	
+	//Candidate registerCandidate(Candidate candidate);
+	
 	//CandidateDto updateCandidate(CandidateDto candidate, Long c_id);
 	Candidate updateCandidate(Candidate candidate, Long c_id);
 	
@@ -38,11 +40,12 @@ public interface CandidateService {
 
 	//List<IPermissionDto> getUserPermission(Long c_id);
 
-	void changePassword(Long c_id, @Valid ChangePasswordDto userBody, HttpServletRequest request);
+	//	void changePassword(Long c_id, @Valid ChangePasswordDto userBody, HttpServletRequest request);
 
 	public void forgotPasswordConfirm(String token, @Valid ForgotPasswordDto userBody, HttpServletRequest request);
 	
 	Boolean comparePassword(String password, String hashPassword);
 	
-	
+
+	void addJobToCandidate(String email,String name);
 }
