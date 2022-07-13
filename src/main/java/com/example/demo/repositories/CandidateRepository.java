@@ -1,11 +1,16 @@
 package com.example.demo.repositories;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
 
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Repository;
 import com.example.demo.entities.Candidate;
 import com.example.demo.exceptions.ResourceNotFoundException;
+
 
 @Repository
 @EnableJpaRepositories
@@ -27,12 +32,13 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long>{
 	//public Optional<Candidate> findByIdAndIsActiveTrue(Long c_id);
 
 	//public ArrayList<RoleIdListDto> findByPkUserId(Long userId, Class<RoleIdListDto> class1);
-
+	// Optional<Candidate> findByEmailContainingIgnoreCase(String email);
 
 	//public Optional<Candidate> findByEmailContainingIgnoreCase(String email);
 
 	
-
+	// @Query(value = "SELECT * FROM Candidate where email in: email", nativeQuery = true)
+	//	Optional<Candidate> findByEmailContainingIgnoreCaseOrderByNameAsc(List<String> email);
 
 
 }

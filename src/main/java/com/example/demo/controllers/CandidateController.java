@@ -4,8 +4,11 @@ import java.util.Calendar;
 
 
 
+
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +30,14 @@ import com.example.demo.dto.ForgotPasswordDto;
 import com.example.demo.dto.SuccessResponseDto;
 import com.example.demo.entities.AuthRequest;
 import com.example.demo.entities.Candidate;
+import com.example.demo.entities.Recruiter;
 import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.services.CandidateService;
 import com.example.demo.services.EmailService;
 import com.example.demo.utils.JwtTokenUtil;
 import com.example.demo.utils.JwtUtil;
+
 
 
 @RestController
@@ -58,14 +63,18 @@ public class CandidateController {
 	@Autowired
 	private JwtUtil jwtUtil;
 	
+	//@Autowired
+	private Recruiter recruiter;
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping("/candidates") 
 	public ResponseEntity<Candidate> applyJob(@Valid @RequestBody Candidate candidate){
 
 		@SuppressWarnings("unused")
 		Candidate savedcandidate=this.candidateService.addCandidate(candidate);
-		//final String url="Job applied successfully!!";
-		//emailService.sendSimpleMessage(candidate.getEmail(), "subject", url);
+		final String url="Job applied successfully!!";
+		emailService.sendSimpleMessage(candidate.getEmail(), "subject", url);
+		emailService.sendSimpleMessage(recruiter.getEmail(), "subject", url);
 		return new ResponseEntity("Candidate Registered Successfully ",HttpStatus.OK);
 	 }
 	
@@ -188,7 +197,7 @@ public class CandidateController {
 		}
 	  
 	  
-	  
+		
 	  
 	  
 	  

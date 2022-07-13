@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -49,19 +50,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		  auth.userDetailsService(customUserDetailsService);
 	  }
 	 
-		/*
-		 * @Bean public PasswordEncoder passwordEncoder() {
-		 * 
-		 * return new BCryptPasswordEncoder();
-		 * 
-		 * }
-		 */
+		
+		  @Bean public PasswordEncoder passwordEncoder() {
+		  
+		  return new BCryptPasswordEncoder();
+		  
+		  }
+		 
 	  
-	  @Bean
-	  public PasswordEncoder passwordEncoder() {
-		  return NoOpPasswordEncoder.getInstance();
-	  }
-	  
+			/*
+			 * @Bean public PasswordEncoder passwordEncoder() { return
+			 * NoOpPasswordEncoder.getInstance(); }
+			 */
 	
 	  
     @Override
@@ -73,12 +73,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	  @Override protected void configure(HttpSecurity http) throws Exception {
 	  http.csrf() .disable() .authorizeRequests() .antMatchers(HttpMethod.OPTIONS,
-	  "/**").permitAll().antMatchers("/api/authenticate","/api/assignJob","/api",
+	  "/**").permitAll().antMatchers("/api/authenticate","/api",
 	  "/api/data","/api/getinfo","/api/jobs/{id}","/token","/forgot-pass",
 	  "/api/candidates","/api/candidates/{c_id}","/api/login","/api/jobs",
-	  "/api/jobs/{pageNo}/{pageSize}","/api/jobs/apply/{pageNo}/{pageSize}",
-	  "/api/changePass/{c_id}","/api/forgot-pass-confirm","/api/logout",
-	  "/mail","/api/sendmail","/api/jobs/applied","/api/jobs/apply","/recruiter").permitAll() .anyRequest()
+	  "/api/jobs/{pageNo}/{pageSize}","/api/jobs/apply/{pageNo}/{pageSize}","/api/forgot-pass-confirm","/api/logout",
+	  "/mail","/api/sendmail","/api/jobs/applied","/api/jobs/apply","/recruiter","/api/assignJob").permitAll() .anyRequest()
 	  .authenticated() .and().httpBasic().and() .sessionManagement()
 	  .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	  //.and().exceptionHandling().accessDeniedPage("/err/403");

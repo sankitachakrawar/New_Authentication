@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 public class Candidate {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long c_id;
 	
 	@Column(name="candidate_name" , nullable=false , length=100)
@@ -37,7 +37,7 @@ public class Candidate {
 	private String address;
 	
 	@Column(name = "is_active")
-	private Boolean isActive = true;
+	private boolean isActive = true;
 	
 	
 	private boolean isEnabled;
@@ -45,11 +45,13 @@ public class Candidate {
 	private String username;
 	
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "candidate_jobs", joinColumns = @JoinColumn(name = "c_id", referencedColumnName = "c_id"), inverseJoinColumns = @JoinColumn(name = "id", referencedColumnName = "id"))
+	@JoinTable(name = "candidate_jobs", joinColumns = @JoinColumn(name = "c_id", referencedColumnName = "c_id"), inverseJoinColumns = @JoinColumn(name = "j_id", referencedColumnName = "id"))
 	private Collection<Job> jobs = new ArrayList<>();
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	private Collection<Recruiter> recruiters=new ArrayList<>();
+
+	
 	
 	
 	/*

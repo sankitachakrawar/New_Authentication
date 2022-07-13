@@ -1,24 +1,19 @@
 package com.example.demo.serviceImpl;
 
 
-import java.util.Date;
 import java.util.List;
-
-
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.demo.dto.JobDto;
 import com.example.demo.entities.Job;
 import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.repositories.JobRepository;
 import com.example.demo.services.JobService;
 import com.example.demo.utils.PaginationUsingFromTo;
+
 
 @Service
 public class JobServiceImpl implements JobService {

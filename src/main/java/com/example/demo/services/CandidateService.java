@@ -48,4 +48,5 @@ public interface CandidateService {
 	
 
 	void addJobToCandidate(String email,String name);
+	
 }

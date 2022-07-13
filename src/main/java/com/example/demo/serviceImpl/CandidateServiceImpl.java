@@ -3,6 +3,8 @@ package com.example.demo.serviceImpl;
 import java.util.Date;
 
 
+
+
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -10,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.demo.dto.CandidateDto;
@@ -22,6 +26,10 @@ import com.example.demo.repositories.ForgotPasswordRequestRepository;
 import com.example.demo.repositories.JobRepository;
 import com.example.demo.services.CandidateService;
 import com.example.demo.utils.JwtTokenUtil;
+
+import lombok.RequiredArgsConstructor;
+
+
 import com.example.demo.exceptions.*;
 
 @Service
@@ -56,7 +64,7 @@ public class CandidateServiceImpl implements CandidateService {
 		Candidate candidate1 = new Candidate();
 		candidate1.setName(candidate.getName());
 		candidate1.setEmail(candidate.getEmail());
-		candidate1.setPassword(passwordEncoder.encode(candidate.getAddress()));
+		candidate1.setPassword(passwordEncoder.encode(candidate.getPassword()));
 		candidate1.setAddress(candidate.getAddress());
 		candidate1.setUsername(candidate.getUsername());
 		candidate1.setJobs(candidate.getJobs());
@@ -161,12 +169,12 @@ public class CandidateServiceImpl implements CandidateService {
 
 	}
 
-	@Override
-	public Candidate findByEmail(String email) {
-		Candidate candidate = candidateRepository.findByEmailContainingIgnoreCase(email);
-		return candidate;
-
-	}
+	
+	  @Override public Candidate findByEmail(String email) { Candidate candidate =
+	  candidateRepository.findByEmailContainingIgnoreCase(email); return candidate;
+	  
+	 }
+	 
 
 	@Override
 	public void forgotPasswordConfirm(String token, @Valid ForgotPasswordDto userBody, HttpServletRequest request) {
@@ -224,7 +232,7 @@ public class CandidateServiceImpl implements CandidateService {
 	@Override
 	public void addJobToCandidate(String email, String name) {
 		
-		Candidate candidate = candidateRepository.findByEmail(email);
+		Candidate candidate = candidateRepository.findByEmailContainingIgnoreCaseAndIsActiveTrue(email);
 		
 		Job job = jobRepository.findByName(name);
 	
@@ -233,18 +241,13 @@ public class CandidateServiceImpl implements CandidateService {
 		
 		
 	}
+	
+	
+
+	
 
 
-	/*
-	 * @Override public Candidate registerCandidate(Candidate candidate) { Candidate
-	 * candidate1 = new Candidate(); candidate1.setName(candidate.getName());
-	 * candidate1.setEmail(candidate.getEmail());
-	 * candidate1.setPassword(passwordEncoder.encode(candidate.getAddress()));
-	 * candidate1.setAddress(candidate.getAddress());
-	 * candidate1.setUsername(candidate.getUsername());
-	 * candidate1.setJobs(candidate.getJobs());
-	 * System.out.println(candidate.getJobs()); Candidate savedCandidate =
-	 * this.candidateRepository.save(candidate1); return savedCandidate; }
-	 */
+
+	
 }
 	
