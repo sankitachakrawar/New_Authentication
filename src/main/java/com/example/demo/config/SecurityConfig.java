@@ -17,6 +17,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.example.demo.serviceImpl.CandidateServiceImpl;
+import com.example.demo.serviceImpl.UserServiceImpl;
 import com.example.demo.services.CustomUserDetailsService;
 
 @SuppressWarnings("deprecation")
@@ -96,4 +99,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 */
 
 	
+	/*
+	 * @Bean public UserServiceImpl getUserServiceImpl() { return new
+	 * UserServiceImpl(); }
+	 */
+	  
+		/*
+		 * @Bean public CandidateServiceImpl getCandidateServiceImpl() { return new
+		 * CandidateServiceImpl(); }
+		 */
 }
