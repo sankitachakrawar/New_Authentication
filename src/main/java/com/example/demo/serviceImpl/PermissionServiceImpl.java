@@ -27,6 +27,7 @@ public class PermissionServiceImpl implements PermissionServiceInterface {
 	@Autowired
 	private EntityRepository entityRepository;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void addPermission(PermissionRequestDto permissionBody) {
 
@@ -42,6 +43,7 @@ public class PermissionServiceImpl implements PermissionServiceInterface {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void editPermission(PermissionRequestDto permissionBody, Long permissionId) throws ResourceNotFoundException {
 

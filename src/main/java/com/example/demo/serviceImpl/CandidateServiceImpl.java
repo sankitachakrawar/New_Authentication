@@ -1,39 +1,33 @@
 package com.example.demo.serviceImpl;
 
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
-
-
-
-
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ForgotPasswordDto;
+import com.example.demo.dto.IPermissionDto;
+import com.example.demo.dto.RoleIdListDto;
 import com.example.demo.entities.Candidate;
 import com.example.demo.entities.Forgot_password_request;
 import com.example.demo.entities.Job;
 import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.repositories.ForgotPasswordRequestRepository;
 import com.example.demo.repositories.JobRepository;
+import com.example.demo.repositories.RolePermissionRepository;
+import com.example.demo.repositories.UserRoleRepository;
 import com.example.demo.services.CandidateService;
 import com.example.demo.utils.JwtTokenUtil;
-
-import lombok.RequiredArgsConstructor;
-
-
 import com.example.demo.exceptions.*;
-
 
 @Service
 public class CandidateServiceImpl implements CandidateService {
@@ -51,7 +45,7 @@ public class CandidateServiceImpl implements CandidateService {
 
 	@Autowired
 	private JwtTokenUtil jwttokenUtil;
-	
+
 	@Autowired
 	private JobRepository jobRepository;
 
@@ -172,12 +166,12 @@ public class CandidateServiceImpl implements CandidateService {
 
 	}
 
-	
-	  @Override public Candidate findByEmail(String email) { Candidate candidate =
-	  candidateRepository.findByEmailContainingIgnoreCase(email); return candidate;
-	  
-	 }
-	 
+	@Override
+	public Candidate findByEmail(String email) {
+		Candidate candidate = candidateRepository.findByEmailContainingIgnoreCase(email);
+		return candidate;
+
+	}
 
 	@Override
 	public void forgotPasswordConfirm(String token, @Valid ForgotPasswordDto userBody, HttpServletRequest request) {
@@ -196,9 +190,7 @@ public class CandidateServiceImpl implements CandidateService {
 				username = jwttokenUtil.getEmailFromToken(jwtToken); // check if that email exist in database
 				// grab the the user entity if email exist in db.
 				Candidate candidate = candidateRepository.findByEmail(username);
-																				
-																				
-				
+
 				candidate.setPassword(bcryptEncoder.encode(userBody.getPassword()));
 
 			} else {
@@ -219,12 +211,10 @@ public class CandidateServiceImpl implements CandidateService {
 
 	@Override
 	public CandidateDto createCandidate(CandidateDto candidate) {
-		
+
 		return null;
 	}
 
-	
-	
 	@Override
 	public Boolean comparePassword(String password, String hashPassword) {
 
@@ -234,23 +224,40 @@ public class CandidateServiceImpl implements CandidateService {
 
 	@Override
 	public void addJobToCandidate(String email, String name) {
-		
+
 		Candidate candidate = candidateRepository.findByEmailContainingIgnoreCaseAndIsActiveTrue(email);
-		
+
 		Job job = jobRepository.findByName(name);
-	
+
 		candidate.getJobs().add(job);
-		
-		
-		
+
 	}
-	
-	
+
+	@Autowired
+	private UserRoleRepository userRoleRepository;
+
+	@Autowired
+	private RolePermissionRepository rolePermissionRepository;
 
 	
-
-
-
+//	  @Override public List<IPermissionDto> getUserPermission(Long c_id) throws
+//	  IOException {
+//	  
+//	  //ArrayList<RoleIdListDto> roleIds =
+//	  userRoleRepository.findById(c_id, RoleIdListDto.class);
+//	  
+//	  ArrayList<RoleIdListDto> roleIds=candidateRepository.findById(c_id,RoleIdListDto.class);
+//	  ArrayList<Long> roles = new ArrayList<>();
+//	  
+//	  for (int i = 0; i < roleIds.size(); i++) {
+//	  
+//	  roles.add(roleIds.get(i).getPkRoleId());
+//	  
+//	  }
+//	  
+//	  return rolePermissionRepository.findByPkRoleIdIn(roles,
+//	  IPermissionDto.class);
+//	 
+//	 }
 	
 }
-	

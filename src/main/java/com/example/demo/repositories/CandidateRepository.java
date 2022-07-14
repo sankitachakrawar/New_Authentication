@@ -1,11 +1,6 @@
 package com.example.demo.repositories;
 
-import java.util.List;
-
-import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Repository;
 import com.example.demo.entities.Candidate;
@@ -25,7 +20,26 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long>{
 	
 	public Candidate findByUsername(String username);
 
-	//public Candidate findByEmailAndIsActiveTrue(Long userId);
+	//public ArrayList<RoleIdListDto> findById(Long c_id, Class<RoleIdListDto> class1);
+
+	//public ArrayList<RoleIdListDto> findById(Long c_id, Class<RoleIdListDto> class1);
+
+	//public ArrayList<RoleIdListDto> findByC_Id(Long c_id, Class<RoleIdListDto> class1);
+
+	
+
+
+}
+
+
+
+
+
+
+
+
+
+//public Candidate findByEmailAndIsActiveTrue(Long userId);
 
 	//public Optional<Candidate> findById(Long c_id);
 
@@ -39,6 +53,3 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long>{
 	
 	// @Query(value = "SELECT * FROM Candidate where email in: email", nativeQuery = true)
 	//	Optional<Candidate> findByEmailContainingIgnoreCaseOrderByNameAsc(List<String> email);
-
-
-}

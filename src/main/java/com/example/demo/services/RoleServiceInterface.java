@@ -26,7 +26,7 @@ public interface RoleServiceInterface {
 
 	RolePermissionDto getRoleAndPermissionById(Long id) throws ResourceNotFoundException;
 
-	ArrayList<String> getPermissionByUserId(Long userId);
+	//ArrayList<String> getPermissionByUserId(Long userId);
 
 	void addPermissionsToRole(Long id, Long[] permissions) throws ResourceNotFoundException;
 

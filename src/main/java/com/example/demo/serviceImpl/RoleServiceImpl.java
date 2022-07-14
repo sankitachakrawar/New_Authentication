@@ -1,26 +1,20 @@
 package com.example.demo.serviceImpl;
 
 import java.util.ArrayList;
-
 import java.util.List;
-
 import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
 import com.example.demo.dto.EntityDto;
 import com.example.demo.dto.EntityPermissionDto;
 import com.example.demo.dto.IPermissionDto;
-import com.example.demo.dto.IPermissionIdList;
 import com.example.demo.dto.IRoleDetailDto;
 import com.example.demo.dto.IRoleListDto;
 import com.example.demo.dto.RoleDto;
-import com.example.demo.dto.RoleIdListDto;
 import com.example.demo.dto.RolePermissionDto;
 import com.example.demo.entities.EntityEntity;
 import com.example.demo.entities.PermissionEntity;
@@ -33,7 +27,6 @@ import com.example.demo.repositories.EntityRepository;
 import com.example.demo.repositories.PermissionRepository;
 import com.example.demo.repositories.RolePermissionRepository;
 import com.example.demo.repositories.RoleRepository;
-import com.example.demo.repositories.UserRoleRepository;
 import com.example.demo.services.RoleServiceInterface;
 import com.example.demo.utils.PaginationUsingFromTo;
 
@@ -62,8 +55,8 @@ public class RoleServiceImpl implements RoleServiceInterface {
 	@Autowired
 	private RolePermissionRepository rolePermissionRepository;
 
-	@Autowired
-	private UserRoleRepository userRoleRepository;
+//	@Autowired
+//	private UserRoleRepository userRoleRepository;
 
 	@Value("${spring.jpa.properties.hibernate.jdbc.batch_size}")
 	private int batchSize;
@@ -88,12 +81,13 @@ public class RoleServiceImpl implements RoleServiceInterface {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public void addRole(RoleDto roleDto, Long userId) {
+	public void addRole(RoleDto roleDto, Long c_id) {
 
 		RoleEntity roleEntity = new RoleEntity();
-		roleEntity.setCreatedBy(this.authRepository.getById(userId));
-		roleEntity.setUpdatedBy(this.authRepository.getById(userId));
+		roleEntity.setCreatedBy(this.authRepository.getById(c_id));
+		roleEntity.setUpdatedBy(this.authRepository.getById(c_id));
 		roleEntity.setRoleName(roleDto.getRoleName());
 		roleEntity.setDescription(roleDto.getDescription());
 		roleRepository.save(roleEntity);
@@ -202,31 +196,32 @@ public class RoleServiceImpl implements RoleServiceInterface {
 		return rolePermissionDto;
 
 	}
-
-	@Override
-	public ArrayList<String> getPermissionByUserId(Long userId) {
-
-		ArrayList<RoleIdListDto> roleIds = userRoleRepository.findByPkUserId(userId, RoleIdListDto.class);
-		ArrayList<Long> roles = new ArrayList<>();
-
-		for (int i = 0; i < roleIds.size(); i++) {
-
-			roles.add(roleIds.get(i).getPkRoleId());
-
-		}
-
-		List<IPermissionIdList> rolesPermission = rolePermissionRepository.findPkPermissionByPkRoleIdIn(roles, IPermissionIdList.class);
-		ArrayList<String> permissions = new ArrayList<>();
-
-		for (IPermissionIdList element : rolesPermission) {
-
-			permissions.add(element.getPkPermissionActionName());
-
-		}
-
-		return permissions;
-
-	}
+	/*
+	 * @Override public ArrayList<String> getPermissionByUserId(Long userId) {
+	 * 
+	 * ArrayList<RoleIdListDto> roleIds = userRoleRepository.findByPkUserId(userId,
+	 * RoleIdListDto.class); ArrayList<Long> roles = new ArrayList<>();
+	 * 
+	 * for (int i = 0; i < roleIds.size(); i++) {
+	 * 
+	 * roles.add(roleIds.get(i).getPkRoleId());
+	 * 
+	 * }
+	 * 
+	 * List<IPermissionIdList> rolesPermission =
+	 * rolePermissionRepository.findPkPermissionByPkRoleIdIn(roles,
+	 * IPermissionIdList.class); ArrayList<String> permissions = new ArrayList<>();
+	 * 
+	 * for (IPermissionIdList element : rolesPermission) {
+	 * 
+	 * permissions.add(element.getPkPermissionActionName());
+	 * 
+	 * }
+	 * 
+	 * return permissions;
+	 * 
+	 * }
+	 */
 
 	@Override
 	public void addPermissionsToRole(Long id, Long[] permissions) throws ResourceNotFoundException {

@@ -17,14 +17,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RolePermissionId implements java.io.Serializable {
 
-	/**
-	 *
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 
 	@ManyToOne
 	private RoleEntity role;
+	
 	@ManyToOne
 	private PermissionEntity permission;
 

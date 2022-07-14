@@ -3,7 +3,7 @@ package com.example.demo.dto;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-public class EditUserRequestDto extends UserDto {
+public class EditUserRequestDto extends CandidateDto {
 
 	public EditUserRequestDto() {
 

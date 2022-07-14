@@ -1,6 +1,7 @@
 package com.example.demo.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -14,12 +15,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import com.example.demo.serviceImpl.CandidateServiceImpl;
-import com.example.demo.serviceImpl.UserServiceImpl;
 import com.example.demo.services.CustomUserDetailsService;
 
 @SuppressWarnings("deprecation")
@@ -80,7 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	  "/api/data","/api/getinfo","/api/jobs/{id}","/token","/forgot-pass",
 	  "/api/candidates","/api/candidates/{c_id}","/api/login","/api/jobs",
 	  "/api/jobs/{pageNo}/{pageSize}","/api/jobs/apply/{pageNo}/{pageSize}","/api/forgot-pass-confirm","/api/logout",
-	  "/mail","/api/sendmail","/api/jobs/applied","/api/jobs/apply","/recruiter","/api/assignJob").permitAll() .anyRequest()
+	  "/mail","/api/sendmail","/api/jobs/applied","/api/jobs/apply","/recruiter","/api/assignJob","/role").permitAll() .anyRequest()
 	  .authenticated() .and().httpBasic().and() .sessionManagement()
 	  .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	  //.and().exceptionHandling().accessDeniedPage("/err/403");

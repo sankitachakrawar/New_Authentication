@@ -1,21 +1,21 @@
 package com.example.demo.repositories;
 
-import java.util.ArrayList;
-
-
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.demo.dto.IUserRoleDetailDto;
-import com.example.demo.dto.RoleIdListDto;
+
 import com.example.demo.entities.UserRoleEntity;
 
 
 public interface UserRoleRepository extends JpaRepository<UserRoleEntity, Long> {
 
-	ArrayList<RoleIdListDto> findByPkUserId(Long userId, Class<RoleIdListDto> RoleIdListDto);
+	//void findById(Long c_id, Class<RoleIdListDto> class1);
 
-	void deleteByPkUserId(Long userId);
+	//ArrayList<RoleIdListDto> findById(Long c_id, Class<RoleIdListDto> RoleIdListDto);
 
-	ArrayList<IUserRoleDetailDto> findByPkUserIdAndPkUserIsActiveTrue(Long userId, Class<IUserRoleDetailDto> IUserRoleDetailDto);
+	//void deleteById(Long c_id);
+
+	//void findById(Long c_id, Class<RoleIdListDto> class1);
+
+	//ArrayList<IUserRoleDetailDto> findByPkUserIdAndPkUserIsActiveTrue(Long userId, Class<IUserRoleDetailDto> IUserRoleDetailDto);
 
 }

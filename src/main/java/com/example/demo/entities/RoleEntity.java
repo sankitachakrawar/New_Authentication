@@ -54,11 +54,11 @@ public class RoleEntity implements Serializable {
 
 	@OneToOne
 	@JoinColumn(name = "created_by")
-	private UserEntity createdBy;
+	private Candidate createdBy;
 
 	@OneToOne
 	@JoinColumn(name = "updated_by")
-	private UserEntity updatedBy;
+	private Candidate updatedBy;
 
 	@Column(name = "created_at")
 	@CreationTimestamp

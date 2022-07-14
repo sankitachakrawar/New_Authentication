@@ -17,14 +17,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "user_role")
-@AssociationOverrides({ @AssociationOverride(name = "pk.user", joinColumns = @JoinColumn(name = "user_id")), @AssociationOverride(name = "pk.role", joinColumns = @JoinColumn(name = "role_id")) })
+@Table(name = "candidate_role")
+@AssociationOverrides({ @AssociationOverride(name = "pk.candidate", joinColumns = @JoinColumn(name = "c_id")), @AssociationOverride(name = "pk.role", joinColumns = @JoinColumn(name = "role_id")) })
 public class UserRoleEntity implements java.io.Serializable {
 
-	/**
-	 *
-	 */
+	
 	private static final long serialVersionUID = 1L;
+	
 	@EmbeddedId
 	private UserRoleId pk = new UserRoleId();
 
