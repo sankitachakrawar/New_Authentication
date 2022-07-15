@@ -59,8 +59,7 @@ public class Candidate {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.candidate", cascade = CascadeType.ALL)
 	//@OneToMany(fetch =  FetchType.LAZY)
 	//private List<UserRoleEntity> userRole;
-
-private Collection<UserRoleEntity> userRole=new ArrayList<>();
+	private Collection<UserRoleEntity> userRole=new ArrayList<>();
 
 	
 	

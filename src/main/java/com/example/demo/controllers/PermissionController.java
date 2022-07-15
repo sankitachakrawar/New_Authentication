@@ -38,7 +38,7 @@ public class PermissionController {
 	private PermissionServiceInterface permissionServiceInterface;
 
 	@PreAuthorize("hasRole('addPermission')")
-	@PostMapping()
+	@PostMapping("/p")
 	public ResponseEntity<?> addPermission(@Valid @RequestBody PermissionRequestDto permissionBody) {
 
 		permissionServiceInterface.addPermission(permissionBody);
