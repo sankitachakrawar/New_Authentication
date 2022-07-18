@@ -1,21 +1,16 @@
 package com.example.demo.dto;
 
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class EntityPermissionDto {
 
-	public EntityPermissionDto() {
-
-		// TODO Auto-generated constructor stub
-	}
-
-	public EntityPermissionDto(Long id, String actionName, Boolean isSelected, Long entityId) {
-
-		super();
-		this.id = id;
-		this.actionName = actionName;
-		this.isSelected = isSelected;
-		this.entityId = entityId;
-
-	}
+	
 
 	private Long id;
 
@@ -25,52 +20,6 @@ public class EntityPermissionDto {
 
 	private Long entityId;
 
-	public Long getId() {
-
-		return id;
-
-	}
-
-	public void setId(Long id) {
-
-		this.id = id;
-
-	}
-
-	public String getActionName() {
-
-		return actionName;
-
-	}
-
-	public void setActionName(String actionName) {
-
-		this.actionName = actionName;
-
-	}
-
-	public Boolean getIsSelected() {
-
-		return isSelected;
-
-	}
-
-	public void setIsSelected(Boolean isSelected) {
-
-		this.isSelected = isSelected;
-
-	}
-
-	public Long getEntityId() {
-
-		return entityId;
-
-	}
-
-	public void setEntityId(Long entityId) {
-
-		this.entityId = entityId;
-
-	}
+	
 
 }

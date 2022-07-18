@@ -1,10 +1,7 @@
 package com.example.demo.controllers;
 
 import java.util.List;
-
-
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +14,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.example.demo.dto.EntityRequestDto;
 import com.example.demo.dto.ErrorResponseDto;
 import com.example.demo.dto.SuccessResponseDto;
@@ -27,7 +23,7 @@ import com.example.demo.services.EntityServiceInterface;
 
 
 @RestController
-@RequestMapping("/entity")
+@RequestMapping("/api")
 public class EntityController {
 
 	public EntityController() {
@@ -38,8 +34,8 @@ public class EntityController {
 	@Autowired
 	private EntityServiceInterface entityServiceInterface;
 
-	@PreAuthorize("hasRole('getAllEntity')")
-	@GetMapping()
+	//@PreAuthorize("hasRole('getAllEntity')")
+	@GetMapping("/entity")
 	public ResponseEntity<?> getAllEntity() {
 
 		List<EntityEntity> entityList = entityServiceInterface.getAllEntity();
@@ -47,8 +43,8 @@ public class EntityController {
 
 	}
 
-	@PreAuthorize("hasRole('addEntity')")
-	@PostMapping()
+	//@PreAuthorize("hasRole('addEntity')")
+	@PostMapping("/entity")
 	public ResponseEntity<?> addEntity(@Valid @RequestBody EntityRequestDto entityBody) {
 
 		entityServiceInterface.addEntity(entityBody);
@@ -56,8 +52,8 @@ public class EntityController {
 
 	}
 
-	@PreAuthorize("hasRole('editEntity')")
-	@PutMapping("/{id}")
+	//@PreAuthorize("hasRole('editEntity')")
+	@PutMapping("/entity/{id}")
 	public ResponseEntity<?> editEntity(@PathVariable(value = "id") Long entityId, @Valid @RequestBody EntityRequestDto entityBody) throws ResourceNotFoundException {
 
 		try {
@@ -73,8 +69,8 @@ public class EntityController {
 
 	}
 
-	@PreAuthorize("hasRole('deleteEntity')")
-	@DeleteMapping("/{id}")
+	//@PreAuthorize("hasRole('deleteEntity')")
+	@DeleteMapping("/entity/{id}")
 	public ResponseEntity<?> editEntity(@PathVariable(value = "id") Long entityId) throws ResourceNotFoundException {
 
 		try {

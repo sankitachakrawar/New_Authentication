@@ -34,7 +34,7 @@ public class JobController {
 
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@PostMapping("/jobs/apply")
+	@PostMapping("/jobs")
 	public ResponseEntity<JobDto> createJob(@RequestBody JobDto jobDto) {
 		jobService.createJob(jobDto, jobDto.getId());
 				
@@ -73,7 +73,7 @@ public class JobController {
 				
 			}
 		  //Pagination of job list
-		  @GetMapping()
+		  @GetMapping("/jobs/sort")
 			public ResponseEntity<?> getAllJobs(@RequestParam(defaultValue = "") String search,
 					@RequestParam(defaultValue = "1") String pageNo, @RequestParam(defaultValue = "25") String size) {
 				Page<Job> users = jobService.getAllJobs(search, pageNo, size);

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import com.example.demo.dto.CandidateDto;
+import com.example.demo.dto.ChangePasswordDto;
 import com.example.demo.dto.ForgotPasswordDto;
 import com.example.demo.dto.IPermissionDto;
 import com.example.demo.entities.Candidate;
@@ -18,10 +19,10 @@ public interface CandidateService {
 	//Candidate registerCandidate(Candidate candidate);
 	
 	//CandidateDto updateCandidate(CandidateDto candidate, Long c_id);
-	Candidate updateCandidate(Candidate candidate, Long c_id);
+	Candidate updateCandidate(Candidate candidate, Long id);
 	
 	//CandidateDto getCandidateById(Long c_id);
-	Candidate getCandidateById(Long c_id);
+	Candidate getCandidateById(Long id);
 	
 	
 	
@@ -29,7 +30,7 @@ public interface CandidateService {
 	
 	//List<CandidateDto> getAllCandidates();
 	
-	void deleteCandidate(Long c_id);
+	void deleteCandidate(Long id);
 
 	public Candidate loginCandidate(String email, String password) throws Exception;
 
@@ -41,7 +42,7 @@ public interface CandidateService {
 
 	//List<IPermissionDto> getUserPermission(Long c_id);
 
-	//	void changePassword(Long c_id, @Valid ChangePasswordDto userBody, HttpServletRequest request);
+	void changePassword(Long id, @Valid ChangePasswordDto userBody, HttpServletRequest request);
 
 	public void forgotPasswordConfirm(String token, @Valid ForgotPasswordDto userBody, HttpServletRequest request);
 	
@@ -49,8 +50,8 @@ public interface CandidateService {
 	
 
 	void addJobToCandidate(String email,String name);
+	List<IPermissionDto> getCandidatePermission(Long id) throws IOException;
 	
-	//List<IPermissionDto> getUserPermission(Long c_id) throws IOException;
 	
 	
 }

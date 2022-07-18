@@ -18,9 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserDataDto {
 
-	public UserDataDto(Long userId2, String name2, String email2) {
-		// TODO Auto-generated constructor stub
-	}
+
 
 	private Long userId;
 
@@ -36,12 +34,12 @@ public class UserDataDto {
 	Optional<ArrayList<UserRoleDto>> roles = Optional.empty();
 
 	public void setDob(Date dob2) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	public void setRoles(ArrayList<UserRoleDto> userRoles) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

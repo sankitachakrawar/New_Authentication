@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 import java.util.Calendar;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +65,7 @@ public class AuthController {
 				final String url = "To confirm your account, please click here : " + "http://localhost:8088" + "/forgot-pass-confirm" + "?token=" + token;
 				Calendar calender = Calendar.getInstance();
 				calender.add(Calendar.MINUTE, 15);
-				forgotPasswordServiceIntf.createForgotPasswordRequest(candidate.getC_id(), token, calender.getTime());
+				forgotPasswordServiceIntf.createForgotPasswordRequest(candidate.getId(), token, calender.getTime());
 				//emailService.sendSimpleMessage(candidate.getEmail(), "Test", url);
 				emailService.sendSimpleMessage(candidate.getEmail(),"subject" , url);
 				return new ResponseEntity<>(new SuccessResponseDto("Password reset link sent on Registerd Email", "passwordRestLinkMail", null), HttpStatus.OK);

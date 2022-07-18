@@ -1,8 +1,13 @@
 package com.example.demo.repositories;
 
+import java.util.ArrayList;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Repository;
+
+import com.example.demo.dto.RoleIdListDto;
 import com.example.demo.entities.Candidate;
 import com.example.demo.exceptions.ResourceNotFoundException;
 
@@ -20,11 +25,11 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long>{
 	
 	public Candidate findByUsername(String username);
 
-	//public ArrayList<RoleIdListDto> findById(Long c_id, Class<RoleIdListDto> class1);
+	public Optional<Candidate> findByIdAndIsActiveTrue(Long id);
 
-	//public ArrayList<RoleIdListDto> findById(Long c_id, Class<RoleIdListDto> class1);
+	public ArrayList<RoleIdListDto> findById(Long id, Class<RoleIdListDto> class1);
 
-	//public ArrayList<RoleIdListDto> findByC_Id(Long c_id, Class<RoleIdListDto> class1);
+	
 
 	
 

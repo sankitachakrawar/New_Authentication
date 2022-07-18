@@ -25,7 +25,7 @@ import com.example.demo.services.PermissionServiceInterface;
 
 
 @RestController
-@RequestMapping("/permission")
+@RequestMapping("/api")
 @Validated
 public class PermissionController {
 
@@ -37,8 +37,8 @@ public class PermissionController {
 	@Autowired
 	private PermissionServiceInterface permissionServiceInterface;
 
-	@PreAuthorize("hasRole('addPermission')")
-	@PostMapping("/p")
+	//@PreAuthorize("hasRole('addPermission')")
+	@PostMapping("/permission")
 	public ResponseEntity<?> addPermission(@Valid @RequestBody PermissionRequestDto permissionBody) {
 
 		permissionServiceInterface.addPermission(permissionBody);
@@ -46,8 +46,8 @@ public class PermissionController {
 
 	}
 
-	@PreAuthorize("hasRole('editPermission')")
-	@PutMapping("/{id}")
+	//@PreAuthorize("hasRole('editPermission')")
+	@PutMapping("/permission/{id}")
 	public ResponseEntity<?> editPermission(@PathVariable(value = "id") Long permissionId, @Valid @RequestBody PermissionRequestDto permissionBody) throws ResourceNotFoundException {
 
 		try {
@@ -63,8 +63,8 @@ public class PermissionController {
 
 	}
 
-	@PreAuthorize("hasRole('deletePermission')")
-	@DeleteMapping("/{id}")
+	//@PreAuthorize("hasRole('deletePermission')")
+	@DeleteMapping("/permission/{id}")
 	public ResponseEntity<?> editEntity(@PathVariable(value = "id") Long permissionId) throws ResourceNotFoundException {
 
 		try {

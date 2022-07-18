@@ -2,21 +2,15 @@ package com.example.demo.dto;
 
 import java.util.Date;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class LoggerDto {
 
-	public LoggerDto() {
-
-		// TODO Auto-generated constructor stub
-	}
-
-	public LoggerDto(String token, Long userId, Date expireAt) {
-
-		super();
-		this.token = token;
-		this.userId = userId;
-		this.expireAt = expireAt;
-
-	}
 
 	public String token;
 
@@ -24,41 +18,6 @@ public class LoggerDto {
 
 	public Date expireAt;
 
-	public String getToken() {
-
-		return token;
-
-	}
-
-	public void setToken(String token) {
-
-		this.token = token;
-
-	}
-
-	public Long getUserId() {
-
-		return userId;
-
-	}
-
-	public void setUserId(Long userId) {
-
-		this.userId = userId;
-
-	}
-
-	public Date getExpireAt() {
-
-		return expireAt;
-
-	}
-
-	public void setExpireAt(Date expireAt) {
-
-		this.expireAt = expireAt;
-
-	}
 
 	public void setOtp(int otp) {
 		// TODO Auto-generated method stub

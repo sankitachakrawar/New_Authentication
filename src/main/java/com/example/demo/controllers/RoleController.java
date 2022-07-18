@@ -1,16 +1,11 @@
 package com.example.demo.controllers;
 
-import java.util.Optional;
-
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.example.demo.dto.AddPermissionRequestDto;
 import com.example.demo.dto.ErrorResponseDto;
 import com.example.demo.dto.IRoleDetailDto;
@@ -29,14 +23,13 @@ import com.example.demo.dto.RoleDto;
 import com.example.demo.dto.RolePermissionDto;
 import com.example.demo.dto.SuccessResponseDto;
 import com.example.demo.dto.UserDataDto;
-import com.example.demo.entities.RoleEntity;
 import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.repositories.RoleRepository;
 import com.example.demo.services.RoleServiceInterface;
 import com.example.demo.dto.ListResponseDto;
 
 @RestController
-@RequestMapping("/role")
+@RequestMapping("/api")
 public class RoleController {
 
 	public RoleController() {
@@ -49,8 +42,8 @@ public class RoleController {
 
 	@Autowired
 	private RoleRepository roleRepository;
-	@PreAuthorize("hasRole('getAllRole')")
-	@GetMapping()
+	
+	@GetMapping("/role")
 	public ResponseEntity<?> getAllRoles(@RequestParam(defaultValue = "") String search, @RequestParam(defaultValue = "1") String pageNo, @RequestParam(defaultValue = "25") String size) {
 
 		Page<IRoleListDto> roles = roleServiceInterface.getAllRoles(search, pageNo, size);
@@ -65,23 +58,26 @@ public class RoleController {
 
 	}
 
-	@PreAuthorize("hasRole('addRole')")
-	@PostMapping()
+	
+	@PostMapping("/role")
 	public ResponseEntity<?> addRole(@Valid @RequestBody RoleDto roleDto, HttpServletRequest request) {
+		try {
 		String name = roleDto.getRoleName();
-		Optional<RoleEntity> databaseName = roleRepository.findByRoleNameContainingIgnoreCase(name);
-		
-		if (databaseName.isEmpty()) {
-			roleServiceInterface.addRole(roleDto, ((UserDataDto) request.getAttribute("userData")).getUserId());
+		//Optional<RoleEntity> databaseName = roleRepository.findByRoleNameContainingIgnoreCase(name);
+		roleRepository.findByRoleNameContainingIgnoreCase(name);
+//		if (databaseName.isEmpty()) {
+//			roleServiceInterface.addRole(roleDto, ((UserDataDto) request.getAttribute("userData")).getUserId());
 			return new ResponseEntity<>(new SuccessResponseDto("Success", "success", null), HttpStatus.CREATED);
-		} else {
-			return new ResponseEntity<>(new ErrorResponseDto("Role Already Exist", "roleAlreadyExist"),
+//		} else {
+		}catch(Exception e) {
+			
+		return new ResponseEntity<>(new ErrorResponseDto("Role Already Exist", "roleAlreadyExist"),
 					HttpStatus.BAD_REQUEST);
 		}
 	}
 
-	@PreAuthorize("hasRole('editRole')")
-	@PutMapping("/{id}")
+	
+	@PutMapping("/role/{id}")
 	public ResponseEntity<?> editRole(@PathVariable(value = "id") Long roleId, @Valid @RequestBody RoleDto roleDto, HttpServletRequest request) {
 
 		try {
@@ -97,8 +93,8 @@ public class RoleController {
 
 	}
 
-	@PreAuthorize("hasRole('deleteRole')")
-	@DeleteMapping("/{id}")
+	
+	@DeleteMapping("/role/{id}")
 	public ResponseEntity<?> deleteRole(@PathVariable(value = "id") Long roleId, HttpServletRequest request) {
 
 		try {
@@ -114,8 +110,8 @@ public class RoleController {
 
 	}
 
-	@PreAuthorize("hasRole('GetRoleById')")
-	@GetMapping("/{id}")
+	
+	@GetMapping("/role/{id}")
 	public ResponseEntity<?> getRoleById(@PathVariable(value = "id") Long roleId) {
 
 		try {
@@ -131,8 +127,8 @@ public class RoleController {
 
 	}
 
-	@PreAuthorize("hasRole('GetRoleAndPermissionById')")
-	@GetMapping("/permission/{id}")
+
+	@GetMapping("/permission_role/{id}")
 	public ResponseEntity<?> getRoleAndPermissionById(@PathVariable(value = "id") Long roleId) {
 
 		try {
@@ -148,8 +144,8 @@ public class RoleController {
 
 	}
 
-	@PreAuthorize("hasRole('addPermissionToRole')")
-	@PostMapping("/permission/{id}")
+	
+	@PostMapping("/permission_role/{id}")
 	public ResponseEntity<?> AddPermissionToRole(@PathVariable(value = "id") Long roleId, @Valid @RequestBody AddPermissionRequestDto permissions) {
 
 		try {

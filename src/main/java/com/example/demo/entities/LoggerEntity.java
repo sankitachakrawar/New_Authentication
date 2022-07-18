@@ -15,6 +15,14 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.example.demo.dto.LoggerDto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "logger")
 public class LoggerEntity implements Serializable {
@@ -24,21 +32,7 @@ public class LoggerEntity implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public LoggerEntity() {
-
-		// TODO Auto-generated constructor stub
-	}
-
-	public LoggerEntity(Long id, Candidate c_id, String token, Date createdAt, Date expireAt) {
-
-		super();
-		this.id = id;
-		this.c_id=c_id;
-		this.token = token;
-		this.createdAt = createdAt;
-		this.expireAt = expireAt;
-
-	}
+	
 
 	@Id
 	@Column(name = "id")
@@ -59,61 +53,6 @@ public class LoggerEntity implements Serializable {
 	@Column(name = "expire_at")
 	private Date expireAt;
 
-	public Long getId() {
-
-		return id;
-
-	}
-
-	public void setId(Long id) {
-
-		this.id = id;
-
-	}
 	
-	public Candidate getC_id() {
-		
-		return c_id;
-	}
-	public void setC_id(Candidate c_id) {
-		
-		this.c_id = c_id;
-	}
-
-	public String getToken() {
-
-		return token;
-
-	}
-
-	public void setToken(String token) {
-
-		this.token = token;
-
-	}
-
-	public Date getCreatedAt() {
-
-		return createdAt;
-
-	}
-
-	public void setCreatedAt(Date createdAt) {
-
-		this.createdAt = createdAt;
-
-	}
-
-	public Date getExpireAt() {
-
-		return expireAt;
-
-	}
-
-	public void setExpireAt(Date expireAt) {
-
-		this.expireAt = expireAt;
-
-	}
 
 }

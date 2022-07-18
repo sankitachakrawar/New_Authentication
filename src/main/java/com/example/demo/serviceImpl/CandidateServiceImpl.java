@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.demo.dto.CandidateDto;
+import com.example.demo.dto.ChangePasswordDto;
 import com.example.demo.dto.ForgotPasswordDto;
 import com.example.demo.dto.IPermissionDto;
 import com.example.demo.dto.RoleIdListDto;
@@ -27,6 +28,8 @@ import com.example.demo.repositories.RolePermissionRepository;
 import com.example.demo.repositories.UserRoleRepository;
 import com.example.demo.services.CandidateService;
 import com.example.demo.utils.JwtTokenUtil;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.example.demo.exceptions.*;
 
 @Service
@@ -57,7 +60,9 @@ public class CandidateServiceImpl implements CandidateService {
 	@Override
 	public Candidate addCandidate(Candidate candidate) {
 
-		// Candidate candidate =this.dtoToCandidate(candidateDto);
+//		 CandidateDto candidateDto;
+//		Candidate candidate1 =this.dtoToCandidate(candidateDto);
+//		 return candidate1;
 		Candidate candidate1 = new Candidate();
 		candidate1.setName(candidate.getName());
 		candidate1.setEmail(candidate.getEmail());
@@ -68,12 +73,13 @@ public class CandidateServiceImpl implements CandidateService {
 		candidate1.setRecruiters(candidate.getRecruiters());
 		Candidate savedCandidate = this.candidateRepository.save(candidate1);
 		return savedCandidate;
+		
 
 	}
 
 	public Candidate dtoToCandidate(CandidateDto candidateDto) {
 		Candidate candidate2 = new Candidate();
-		candidate2.setC_id(candidateDto.getC_id());
+		candidate2.setId(candidateDto.getId());
 		candidate2.setName(candidateDto.getName());
 		candidate2.setEmail(candidateDto.getEmail());
 		candidate2.setPassword(passwordEncoder.encode(candidateDto.getPassword()));
@@ -85,7 +91,7 @@ public class CandidateServiceImpl implements CandidateService {
 
 	public CandidateDto candidateToDto(Candidate candidate) {
 		CandidateDto candidateDto = new CandidateDto();
-		candidateDto.setC_id(candidate.getC_id());
+		candidateDto.setId(candidate.getId());
 		candidateDto.setName(candidate.getName());
 		candidateDto.setEmail(candidate.getEmail());
 		candidateDto.setPassword(candidate.getPassword());
@@ -96,10 +102,10 @@ public class CandidateServiceImpl implements CandidateService {
 	}
 
 	@Override
-	public Candidate updateCandidate(Candidate candidate1, Long c_id) {
-		Candidate candidate = this.candidateRepository.findById(c_id)
-				.orElseThrow(() -> new ResourceNotFoundException("candidate", "c_id", c_id));
-		candidate.setC_id(candidate1.getC_id());
+	public Candidate updateCandidate(Candidate candidate1, Long id) {
+		Candidate candidate = this.candidateRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("candidate", "id", id));
+		candidate.setId(candidate1.getId());
 		candidate.setName(candidate1.getName());
 		candidate.setEmail(candidate1.getEmail());
 		candidate.setPassword(candidate1.getPassword());
@@ -112,9 +118,9 @@ public class CandidateServiceImpl implements CandidateService {
 	}
 
 	@Override
-	public Candidate getCandidateById(Long c_id) {
-		Candidate candidate = this.candidateRepository.findById(c_id)
-				.orElseThrow(() -> new ResourceNotFoundException("candidate", "c_id", c_id));
+	public Candidate getCandidateById(Long id) {
+		Candidate candidate = this.candidateRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("candidate", "id", id));
 		return candidate;
 	}
 
@@ -128,9 +134,9 @@ public class CandidateServiceImpl implements CandidateService {
 	}
 
 	@Override
-	public void deleteCandidate(Long c_id) {
-		Candidate candidate = this.candidateRepository.findById(c_id)
-				.orElseThrow(() -> new ResourceNotFoundException("candidate", "c_id", c_id));
+	public void deleteCandidate(Long id) {
+		Candidate candidate = this.candidateRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("candidate", "id", id));
 
 		this.candidateRepository.delete(candidate);
 	}
@@ -232,6 +238,65 @@ public class CandidateServiceImpl implements CandidateService {
 		candidate.getJobs().add(job);
 
 	}
+	
+	
+	
+	@Override
+	public void changePassword(Long id, ChangePasswordDto userBody, HttpServletRequest request)
+			throws ResourceNotFoundException {
+
+		Candidate candidate = candidateRepository.findByIdAndIsActiveTrue(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Candidate Not Found"));
+		final String requestTokenHeader = request.getHeader("Authorization");
+		String username = null;
+		String jwtToken = null;
+		JsonObject jsonObj = null;
+		jwtToken = requestTokenHeader.substring(7);
+		username = jwttokenUtil.getEmailFromToken(jwtToken);
+		jsonObj = JsonParser.parseString(username).getAsJsonObject();
+		CandidateDto candidatedata = new CandidateDto();
+		candidatedata.setId((jsonObj.get("id").getAsLong()));
+
+		if (candidatedata.getId() == candidate.getId()) {
+
+			if (!bcryptEncoder.matches(userBody.getNewPassword(), candidate.getPassword())) {
+ 
+				if (bcryptEncoder.matches(userBody.getPassword(), candidate.getPassword())) {
+
+					candidate.setPassword(bcryptEncoder.encode(userBody.getNewPassword()));
+					if (userBody.getNewPassword().equals(userBody.getConfPassword())) {
+						candidate.setPassword(bcryptEncoder.encode(userBody.getNewPassword()));
+					} else {
+						throw new ResourceNotFoundException("new password and confirm password must be same");
+					}
+
+				} else {
+
+					throw new ResourceNotFoundException("Please enter old password correct");
+
+				}
+
+			} else {
+
+				throw new ResourceNotFoundException("password must be differ from old password");
+
+			}
+
+		} else {
+
+			throw new ResourceNotFoundException("Access Denied");
+
+		}
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 
 	@Autowired
 	private UserRoleRepository userRoleRepository;
@@ -240,24 +305,20 @@ public class CandidateServiceImpl implements CandidateService {
 	private RolePermissionRepository rolePermissionRepository;
 
 	
-//	  @Override public List<IPermissionDto> getUserPermission(Long c_id) throws
-//	  IOException {
-//	  
-//	  //ArrayList<RoleIdListDto> roleIds =
-//	  userRoleRepository.findById(c_id, RoleIdListDto.class);
-//	  
-//	  ArrayList<RoleIdListDto> roleIds=candidateRepository.findById(c_id,RoleIdListDto.class);
-//	  ArrayList<Long> roles = new ArrayList<>();
-//	  
-//	  for (int i = 0; i < roleIds.size(); i++) {
-//	  
-//	  roles.add(roleIds.get(i).getPkRoleId());
-//	  
-//	  }
-//	  
-//	  return rolePermissionRepository.findByPkRoleIdIn(roles,
-//	  IPermissionDto.class);
-//	 
-//	 }
+	  @Override public List<IPermissionDto> getCandidatePermission(Long id) throws
+	  IOException {
+	  
+	  ArrayList<RoleIdListDto> roleIds=candidateRepository.findById(id,RoleIdListDto.class);
+	  ArrayList<Long> roles = new ArrayList<>();
+	  
+	  for (int i = 0; i < roleIds.size(); i++) {
+	  
+	  roles.add(roleIds.get(i).getPkRoleId());
+	  
+	  }
+	  
+	  return rolePermissionRepository.findByPkRoleIdIn(roles,IPermissionDto.class);
+	 
+	 }
 	
 }

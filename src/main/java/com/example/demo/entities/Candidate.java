@@ -15,6 +15,11 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import javax.persistence.JoinColumn;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,18 +31,30 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name="candidate")
 public class Candidate {
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long c_id;
+	private Long id;
 	
-	@Column(name="candidate_name" , nullable=false , length=100)
+	//@NotEmpty
+	//@Size(min=4,message="Name must be min of 4 characters !!")
+	//@Column(name="candidate_name" , nullable=false , length=100)
 	private String name;
+	
+	
+	
+	//@Email(message="Email address is not valid!!")
+//	@NotBlank(message="email is mandatory")
+	//@Pattern(regexp = "^(.+)@(.+)$")
 	
 	private String email;
 	
+	//@NotEmpty
+	//@Size(min=3,max=8,message="Password must be min of 3 characters or max of 8 chracters")
+	//@Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$",message="Password must be min of 3 characters or max of 8 chracters")
 	private String password;
 
+	//@NotEmpty
 	private String address;
 	
 	@Column(name = "is_active")
@@ -49,7 +66,7 @@ public class Candidate {
 	private String username;
 	
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "candidate_jobs", joinColumns = @JoinColumn(name = "c_id", referencedColumnName = "c_id"), inverseJoinColumns = @JoinColumn(name = "j_id", referencedColumnName = "id"))
+	@JoinTable(name = "candidate_jobs", joinColumns = @JoinColumn(name = "c_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "j_id", referencedColumnName = "id"))
 	private Collection<Job> jobs = new ArrayList<>();
 
 	@ManyToMany(fetch = FetchType.LAZY)

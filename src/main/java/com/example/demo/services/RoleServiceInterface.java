@@ -1,8 +1,5 @@
 package com.example.demo.services;
 
-import java.util.ArrayList;
-
-
 import org.springframework.data.domain.Page;
 
 import com.example.demo.dto.IRoleDetailDto;
@@ -16,7 +13,7 @@ public interface RoleServiceInterface {
 
 	Page<IRoleListDto> getAllRoles(String search, String from, String to);
 
-	void addRole(RoleDto roleDto, Long userId);
+	void addRole(RoleDto roleDto, Long id);
 
 	RoleEntity updateRole(RoleDto roleData, Long id, Long updateBy) throws ResourceNotFoundException;
 

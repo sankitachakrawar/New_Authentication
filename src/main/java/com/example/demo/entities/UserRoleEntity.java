@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "candidate_role")
-@AssociationOverrides({ @AssociationOverride(name = "pk.candidate", joinColumns = @JoinColumn(name = "c_id")), @AssociationOverride(name = "pk.role", joinColumns = @JoinColumn(name = "role_id")) })
+@AssociationOverrides({ @AssociationOverride(name = "pk.candidate", joinColumns = @JoinColumn(name = "id")), @AssociationOverride(name = "pk.role", joinColumns = @JoinColumn(name = "role_id")) })
 public class UserRoleEntity implements java.io.Serializable {
 
 	

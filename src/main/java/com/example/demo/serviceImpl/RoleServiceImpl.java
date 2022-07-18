@@ -83,11 +83,11 @@ public class RoleServiceImpl implements RoleServiceInterface {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void addRole(RoleDto roleDto, Long c_id) {
+	public void addRole(RoleDto roleDto, Long id) {
 
 		RoleEntity roleEntity = new RoleEntity();
-		roleEntity.setCreatedBy(this.authRepository.getById(c_id));
-		roleEntity.setUpdatedBy(this.authRepository.getById(c_id));
+		roleEntity.setCreatedBy(this.authRepository.getById(id));
+		roleEntity.setUpdatedBy(this.authRepository.getById(id));
 		roleEntity.setRoleName(roleDto.getRoleName());
 		roleEntity.setDescription(roleDto.getDescription());
 		roleRepository.save(roleEntity);
