@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.demo.dto.JobDto;
 import com.example.demo.entities.Job;
 import com.example.demo.exceptions.ResourceNotFoundException;
@@ -24,16 +27,33 @@ public class JobServiceImpl implements JobService {
 
 	
 	//apply Job
-	@Override
-	public void createJob(JobDto jobDto, Long id) {
+	
+	public void createJob(JobDto jobDto,Long id,String token) {
+		
+		//DecodedJWT jwt=JWT.decode(token);
+		
 		Job job=new Job();
 		job.setName(jobDto.getName());
 		job.setLocation(jobDto.getLocation());
 		job.setPostTime(jobDto.getPostTime());
 		job.setApply(jobDto.getApply());
-		//job.setCandidate(jobDto.getCandidate());
 		
 		jobRepository.save(job);
+	}
+	
+	
+	
+	
+//	@Override
+//	public void createJob(JobDto jobDto, Long id) {
+//		Job job=new Job();
+//		job.setName(jobDto.getName());
+//		job.setLocation(jobDto.getLocation());
+//		job.setPostTime(jobDto.getPostTime());
+//		job.setApply(jobDto.getApply());
+//		//job.setCandidate(jobDto.getCandidate());
+//		
+//		jobRepository.save(job);
 		
 	 
 		
@@ -52,7 +72,7 @@ public class JobServiceImpl implements JobService {
 		
 		
 		
-	}
+	//}
 
 	public Job dtoToJob(JobDto jobDto)
 	{ Job job=new Job();
@@ -77,7 +97,7 @@ public class JobServiceImpl implements JobService {
 	
 	//get job details by id
 	@Override
-	public JobDto getJobById(Long id) {
+	public JobDto getJobById(Long id,String token) {
 		
 		Job job=this.jobRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("job", "id", id));
 		 return this.jobToDto(job);

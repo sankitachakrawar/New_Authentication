@@ -1,5 +1,7 @@
 package com.example.demo.services;
 
+import javax.validation.Valid;
+
 import org.springframework.data.domain.Page;
 
 import com.example.demo.dto.IRoleDetailDto;
@@ -13,10 +15,12 @@ public interface RoleServiceInterface {
 
 	Page<IRoleListDto> getAllRoles(String search, String from, String to);
 
-	void addRole(RoleDto roleDto, Long id);
+	//void addRole(RoleDto roleDto, Long id);
 
-	RoleEntity updateRole(RoleDto roleData, Long id, Long updateBy) throws ResourceNotFoundException;
+	//RoleEntity updateRole(RoleDto roleData, Long id, Long updateBy) throws ResourceNotFoundException;
 
+	RoleEntity updateRole(RoleDto roleData,Long id)throws ResourceNotFoundException;
+	
 	void deleteRole(Long id) throws ResourceNotFoundException;
 
 	IRoleDetailDto getRoleById(Long id) throws ResourceNotFoundException;
@@ -26,5 +30,7 @@ public interface RoleServiceInterface {
 	//ArrayList<String> getPermissionByUserId(Long userId);
 
 	void addPermissionsToRole(Long id, Long[] permissions) throws ResourceNotFoundException;
+
+	RoleDto addRole(@Valid RoleDto roleDto);
 
 }

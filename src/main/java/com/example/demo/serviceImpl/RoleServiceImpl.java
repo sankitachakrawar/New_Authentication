@@ -3,6 +3,8 @@ package com.example.demo.serviceImpl;
 import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -81,26 +83,25 @@ public class RoleServiceImpl implements RoleServiceInterface {
 
 	}
 
-	@SuppressWarnings("deprecation")
+//	@SuppressWarnings("deprecation")
+//	@Override
+//	public void addRole(RoleDto roleDto, Long id) {
+//
+//		RoleEntity roleEntity = new RoleEntity();
+//		roleEntity.setCreatedBy(this.authRepository.getById(id));
+//		roleEntity.setUpdatedBy(this.authRepository.getById(id));
+//		roleEntity.setRoleName(roleDto.getRoleName());
+//		roleEntity.setDescription(roleDto.getDescription());
+//		roleRepository.save(roleEntity);
+//
+//	}
+
 	@Override
-	public void addRole(RoleDto roleDto, Long id) {
-
-		RoleEntity roleEntity = new RoleEntity();
-		roleEntity.setCreatedBy(this.authRepository.getById(id));
-		roleEntity.setUpdatedBy(this.authRepository.getById(id));
-		roleEntity.setRoleName(roleDto.getRoleName());
-		roleEntity.setDescription(roleDto.getDescription());
-		roleRepository.save(roleEntity);
-
-	}
-
-	@Override
-	public RoleEntity updateRole(RoleDto roleData, Long id, Long updateBy) throws ResourceNotFoundException {
+	public RoleEntity updateRole(RoleDto roleData, Long id) throws ResourceNotFoundException {
 
 		RoleEntity roleEntity = roleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Role Not Found"));
 		roleEntity.setRoleName(roleData.getRoleName());
 		roleEntity.setDescription(roleData.getDescription());
-		roleEntity.setUpdatedBy(authRepository.getById(updateBy));
 		roleRepository.save(roleEntity);
 		return roleEntity;
 
@@ -252,6 +253,15 @@ public class RoleServiceImpl implements RoleServiceInterface {
 
 		return;
 
+	}
+
+	@Override
+	public RoleDto addRole(@Valid RoleDto roleDto) {
+		RoleEntity roleEntity = new RoleEntity();
+		roleEntity.setRoleName(roleDto.getRoleName());
+		roleEntity.setDescription(roleDto.getDescription());
+		roleRepository.save(roleEntity);
+		return roleDto;
 	}
 
 }

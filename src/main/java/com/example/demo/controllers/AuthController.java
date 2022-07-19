@@ -1,19 +1,27 @@
 package com.example.demo.controllers;
 import java.util.Calendar;
 
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+import com.example.demo.dto.AuthRequestDto;
+import com.example.demo.dto.AuthResponseDto;
+import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ErrorResponseDto;
 import com.example.demo.dto.ForgotPasswordRequestDto;
+import com.example.demo.dto.LoggerDto;
 import com.example.demo.dto.SuccessResponseDto;
 import com.example.demo.entities.Candidate;
 import com.example.demo.exceptions.ResourceNotFoundException;
+import com.example.demo.serviceImpl.CandidateServiceImpl;
 import com.example.demo.services.*;
 import com.example.demo.utils.JwtTokenUtil;
 import com.example.demo.utils.JwtUtil;
@@ -31,24 +39,22 @@ public class AuthController {
 	@Autowired
 	private ForgotPasswordServiceIntf forgotPasswordServiceIntf;
 	
-	
-	
-
-	
-	 @Autowired
-	 private JwtTokenUtil jwtTokenUtil;
-	 
-	 @SuppressWarnings("unused")
 	@Autowired
-	 private JwtUtil jwtUtil;
+	private LoggerServiceInterface loggerServiceInterface;
 	
-	 @SuppressWarnings("static-access")
+	@Autowired
+	private JwtTokenUtil jwtTokenUtil;
+	 
+	@SuppressWarnings("unused")
+	@Autowired
+	private JwtUtil jwtUtil;
+	
+	@SuppressWarnings("static-access")
 	@PostMapping("/forgot-pass")
-		public ResponseEntity<?> forgotPass(@Valid @RequestBody ForgotPasswordRequestDto forgotPassBody, HttpServletRequest request) throws Exception {
+	public ResponseEntity<?> forgotPass(@Valid @RequestBody ForgotPasswordRequestDto forgotPassBody, HttpServletRequest request) throws Exception {
 
 			try {
-					//System.out.println("token1");
-					//System.out.println(forgotPassBody.getEmail());
+					;
 				Candidate candidate = candidateService.findByEmail(forgotPassBody.getEmail());
 				System.out.println("candidate>>"+candidate);
 				
@@ -77,5 +83,47 @@ public class AuthController {
 			}
 
 		}
-	
+	@Autowired
+	private CandidateServiceImpl candidateServiceImpl;
+	 
+	 @SuppressWarnings("static-access")
+	@PostMapping("/login")
+		public ResponseEntity<?> createAuthenticationToken(@Valid @RequestBody AuthRequestDto authenticationRequest) throws Exception, ResourceNotFoundException {
+
+			try {
+
+				Candidate candidate= candidateService.findByEmail(authenticationRequest.getEmail());
+
+				if (!candidateServiceImpl.comparePassword(authenticationRequest.getPassword(), candidate.getPassword())) {
+
+					return new ResponseEntity<>(new ErrorResponseDto("Invalid Credential", "invalidCreds"), HttpStatus.UNAUTHORIZED);
+				}
+				
+				System.out.println("DATA>>"+candidate.getEmail());
+				final String token = jwtTokenUtil.generateToken(candidate);
+				LoggerDto logger = new LoggerDto();
+				logger.setToken(token);
+				Calendar calender = Calendar.getInstance();
+				calender.add(Calendar.MINUTE, 15);
+				logger.setExpireAt(calender.getTime());
+				loggerServiceInterface.createLogger(logger,candidate);
+				return new ResponseEntity<>(new SuccessResponseDto("Success", "success", new AuthResponseDto(token,candidate.getEmail(),candidate.getName(),candidate.getId())), HttpStatus.OK);
+				
+			} catch (ResourceNotFoundException e) {
+
+				return new ResponseEntity<>(new ErrorResponseDto(e.getMessage(), "userNotFound"), HttpStatus.NOT_FOUND);
+
+			}
+
+		}
+	 
+	  @GetMapping("/logout")
+		public ResponseEntity<?> logout(@RequestHeader("Authorization") String token, HttpServletRequest request) throws Exception {
+
+			candidateService.logout(token, ((CandidateDto) request.getAttribute("userData")).getId(), ((CandidateDto) request.getAttribute("userData")).getEmail());
+			return new ResponseEntity<>(new ErrorResponseDto("Logout Successfully", "logoutSuccess"), HttpStatus.OK);
+
+		}
+	 
+	 
 }

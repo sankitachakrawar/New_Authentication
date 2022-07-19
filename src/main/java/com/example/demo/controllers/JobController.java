@@ -21,6 +21,7 @@ import com.example.demo.dto.ErrorResponseDto;
 import com.example.demo.dto.JobDto;
 import com.example.demo.dto.ListResponseDto;
 import com.example.demo.dto.SuccessResponseDto;
+import com.example.demo.entities.Candidate;
 import com.example.demo.entities.Job;
 import com.example.demo.services.EmailService;
 import com.example.demo.services.JobService;
@@ -35,16 +36,18 @@ public class JobController {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping("/jobs")
-	public ResponseEntity<JobDto> createJob(@RequestBody JobDto jobDto) {
-		jobService.createJob(jobDto, jobDto.getId());
+	public ResponseEntity<JobDto> createJob(@RequestBody JobDto jobDto,String token) {
+
+		jobService.createJob(jobDto, jobDto.getId(),token);
+		
 				
 		return new ResponseEntity("Applied to job successfully!!", HttpStatus.CREATED);
 
 	}
 
 	  @GetMapping("/jobs/{id}")
-	  public ResponseEntity<?> getSingleJob(@PathVariable ("id") Long id){
-		  return ResponseEntity.ok(this.jobService.getJobById(id));
+	  public ResponseEntity<?> getSingleJob(@PathVariable ("id") Long id,String token){
+		  return ResponseEntity.ok(this.jobService.getJobById(id,token));
 		  
 	  }
 	  

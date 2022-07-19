@@ -2,15 +2,18 @@ package com.example.demo.serviceImpl;
 
 
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.demo.dto.CandidateDto;
@@ -27,6 +30,7 @@ import com.example.demo.repositories.JobRepository;
 import com.example.demo.repositories.RolePermissionRepository;
 import com.example.demo.repositories.UserRoleRepository;
 import com.example.demo.services.CandidateService;
+import com.example.demo.utils.CacheOperation;
 import com.example.demo.utils.JwtTokenUtil;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -51,6 +55,9 @@ public class CandidateServiceImpl implements CandidateService {
 
 	@Autowired
 	private JobRepository jobRepository;
+	
+	@Autowired
+	private CacheOperation cache;
 
 	public CandidateServiceImpl(CandidateRepository candidateRepository) {
 		this.candidateRepository = candidateRepository;
@@ -154,23 +161,20 @@ public class CandidateServiceImpl implements CandidateService {
 		}
 
 	}
-
+	
+	@Transactional
 	@Override
-	public Candidate logout(String email, String password) throws Exception {
-
-		Candidate candidate = candidateRepository.findByEmail(email);
-		if (candidate == null) {
-			throw new Exception("You entered incorrect Email.");
-		} else {
-			if ((candidate.getEmail().equals(email)) && (candidate.getPassword().equals(password))) {
-				return candidate;
-
-			}
-			throw new Exception("Invalid username and password!!!");
-
-		}
-
+	public void logout(String token, Long id, String email) {
+		
+		final String userToken = token.substring(7);
+		cache.removeKeyFromCache(userToken);
+		cache.removeKeyFromCache(id+"");
+		cache.removeKeyFromCache(email);
+		candidateRepository.removeByToken(userToken);
+		
 	}
+
+
 
 	@Override
 	public Candidate findByEmail(String email) {
@@ -221,12 +225,6 @@ public class CandidateServiceImpl implements CandidateService {
 		return null;
 	}
 
-	@Override
-	public Boolean comparePassword(String password, String hashPassword) {
-
-		return bcryptEncoder.matches(password, hashPassword);
-
-	}
 
 	@Override
 	public void addJobToCandidate(String email, String name) {
@@ -256,7 +254,6 @@ public class CandidateServiceImpl implements CandidateService {
 		jsonObj = JsonParser.parseString(username).getAsJsonObject();
 		CandidateDto candidatedata = new CandidateDto();
 		candidatedata.setId((jsonObj.get("id").getAsLong()));
-
 		if (candidatedata.getId() == candidate.getId()) {
 
 			if (!bcryptEncoder.matches(userBody.getNewPassword(), candidate.getPassword())) {
@@ -273,33 +270,17 @@ public class CandidateServiceImpl implements CandidateService {
 				} else {
 
 					throw new ResourceNotFoundException("Please enter old password correct");
-
 				}
 
 			} else {
-
 				throw new ResourceNotFoundException("password must be differ from old password");
-
 			}
 
 		} else {
-
 			throw new ResourceNotFoundException("Access Denied");
-
 		}
-
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 
-	@Autowired
-	private UserRoleRepository userRoleRepository;
 
 	@Autowired
 	private RolePermissionRepository rolePermissionRepository;
@@ -321,4 +302,31 @@ public class CandidateServiceImpl implements CandidateService {
 	 
 	 }
 	
+	  
+	  @Override
+		public Boolean comparePassword(String password, String hashPassword) {
+
+			return bcryptEncoder.matches(password, hashPassword);
+
+		}	
 }
+
+
+
+
+//@Override
+//public Candidate logout(String email, String password) throws Exception {
+//
+//	Candidate candidate = candidateRepository.findByEmail(email);
+//	if (candidate == null) {
+//		throw new Exception("You entered incorrect Email.");
+//	} else {
+//		if ((candidate.getEmail().equals(email)) && (candidate.getPassword().equals(password))) {
+//			return candidate;
+//
+//		}
+//		throw new Exception("Invalid username and password!!!");
+//
+//	}
+//
+//}

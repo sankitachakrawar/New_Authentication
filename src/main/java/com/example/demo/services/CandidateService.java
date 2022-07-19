@@ -14,33 +14,30 @@ import com.example.demo.entities.Candidate;
 public interface CandidateService {
 
 	Candidate addCandidate(Candidate candidate);
+	
 	CandidateDto createCandidate(CandidateDto candidate);
 	
-	//Candidate registerCandidate(Candidate candidate);
-	
-	//CandidateDto updateCandidate(CandidateDto candidate, Long c_id);
 	Candidate updateCandidate(Candidate candidate, Long id);
 	
-	//CandidateDto getCandidateById(Long c_id);
+	
 	Candidate getCandidateById(Long id);
 	
 	
 	
 	List<Candidate> getAllCandidates();
 	
-	//List<CandidateDto> getAllCandidates();
+
 	
 	void deleteCandidate(Long id);
 
-	public Candidate loginCandidate(String email, String password) throws Exception;
+	public Candidate loginCandidate(String email,String password)throws Exception;
+	
 
-	public Candidate logout(String email,String password) throws Exception;
+	//public Candidate logout(String email,String password) throws Exception;
 
 	Candidate findByEmail(String email);
 
-	//void forgotPasswordConfirm(String token, @Valid ForgotPasswordDto userBody, HttpServletRequest request);
-
-	//List<IPermissionDto> getUserPermission(Long c_id);
+	
 
 	void changePassword(Long id, @Valid ChangePasswordDto userBody, HttpServletRequest request);
 
@@ -50,7 +47,17 @@ public interface CandidateService {
 	
 
 	void addJobToCandidate(String email,String name);
+	
 	List<IPermissionDto> getCandidatePermission(Long id) throws IOException;
+	
+	
+	void logout(String token, Long id, String email);
+	
+	
+	
+
+	
+	
 	
 	
 	

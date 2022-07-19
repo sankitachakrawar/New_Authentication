@@ -37,11 +37,11 @@ public class LoggerEntity implements Serializable {
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long loggerId;
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
-	private Candidate c_id;
+	@JoinColumn(name = "candidate_id")
+	private Candidate id;
 
 	@Column(name = "token", length = 512)
 	private String token;

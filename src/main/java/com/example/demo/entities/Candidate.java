@@ -36,25 +36,24 @@ public class Candidate {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	//@NotEmpty
-	//@Size(min=4,message="Name must be min of 4 characters !!")
+	@NotEmpty
+	@Size(min=4,message="Name must be min of 4 characters !!")
 	//@Column(name="candidate_name" , nullable=false , length=100)
 	private String name;
 	
 	
 	
-	//@Email(message="Email address is not valid!!")
-//	@NotBlank(message="email is mandatory")
-	//@Pattern(regexp = "^(.+)@(.+)$")
-	
+	@Email(message="Email address is not valid!!")
+	@NotBlank(message="email is mandatory")
+	@Pattern(regexp = "^(.+)@(.+)$",message="Email address is not valid!")
 	private String email;
 	
-	//@NotEmpty
-	//@Size(min=3,max=8,message="Password must be min of 3 characters or max of 8 chracters")
-	//@Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$",message="Password must be min of 3 characters or max of 8 chracters")
+	@NotEmpty
+	@Size(min=3,max=8,message="Password must be min of 3 characters or max of 8 chracters ")
+	@Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$",message="Password must be min of 3 characters or max of 8 chracters and must be 1 capital letter,1 special character,1 numeric character")
 	private String password;
 
-	//@NotEmpty
+	@NotEmpty
 	private String address;
 	
 	@Column(name = "is_active")
@@ -78,7 +77,7 @@ public class Candidate {
 	//private List<UserRoleEntity> userRole;
 	private Collection<UserRoleEntity> userRole=new ArrayList<>();
 
-	
+	private String token;
 	
 	
 	

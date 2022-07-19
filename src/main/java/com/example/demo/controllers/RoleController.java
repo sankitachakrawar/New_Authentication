@@ -1,6 +1,7 @@
 package com.example.demo.controllers;
 
 import javax.servlet.http.HttpServletRequest;
+
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,7 +25,6 @@ import com.example.demo.dto.RolePermissionDto;
 import com.example.demo.dto.SuccessResponseDto;
 import com.example.demo.dto.UserDataDto;
 import com.example.demo.exceptions.ResourceNotFoundException;
-import com.example.demo.repositories.RoleRepository;
 import com.example.demo.services.RoleServiceInterface;
 import com.example.demo.dto.ListResponseDto;
 
@@ -34,14 +34,10 @@ public class RoleController {
 
 	public RoleController() {
 
-		// TODO Auto-generated constructor stub
 	}
 
 	@Autowired
 	private RoleServiceInterface roleServiceInterface;
-
-	@Autowired
-	private RoleRepository roleRepository;
 	
 	@GetMapping("/role")
 	public ResponseEntity<?> getAllRoles(@RequestParam(defaultValue = "") String search, @RequestParam(defaultValue = "1") String pageNo, @RequestParam(defaultValue = "25") String size) {
@@ -62,34 +58,23 @@ public class RoleController {
 	@PostMapping("/role")
 	public ResponseEntity<?> addRole(@Valid @RequestBody RoleDto roleDto, HttpServletRequest request) {
 		try {
-		String name = roleDto.getRoleName();
-		//Optional<RoleEntity> databaseName = roleRepository.findByRoleNameContainingIgnoreCase(name);
-		roleRepository.findByRoleNameContainingIgnoreCase(name);
-//		if (databaseName.isEmpty()) {
-//			roleServiceInterface.addRole(roleDto, ((UserDataDto) request.getAttribute("userData")).getUserId());
-			return new ResponseEntity<>(new SuccessResponseDto("Success", "success", null), HttpStatus.CREATED);
-//		} else {
+			this.roleServiceInterface.addRole(roleDto);
+			return new ResponseEntity<>("Role Added Successfully!!",HttpStatus.OK);
 		}catch(Exception e) {
-			
-		return new ResponseEntity<>(new ErrorResponseDto("Role Already Exist", "roleAlreadyExist"),
-					HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>("Role Not Added",HttpStatus.BAD_REQUEST);
 		}
 	}
 
 	
 	@PutMapping("/role/{id}")
 	public ResponseEntity<?> editRole(@PathVariable(value = "id") Long roleId, @Valid @RequestBody RoleDto roleDto, HttpServletRequest request) {
+			try {
+		roleServiceInterface.updateRole(roleDto, roleId);
 
-		try {
-
-			roleServiceInterface.updateRole(roleDto, roleId, ((UserDataDto) request.getAttribute("userData")).getUserId());
-			return new ResponseEntity<>(new SuccessResponseDto("Success", "success", null), HttpStatus.OK);
-
-		} catch (ResourceNotFoundException e) {
-
-			return new ResponseEntity<>(new ErrorResponseDto(e.getMessage(), "roleNotFound"), HttpStatus.NOT_FOUND);
-
-		}
+			return new ResponseEntity<>("Role updated successfully", HttpStatus.OK);
+			}catch(Exception e) {
+				return new ResponseEntity<>("Role not found",HttpStatus.BAD_REQUEST);
+			}
 
 	}
 

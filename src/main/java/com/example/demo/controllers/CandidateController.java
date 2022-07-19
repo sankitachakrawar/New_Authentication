@@ -1,17 +1,12 @@
 package com.example.demo.controllers;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,17 +20,13 @@ import com.example.demo.dto.ChangePasswordDto;
 import com.example.demo.dto.ErrorResponseDto;
 import com.example.demo.dto.ForgotPasswordDto;
 import com.example.demo.dto.SuccessResponseDto;
-import com.example.demo.entities.AuthRequest;
 import com.example.demo.entities.Candidate;
 import com.example.demo.entities.Recruiter;
 import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.services.CandidateService;
 import com.example.demo.services.EmailService;
-import com.example.demo.utils.JwtTokenUtil;
 import com.example.demo.utils.JwtUtil;
-
-
 
 @RestController
 @RequestMapping("/api")
@@ -51,27 +42,13 @@ public class CandidateController {
 	private CandidateService candidateService;
 
 	
-	@Autowired
-	private EmailService emailService;
-	
-	@Autowired
-	private AuthenticationManager authenticationManager;
-		
-	@Autowired
-	private JwtUtil jwtUtil;
-	
-	//@Autowired
-	private Recruiter recruiter;
-	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping("/candidates") 
-	public ResponseEntity<Candidate> applyJob(@Valid @RequestBody Candidate candidate){
+	public ResponseEntity<Candidate> registerCandidate(@Valid @RequestBody Candidate candidate){
 
 		@SuppressWarnings("unused")
 		Candidate savedcandidate=this.candidateService.addCandidate(candidate);
-		final String url="Job applied successfully!!";
-		emailService.sendSimpleMessage(candidate.getEmail(), "subject", url);
-		//emailService.sendSimpleMessage(recruiter.getEmail(), "subject", url);
+
 		return new ResponseEntity("Candidate Registered Successfully ",HttpStatus.OK);
 	 }
 	
@@ -82,7 +59,7 @@ public class CandidateController {
 		
 		Candidate updatedCandidate=this.candidateService.updateCandidate(candidate, id);
 		
-		return new ResponseEntity("candidate deleted successfully",HttpStatus.OK);	
+		return new ResponseEntity("candidate updated successfully",HttpStatus.OK);	
 		
 	}
 	
@@ -125,11 +102,10 @@ public class CandidateController {
 	}
 
 	  @PutMapping("/forgot-pass-confirm")
-	  public ResponseEntity<?>
-	  forgotPassword(@Valid @RequestBody ForgotPasswordDto userBody,HttpServletRequest request) throws ResourceNotFoundException {
+	  public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordDto userBody,HttpServletRequest request) throws ResourceNotFoundException {
 	  
 	  try {
-	  System.out.println("password");
+	 
 	  candidateService.forgotPasswordConfirm(userBody.getToken(), userBody, request);
 	  return new ResponseEntity<>("password Updated",HttpStatus.OK);
 	  
@@ -139,57 +115,8 @@ public class CandidateController {
 	  
 	 }
 	  }
-	  
-	
-	  
-	  @PostMapping("/authenticate")
-	    public String generateToken(@RequestBody AuthRequest authRequest) throws Exception {
-	        try {
-	        	System.out.println("token01");
-
-	        	authenticationManager.authenticate(	    		 
-	            new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
-	        	
-	        	System.out.println("token1");
-	        } catch (Exception ex) {
-	            throw new Exception("inavalid username/password");
-	        }
-	        return jwtUtil.generateToken(authRequest.getUsername());
-	    }
-	  
-	  @Autowired
-	  private JwtTokenUtil jwtTokenUtil;
-	  
-	  @SuppressWarnings({ "rawtypes", "unchecked", "static-access" })
-		@PostMapping("/login")
-		public ResponseEntity<Candidate> createCandidate(@RequestBody Candidate candidate) throws Exception {
-			
-		try {
-			String email = candidate.getEmail();
-			String password = candidate.getPassword();
-			candidate = candidateService.loginCandidate(email, password);
-			//final String token=jwtTokenUtil.generateTokenOnLogin(candidate.getEmail(),candidate.getPassword());
-			final String url = "To confirm your account, please click here : " + "http://localhost:8088" + "/api/jobs" ;
-			//Calendar calender = Calendar.getInstance();
-			//calender.add(Calendar.MINUTE, 15);
-			
-			//candidateService.addCandidate(candidate);
-			emailService.sendSimpleMessage(candidate.getEmail(), "subject", url);
-			return new ResponseEntity(new SuccessResponseDto("Login successfully ,Check your registered email id","loginLinkMail",null), HttpStatus.OK);
-			} catch(ResourceNotFoundException e) {
-			return new  ResponseEntity(new ErrorResponseDto(e.getMessage(), "candidateNotFound"), HttpStatus.NOT_FOUND);
-			}
-	}
 	 
 	  
-	  @PostMapping("/logout")
-		 public ResponseEntity<?> logoutCandidate(@RequestBody Candidate candidate) throws Exception{
-			String email=candidate.getEmail();
-			String password=candidate.getPassword();
-					candidate=candidateService.logout(email, password);
-					return new ResponseEntity<>("Candidate logout successfully!!",HttpStatus.OK);
-		} 
-	
 	  
 		@PostMapping("/assignJob")
 		public ResponseEntity<?> assignRole(@Valid @RequestBody AssignJob assignRole, HttpServletRequest request)
@@ -231,16 +158,64 @@ public class CandidateController {
  */  
 	  
 	  
+//@PostMapping("/logout")
+//	 public ResponseEntity<?> logoutCandidate(@RequestBody Candidate candidate) throws Exception{
+//		String email=candidate.getEmail();
+//		String password=candidate.getPassword();
+//		
+//				candidate=candidateService.logout(email, password,token);
+//				return new ResponseEntity<>("Candidate logout successfully!!",HttpStatus.OK);
+//	}	  
 	  
 	  
 	  
 	  
 	  
+//@SuppressWarnings({ "rawtypes", "unchecked", "static-access" })
+//	@PostMapping("/login")
+//	public ResponseEntity<Candidate> loginCandidate(@RequestBody Candidate candidate) throws Exception {
+//		
+//	try {
+//		System.out.println("login...............");
+//		String email =candidate.getEmail() ;
+//		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();  
+//		System.out.println("login!!!!!!!!!!!!!!!");
+//		String password = candidate.getPassword();
+//		System.out.println("login $$$$$$$$$$$$$");
+//		//if(candidate.equals(candidate.getEmail()) && encoder.matches(password, candidate.getPassword())) {
+//			System.out.println("login1");
+//			final String token = jwtTokenUtil.generateToken(candidate);
+//			candidate.setToken(token);
+//			Calendar calender = Calendar.getInstance();
+//			calender.add(Calendar.MINUTE, 15);
+//			System.out.println("login2");
+//			candidate = candidateService.loginCandidate(email, password);
+//			System.out.println("login3");
+//			return new ResponseEntity(new SuccessResponseDto("Login successfully","loginSuccess",token), HttpStatus.OK);
+//		}
+//		//else {
+//catch(Exception e) {
+//		return new  ResponseEntity(new ErrorResponseDto("Candidate not found", "candidateNotFound"), HttpStatus.NOT_FOUND);
+//		}
+//}
+  
 	  
 	  
 	  
-	  
-	  
+//	  @PostMapping("/authenticate")
+//public String generateToken(@RequestBody AuthRequest authRequest) throws Exception {
+//    try {
+//    	System.out.println("token01");
+//
+//    	authenticationManager.authenticate(	    		 
+//        new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+//    	
+//    	System.out.println("token1");
+//    } catch (Exception ex) {
+//        throw new Exception("inavalid username/password");
+//    }
+//    return jwtUtil.generateToken(authRequest.getUsername());
+//}
 	
 
 
