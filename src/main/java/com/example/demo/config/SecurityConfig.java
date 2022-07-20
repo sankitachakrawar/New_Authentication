@@ -80,7 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	  "/**").permitAll().antMatchers("/api/authenticate","/api","/login","/logout",
 	  "/api/data","/api/getinfo","/api/jobs/{id}","/token","/forgot-pass",
 	  "/api/candidates","/api/candidates/{c_id}","/api/login","/api/jobs",
-	  "/api/jobs/{pageNo}/{pageSize}","/api/jobs/apply/{pageNo}/{pageSize}","/api/forgot-pass-confirm","/api/logout",
+	  "/api/jobs/{pageNo}/{pageSize}","/api/jobs/apply/{pageNo}/{pageSize}","/api/forgot-pass-confirm",
 	  "/mail","/api/sendmail","/api/jobs/applied","/api/jobs","/api/jobs/sort","/recruiter","/api/assignJob","/role","/api/permission","/api/permission/{id}","/permission/{id}","/api/entity",
 	  "/api/entity/{id}","/api/role","/api/role/{id}","/api/permission_role/{id}").permitAll() .anyRequest()
 	  .authenticated() .and().httpBasic().and() .sessionManagement()

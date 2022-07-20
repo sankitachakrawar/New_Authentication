@@ -13,7 +13,7 @@ public class AuthResponseDto implements Serializable {
 
 	private static final long serialVersionUID = -8091879091924046844L;
 
-	private final String jwttoken;
+	private final String token;
 
 	//private List<IPermissionDto> permission;
 
@@ -48,10 +48,10 @@ public class AuthResponseDto implements Serializable {
 	 * }
 	 */
 
-	public String getToken() {
-
-		return this.jwttoken;
-
-	}
+//	public String getToken() {
+//
+//		return this.jwttoken;
+//
+//	}
 
 }

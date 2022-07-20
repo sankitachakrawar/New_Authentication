@@ -100,7 +100,7 @@ public class AuthController {
 				}
 				
 				System.out.println("DATA>>"+candidate.getEmail());
-				final String token = jwtTokenUtil.generateToken(candidate);
+				final String token = jwtTokenUtil.generateTokenOnLogin(candidate.getEmail(), candidate.getPassword());
 				LoggerDto logger = new LoggerDto();
 				logger.setToken(token);
 				Calendar calender = Calendar.getInstance();
@@ -117,10 +117,13 @@ public class AuthController {
 
 		}
 	 
-	  @GetMapping("/logout")
+	 
+	  @PostMapping("/logout")
 		public ResponseEntity<?> logout(@RequestHeader("Authorization") String token, HttpServletRequest request) throws Exception {
 
-			candidateService.logout(token, ((CandidateDto) request.getAttribute("userData")).getId(), ((CandidateDto) request.getAttribute("userData")).getEmail());
+		  System.out.println("logout1");
+			loggerServiceInterface.logout(token, ((CandidateDto) request.getAttribute("userData")).getId(), ((CandidateDto) request.getAttribute("userData")).getEmail());
+			System.out.println("logout2");
 			return new ResponseEntity<>(new ErrorResponseDto("Logout Successfully", "logoutSuccess"), HttpStatus.OK);
 
 		}

@@ -19,46 +19,23 @@ public interface CandidateService {
 	
 	Candidate updateCandidate(Candidate candidate, Long id);
 	
-	
 	Candidate getCandidateById(Long id);
-	
-	
 	
 	List<Candidate> getAllCandidates();
 	
-
-	
 	void deleteCandidate(Long id);
-
-	public Candidate loginCandidate(String email,String password)throws Exception;
-	
 
 	//public Candidate logout(String email,String password) throws Exception;
 
 	Candidate findByEmail(String email);
 
-	
-
 	void changePassword(Long id, @Valid ChangePasswordDto userBody, HttpServletRequest request);
-
-	public void forgotPasswordConfirm(String token, @Valid ForgotPasswordDto userBody, HttpServletRequest request);
 	
 	Boolean comparePassword(String password, String hashPassword);
 	
-
 	void addJobToCandidate(String email,String name);
 	
 	List<IPermissionDto> getCandidatePermission(Long id) throws IOException;
-	
-	
-	void logout(String token, Long id, String email);
-	
-	
-	
-
-	
-	
-	
-	
+		
 	
 }

@@ -24,6 +24,7 @@ import com.example.demo.entities.Candidate;
 import com.example.demo.entities.Recruiter;
 import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.repositories.CandidateRepository;
+import com.example.demo.services.AuthService;
 import com.example.demo.services.CandidateService;
 import com.example.demo.services.EmailService;
 import com.example.demo.utils.JwtUtil;
@@ -41,6 +42,8 @@ public class CandidateController {
 	@Autowired
 	private CandidateService candidateService;
 
+	@Autowired
+	private AuthService authService;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping("/candidates") 
@@ -101,12 +104,13 @@ public class CandidateController {
 
 	}
 
+	
 	  @PutMapping("/forgot-pass-confirm")
 	  public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordDto userBody,HttpServletRequest request) throws ResourceNotFoundException {
 	  
 	  try {
 	 
-	  candidateService.forgotPasswordConfirm(userBody.getToken(), userBody, request);
+	 authService.forgotPasswordConfirm(userBody.getToken(), userBody, request);
 	  return new ResponseEntity<>("password Updated",HttpStatus.OK);
 	  
 	  } catch (ResourceNotFoundException e) {

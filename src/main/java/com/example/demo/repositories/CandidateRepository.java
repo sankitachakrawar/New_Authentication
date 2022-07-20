@@ -29,7 +29,7 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long>{
 
 	public ArrayList<RoleIdListDto> findById(Long id, Class<RoleIdListDto> class1);
 
-	public void removeByToken(String userToken);
+	
 
 	
 	

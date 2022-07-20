@@ -1,7 +1,6 @@
 package com.example.demo.controllers;
 
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,14 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.demo.dto.AssignJob;
 import com.example.demo.dto.ErrorResponseDto;
 import com.example.demo.dto.JobDto;
 import com.example.demo.dto.ListResponseDto;
 import com.example.demo.dto.SuccessResponseDto;
-import com.example.demo.entities.Candidate;
 import com.example.demo.entities.Job;
-import com.example.demo.services.EmailService;
 import com.example.demo.services.JobService;
 
 @RestController
@@ -33,31 +29,31 @@ public class JobController {
 	@Autowired
 	private JobService jobService;
 
-
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping("/jobs")
 	public ResponseEntity<JobDto> createJob(@RequestBody JobDto jobDto,String token) {
-
-		jobService.createJob(jobDto, jobDto.getId(),token);
 		
-				
-		return new ResponseEntity("Applied to job successfully!!", HttpStatus.CREATED);
-
-	}
+		
+		jobService.createJob(token,jobDto, jobDto.getId());
+			return new ResponseEntity("Applied to job successfully!!", HttpStatus.CREATED);
+		
+		}
+		
+	
 
 	  @GetMapping("/jobs/{id}")
-	  public ResponseEntity<?> getSingleJob(@PathVariable ("id") Long id,String token){
-		  return ResponseEntity.ok(this.jobService.getJobById(id,token));
+	  public ResponseEntity<?> getSingleJob(@PathVariable ("id") Long id){
+		  return ResponseEntity.ok(this.jobService.getJobById(id));
 		  
 	  }
 	  
 	  
 	  
 	  @PutMapping("/jobs/{id}")
-		public ResponseEntity<?> updateJob(@Valid @RequestBody JobDto jobDto,@PathVariable Long id){
+		public ResponseEntity<?> updateJob(@Valid @RequestBody JobDto jobDto,@PathVariable Long id,String token){
 			
 			@SuppressWarnings("unused")
-			JobDto updatedJob=this.jobService.updateJobDetails(jobDto, id);
+			JobDto updatedJob=this.jobService.updateJobDetails(jobDto, id, token);
 			
 			return new ResponseEntity<>("Data Updated Successfully!!",HttpStatus.OK);	
 			

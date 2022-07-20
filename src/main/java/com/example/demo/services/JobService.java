@@ -6,13 +6,13 @@ import com.example.demo.entities.Job;
 
 public interface JobService {
 
-	public void  createJob(JobDto jobDto,Long id,String token);
+	public void  createJob(String token,JobDto jobDto,Long id);
 	
 	 public List<JobDto> getAllJobs();
 	
-	public JobDto getJobById(Long id,String token);
+	public JobDto getJobById(Long id);
 	
-	JobDto updateJobDetails(JobDto job, Long id);
+	JobDto updateJobDetails(JobDto job, Long id,String token);
 	
 	void deleteJobDetails(Long id);
 

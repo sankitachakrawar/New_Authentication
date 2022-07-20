@@ -2,6 +2,8 @@ package com.example.demo.serviceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.demo.dto.LoggerDto;
 import com.example.demo.entities.Candidate;
 import com.example.demo.entities.LoggerEntity;
@@ -54,17 +56,17 @@ public class LoggerServiceImpl implements LoggerServiceInterface {
 		loggerRepository.save(logger);
 
 	}
-
-//	@Transactional
-//	@Override
-//	public void logoutUser(String token, Long userId, String email) {
-//
-//		final String userToken = token.substring(7);
-//		cache.removeKeyFromCache(userToken);
-//		cache.removeKeyFromCache(userId + "permission");
-//		cache.removeKeyFromCache(email);
-//		loggerRepository.removeByToken(userToken);
-//
-//	}
+	
+	//logout
+			@Transactional
+			@Override
+			public void logout(String token, Long id, String email) {
+				
+				final String userToken=token.substring(7);
+				cache.removeKeyFromCache(userToken);
+				cache.removeKeyFromCache(id+"");
+				cache.removeKeyFromCache(email);
+				loggerRepository.removeByToken(userToken);
+			}
 
 }

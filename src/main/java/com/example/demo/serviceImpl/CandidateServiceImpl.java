@@ -2,35 +2,23 @@ package com.example.demo.serviceImpl;
 
 
 import java.io.IOException;
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ChangePasswordDto;
-import com.example.demo.dto.ForgotPasswordDto;
 import com.example.demo.dto.IPermissionDto;
 import com.example.demo.dto.RoleIdListDto;
 import com.example.demo.entities.Candidate;
-import com.example.demo.entities.Forgot_password_request;
 import com.example.demo.entities.Job;
 import com.example.demo.repositories.CandidateRepository;
-import com.example.demo.repositories.ForgotPasswordRequestRepository;
 import com.example.demo.repositories.JobRepository;
 import com.example.demo.repositories.RolePermissionRepository;
-import com.example.demo.repositories.UserRoleRepository;
 import com.example.demo.services.CandidateService;
-import com.example.demo.utils.CacheOperation;
 import com.example.demo.utils.JwtTokenUtil;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -45,9 +33,6 @@ public class CandidateServiceImpl implements CandidateService {
 	private CandidateRepository candidateRepository;
 
 	@Autowired
-	private ForgotPasswordRequestRepository forgotPasswordRequestRepository;
-
-	@Autowired
 	private PasswordEncoder bcryptEncoder;
 
 	@Autowired
@@ -56,8 +41,7 @@ public class CandidateServiceImpl implements CandidateService {
 	@Autowired
 	private JobRepository jobRepository;
 	
-	@Autowired
-	private CacheOperation cache;
+	
 
 	public CandidateServiceImpl(CandidateRepository candidateRepository) {
 		this.candidateRepository = candidateRepository;
@@ -148,75 +132,12 @@ public class CandidateServiceImpl implements CandidateService {
 		this.candidateRepository.delete(candidate);
 	}
 
-	@Override
-	public Candidate loginCandidate(String email, String password) throws Exception {
-		Candidate candidate = candidateRepository.findByEmail(email);
-		if (candidate == null) {
-			throw new Exception("You entered incorrect Email.");
-		} else {
-			if (candidate.getEmail().equals(email) && candidate.getPassword().equals(password)) {
-				return candidate;
-			}
-			throw new Exception("You entered incorrect password.");
-		}
-
-	}
 	
-	@Transactional
-	@Override
-	public void logout(String token, Long id, String email) {
-		
-		final String userToken = token.substring(7);
-		cache.removeKeyFromCache(userToken);
-		cache.removeKeyFromCache(id+"");
-		cache.removeKeyFromCache(email);
-		candidateRepository.removeByToken(userToken);
-		
-	}
-
-
-
 	@Override
 	public Candidate findByEmail(String email) {
 		Candidate candidate = candidateRepository.findByEmailContainingIgnoreCase(email);
 		return candidate;
 
-	}
-
-	@Override
-	public void forgotPasswordConfirm(String token, @Valid ForgotPasswordDto userBody, HttpServletRequest request) {
-		DecodedJWT jwt = JWT.decode(token); // give the current date
-		Date CurrentDate = new Date(System.currentTimeMillis());
-
-		// compare current date and expiredDate.
-		if (CurrentDate.before(jwt.getExpiresAt())) {
-
-			if (userBody.getPassword().equals(userBody.getConfirmpassword())) {
-
-				// extract the email from token
-				String username = null;
-				String jwtToken = null; // get the token from payload
-				jwtToken = userBody.getToken(); // get the email from token
-				username = jwttokenUtil.getEmailFromToken(jwtToken); // check if that email exist in database
-				// grab the the user entity if email exist in db.
-				Candidate candidate = candidateRepository.findByEmail(username);
-
-				candidate.setPassword(bcryptEncoder.encode(userBody.getPassword()));
-
-			} else {
-
-				throw new ResourceNotFoundException("password and confirm password must be a same");
-
-			}
-
-		} else {
-
-			Forgot_password_request forgot_password_request = forgotPasswordRequestRepository
-					.getByTokenOrderByIdDesc(token).orElseThrow(() -> new ResourceNotFoundException("Invalid Request"));
-			forgot_password_request.setIsActive(false);
-			throw new ResourceNotFoundException("Reset the password time out");
-
-		}
 	}
 
 	@Override
