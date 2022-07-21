@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.dto.AuthRequestDto;
 import com.example.demo.dto.AuthResponseDto;
@@ -27,6 +28,7 @@ import com.example.demo.utils.JwtTokenUtil;
 import com.example.demo.utils.JwtUtil;
 
 @RestController
+@RequestMapping("/auth")
 public class AuthController {
 
 
@@ -121,7 +123,7 @@ public class AuthController {
 	  @PostMapping("/logout")
 		public ResponseEntity<?> logout(@RequestHeader("Authorization") String token, HttpServletRequest request) throws Exception {
 
-		  System.out.println("logout1");
+		  System.out.println("&&&&@&&&&&&&&logout1");
 			loggerServiceInterface.logout(token, ((CandidateDto) request.getAttribute("userData")).getId(), ((CandidateDto) request.getAttribute("userData")).getEmail());
 			System.out.println("logout2");
 			return new ResponseEntity<>(new ErrorResponseDto("Logout Successfully", "logoutSuccess"), HttpStatus.OK);

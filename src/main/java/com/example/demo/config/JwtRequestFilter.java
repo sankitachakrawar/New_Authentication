@@ -16,13 +16,19 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.example.demo.services.CustomUserDetailsService;
+import com.example.demo.utils.JwtTokenUtil;
 import com.example.demo.utils.JwtUtil;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter{
 
 	@Autowired
 	private JwtUtil jwtUtil;
+	
+	@Autowired
+	private JwtTokenUtil jwtToUtil;
 	
 	@Autowired
 	private CustomUserDetailsService customUserDetailsService;
@@ -34,15 +40,22 @@ public class JwtRequestFilter extends OncePerRequestFilter{
 		String token=null;
 		String username=null;
 		String authorizationHeader=request.getHeader("Authorization");
+		JsonObject jsonObject = null;
+		
+		
 		if(authorizationHeader != null && authorizationHeader.startsWith("Bearer")) {
 			token=authorizationHeader.substring(7);
-			username=jwtUtil.extractUsername(token);	
+			username=jwtToUtil.getEmailFromToken(token);
+			System.out.println("TOKEN "+ JsonParser.parseString(username));
+//			jsonObject = JsonParser.parseString(username).getAsJsonObject();
 			
 		}
 		if(username != null && SecurityContextHolder.getContext().getAuthentication()== null) {
-			UserDetails userDetails=customUserDetailsService.loadUserByUsername(username);
+//			System.out.println("JSONOBJECT  :"+ jsonObject);
+			UserDetails userDetails=customUserDetailsService.loadUserByEmail(JsonParser.parseString(username).toString());
+			System.out.println("GET EMAIL: "+ userDetails);
 			
-			if(jwtUtil.validateToken(token, userDetails)) {
+			if(jwtToUtil.validateToken(token, userDetails)) {
 				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 				usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);

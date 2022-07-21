@@ -20,7 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import com.example.demo.services.CustomUserDetailsService;
 
-@SuppressWarnings("deprecation")
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -76,14 +75,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	  @Override 
 	  protected void configure(HttpSecurity http) throws Exception {
-	  http.csrf() .disable() .authorizeRequests() .antMatchers(HttpMethod.OPTIONS,
-	  "/**").permitAll().antMatchers("/api/authenticate","/api","/login","/logout",
-	  "/api/data","/api/getinfo","/api/jobs/{id}","/token","/forgot-pass",
-	  "/api/candidates","/api/candidates/{c_id}","/api/login","/api/jobs",
-	  "/api/jobs/{pageNo}/{pageSize}","/api/jobs/apply/{pageNo}/{pageSize}","/api/forgot-pass-confirm",
-	  "/mail","/api/sendmail","/api/jobs/applied","/api/jobs","/api/jobs/sort","/recruiter","/api/assignJob","/role","/api/permission","/api/permission/{id}","/permission/{id}","/api/entity",
-	  "/api/entity/{id}","/api/role","/api/role/{id}","/api/permission_role/{id}").permitAll() .anyRequest()
-	  .authenticated() .and().httpBasic().and() .sessionManagement()
+	  http.csrf().disable().authorizeRequests().antMatchers(HttpMethod.OPTIONS,
+	  "/**").permitAll().antMatchers("/auth/login", "/auth/*").permitAll().anyRequest()
+	  .authenticated().and().httpBasic().and().sessionManagement()
 	  .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 	  .and().exceptionHandling().accessDeniedPage("/err/403");
 	  http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);

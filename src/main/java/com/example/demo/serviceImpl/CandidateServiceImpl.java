@@ -2,6 +2,7 @@ package com.example.demo.serviceImpl;
 
 
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -15,9 +16,11 @@ import com.example.demo.dto.IPermissionDto;
 import com.example.demo.dto.RoleIdListDto;
 import com.example.demo.entities.Candidate;
 import com.example.demo.entities.Job;
+import com.example.demo.entities.RoleEntity;
 import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.repositories.JobRepository;
 import com.example.demo.repositories.RolePermissionRepository;
+import com.example.demo.repositories.RoleRepository;
 import com.example.demo.services.CandidateService;
 import com.example.demo.utils.JwtTokenUtil;
 import com.google.gson.JsonObject;
@@ -41,7 +44,8 @@ public class CandidateServiceImpl implements CandidateService {
 	@Autowired
 	private JobRepository jobRepository;
 	
-	
+	@Autowired
+	  private RoleRepository roleRepository;
 
 	public CandidateServiceImpl(CandidateRepository candidateRepository) {
 		this.candidateRepository = candidateRepository;
@@ -62,6 +66,7 @@ public class CandidateServiceImpl implements CandidateService {
 		candidate1.setUsername(candidate.getUsername());
 		candidate1.setJobs(candidate.getJobs());
 		candidate1.setRecruiters(candidate.getRecruiters());
+		candidate1.setRoleName(candidate.getRoleName());
 		Candidate savedCandidate = this.candidateRepository.save(candidate1);
 		return savedCandidate;
 		
@@ -76,7 +81,7 @@ public class CandidateServiceImpl implements CandidateService {
 		candidate2.setPassword(passwordEncoder.encode(candidateDto.getPassword()));
 		candidate2.setAddress(candidateDto.getAddress());
 		candidate2.setUsername(candidateDto.getUsername());
-
+		
 		return candidate2;
 	}
 
@@ -230,6 +235,10 @@ public class CandidateServiceImpl implements CandidateService {
 			return bcryptEncoder.matches(password, hashPassword);
 
 		}	
+	  
+	  
+	 
+	  
 }
 
 

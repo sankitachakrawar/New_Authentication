@@ -52,14 +52,6 @@ public class RoleEntity implements Serializable {
 	@Column(name = "is_active")
 	private Boolean isActive = true;
 
-//	@OneToOne
-//	@JoinColumn(name = "created_by")
-//	private Candidate createdBy;
-//
-//	@OneToOne
-//	@JoinColumn(name = "updated_by")
-//	private Candidate updatedBy;
-
 	@Column(name = "created_at")
 	@CreationTimestamp
 	private Date createdAt;
