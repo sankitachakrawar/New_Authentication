@@ -8,14 +8,11 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.demo.dto.JobDto;
 import com.example.demo.entities.Job;
-import com.example.demo.entities.LoggerEntity;
 import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.repositories.JobRepository;
 import com.example.demo.services.JobService;
@@ -28,9 +25,7 @@ public class JobServiceImpl implements JobService {
 	@Autowired
 	private JobRepository jobRepository;
 	
-	private LoggerEntity loggerEntity;
 	//apply Job
-	
 	public void createJob(String token,JobDto jobDto,Long id) {
 		
 		DecodedJWT jwt=JWT.decode(token);
@@ -38,9 +33,9 @@ public class JobServiceImpl implements JobService {
 		Date CurrentDate = new Date(System.currentTimeMillis());
 			if (CurrentDate.before(jwt.getExpiresAt())) {
 			
-			if(token.equals(loggerEntity.getToken())) {
+			//if(token.equals(loggerEntity.getToken())) {
 				String jwtToken = null;
-				jwtToken = loggerEntity.getToken();
+				//jwtToken = loggerEntity.getToken();
 		Job job=new Job();
 		job.setName(jobDto.getName());
 		job.setLocation(jobDto.getLocation());
@@ -54,10 +49,10 @@ public class JobServiceImpl implements JobService {
 						throw new ResourceNotFoundException("token same");					
 					}
 			}
-					else {
-						throw new ResourceNotFoundException("token not same");
-					}
-	}
+					//else {
+						//throw new ResourceNotFoundException("token not same");
+					//}
+	//}
 	
 	
 	
@@ -192,6 +187,7 @@ public class JobServiceImpl implements JobService {
 			
 		}
 	}
+	
 }
 	
 	

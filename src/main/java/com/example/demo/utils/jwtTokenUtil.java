@@ -59,16 +59,13 @@ public class JwtTokenUtil implements Serializable{
 		return expiration.before(new Date());
 
 	}
-	// check if the token has expired
-	// public Boolean isTokenExpiredpubl(String token) {
-	// final Date expiration = getExpirationDateFromToken(token);
-	// return expiration.before(new Date());
-	// }
+	
 
 	// generate token for user
 	public static String generateToken(Candidate candidate) {
 
 		Map<String, Object> claims = new HashMap<>();
+		
 		return doGenerateToken(claims, candidate.toString());
 
 	}

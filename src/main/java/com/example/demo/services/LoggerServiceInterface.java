@@ -10,6 +10,6 @@ public interface LoggerServiceInterface {
 
 	void createLogger(LoggerDto loggerDto, Candidate candidate);
 
-	void logout(String token, Long id, String email);
+	void logout(String token);
 
 }

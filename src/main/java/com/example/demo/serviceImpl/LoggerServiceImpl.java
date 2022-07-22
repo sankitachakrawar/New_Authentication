@@ -11,6 +11,8 @@ import com.example.demo.repositories.LoggerRepository;
 import com.example.demo.services.LoggerServiceInterface;
 import com.example.demo.utils.CacheOperation;
 
+import ch.qos.logback.classic.Logger;
+
 @Service("LoggerServiceImpl")
 public class LoggerServiceImpl implements LoggerServiceInterface {
 
@@ -29,18 +31,18 @@ public class LoggerServiceImpl implements LoggerServiceInterface {
 	@Override
 	public LoggerEntity getLoggerDetail(String token) {
 
-		LoggerEntity logger;
+		LoggerEntity logger = null;
 
-		if (!cache.isKeyExist(token, token)) {
-
-			logger = loggerRepository.findByToken(token);
-			cache.addInCache(token, token, logger);
-
-		} else {
-
-			logger = (LoggerEntity) cache.getFromCache(token, token);
-
-		}
+//		if (!cache.isKeyExist(token, token)) {
+//
+//			logger = loggerRepository.findByToken(token);
+//			cache.addInCache(token, token, logger);
+//
+//		} else {
+//
+//			logger = (LoggerEntity) cache.getFromCache(token, token);
+//
+//		}
 
 		return logger;// loggerRepository.findByToken(token);
 
@@ -60,13 +62,16 @@ public class LoggerServiceImpl implements LoggerServiceInterface {
 	//logout
 			@Transactional
 			@Override
-			public void logout(String token, Long id, String email) {
+			public void logout(String token) {
 				
 				final String userToken=token.substring(7);
-				cache.removeKeyFromCache(userToken);
-				cache.removeKeyFromCache(id+"");
-				cache.removeKeyFromCache(email);
-				loggerRepository.removeByToken(userToken);
+//				cache.removeKeyFromCache(userToken);
+//				cache.removeKeyFromCache(id+"");
+//				cache.removeKeyFromCache(email);
+				LoggerEntity log = loggerRepository.findByToken(userToken);
+				log.setToken(null);
+				
+				loggerRepository.save(log);
 			}
 
 }

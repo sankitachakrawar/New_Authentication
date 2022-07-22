@@ -64,9 +64,9 @@ public class CandidateServiceImpl implements CandidateService {
 		candidate1.setPassword(passwordEncoder.encode(candidate.getPassword()));
 		candidate1.setAddress(candidate.getAddress());
 		candidate1.setUsername(candidate.getUsername());
-		candidate1.setJobs(candidate.getJobs());
-		candidate1.setRecruiters(candidate.getRecruiters());
-		candidate1.setRoleName(candidate.getRoleName());
+//		candidate1.setJobs(candidate.getJobs());
+//		candidate1.setRecruiters(candidate.getRecruiters());
+		//candidate1.setRoleName(candidate.getRoleName());
 		Candidate savedCandidate = this.candidateRepository.save(candidate1);
 		return savedCandidate;
 		
@@ -159,7 +159,7 @@ public class CandidateServiceImpl implements CandidateService {
 
 		Job job = jobRepository.findByName(name);
 
-		candidate.getJobs().add(job);
+//		candidate.getJobs().add(job);
 
 	}
 	

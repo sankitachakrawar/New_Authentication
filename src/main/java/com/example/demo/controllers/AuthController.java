@@ -120,11 +120,11 @@ public class AuthController {
 		}
 	 
 	 
-	  @PostMapping("/logout")
+	 @GetMapping("/logout")
 		public ResponseEntity<?> logout(@RequestHeader("Authorization") String token, HttpServletRequest request) throws Exception {
 
 		  System.out.println("&&&&@&&&&&&&&logout1");
-			loggerServiceInterface.logout(token, ((CandidateDto) request.getAttribute("userData")).getId(), ((CandidateDto) request.getAttribute("userData")).getEmail());
+			loggerServiceInterface.logout(token);
 			System.out.println("logout2");
 			return new ResponseEntity<>(new ErrorResponseDto("Logout Successfully", "logoutSuccess"), HttpStatus.OK);
 

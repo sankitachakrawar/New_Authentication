@@ -58,22 +58,19 @@ public class Candidate {
 
 	private String username;
 	
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "candidate_jobs", joinColumns = @JoinColumn(name = "c_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "j_id", referencedColumnName = "id"))
-	private Collection<Job> jobs = new ArrayList<>();
-
-	@ManyToMany(fetch = FetchType.LAZY)
-	private Collection<Recruiter> recruiters=new ArrayList<>();
-
-	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.candidate", cascade = CascadeType.ALL)
-	//@OneToMany(fetch =  FetchType.LAZY)
-	//private List<UserRoleEntity> userRole;
-	private Collection<UserRoleEntity> userRole=new ArrayList<>();
+//	@ManyToMany(fetch = FetchType.LAZY)
+//	@JoinTable(name = "candidate_jobs", joinColumns = @JoinColumn(name = "c_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "j_id", referencedColumnName = "id"))
+//	private Collection<Job> jobs = new ArrayList<>();
+//
+//	@ManyToMany(fetch = FetchType.LAZY)
+//	private Collection<Recruiter> recruiters=new ArrayList<>();
+//
+//
+//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.candidate", cascade = CascadeType.ALL)
+//	private Collection<UserRoleEntity> userRole=new ArrayList<>();
 
 	private String token;
-
-	private String roleName;
+	
 }
 
 
