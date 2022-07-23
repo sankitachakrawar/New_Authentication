@@ -14,14 +14,14 @@ public class LoggerDto {
 
 	public String token;
 
-	public Long userId;
+	public Long id;
 
 	public Date expireAt;
 
-
-	public void setOtp(int otp) {
-		// TODO Auto-generated method stub
-		
-	}
+//
+//	public void setOtp(int otp) {
+//		// TODO Auto-generated method stub
+//		
+//	}
 
 }

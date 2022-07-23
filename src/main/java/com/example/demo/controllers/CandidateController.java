@@ -31,34 +31,25 @@ import com.example.demo.services.CandidateService;
 @RequestMapping("/api")
 public class CandidateController {
 
-	
-	  @SuppressWarnings("unused")
-	@Autowired
-	  private CandidateRepository candidateRepository;
-	 
-
 	@Autowired
 	private CandidateService candidateService;
 
 	@Autowired
 	private AuthService authService;
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping("/candidates") 
-	public ResponseEntity<Candidate> registerCandidate(@Valid @RequestBody Candidate candidate){
+	public ResponseEntity<?> registerCandidate(@Valid @RequestBody Candidate candidate){
 
-		@SuppressWarnings("unused")
-		Candidate savedcandidate=this.candidateService.addCandidate(candidate);
+		candidateService.addCandidate(candidate);
 
 		return new ResponseEntity("Candidate Registered Successfully ",HttpStatus.OK);
 	 }
 	
 
-	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
 	@PutMapping("/candidates/{id}")
 	public ResponseEntity<Candidate> updateCandidate(@Valid @RequestBody Candidate candidate,@PathVariable Long id){
 		
-		Candidate updatedCandidate=this.candidateService.updateCandidate(candidate, id);
+		candidateService.updateCandidate(candidate, id);
 		
 		return new ResponseEntity("candidate updated successfully",HttpStatus.OK);	
 		
@@ -78,6 +69,7 @@ public class CandidateController {
 	}
 	@GetMapping("/candidates/{id}")
 	public ResponseEntity<Candidate> getSingleCandidate(@PathVariable Long id){
+		
 		return ResponseEntity.ok(this.candidateService.getCandidateById(id));
 		
 	}

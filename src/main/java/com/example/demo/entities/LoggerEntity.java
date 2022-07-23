@@ -13,7 +13,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import com.example.demo.dto.LoggerDto;
 
@@ -27,12 +31,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "logger")
 public class LoggerEntity implements Serializable {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = 1L;
-
-	
 
 	@Id
 	@Column(name = "id")
@@ -40,19 +39,13 @@ public class LoggerEntity implements Serializable {
 	private Long loggerId;
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "candidate_id")
-	private Candidate id;
+    @Fetch(FetchMode.JOIN)
+	@JoinColumn(name = "id")
+	@Cascade({ CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DELETE })
+	private User user_id;
 
 	@Column(name = "token", length = 512)
 	private String token;
 
-	@Column(name = "created_at")
-	@CreationTimestamp
-	private Date createdAt;
-
-	@Column(name = "expire_at")
-	private Date expireAt;
-
-	
 
 }

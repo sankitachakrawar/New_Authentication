@@ -19,7 +19,9 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.ManyToAny;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,13 +32,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "roles")
+@Where(clause = "is_active = true")
+@SQLDelete(sql="UPDATE croles SET is_active=false WHERE id=?")
 public class RoleEntity implements Serializable {
 
-	
 	private static final long serialVersionUID = 1L;
-
 	
-
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

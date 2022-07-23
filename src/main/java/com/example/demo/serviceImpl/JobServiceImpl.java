@@ -1,23 +1,17 @@
 package com.example.demo.serviceImpl;
 
-
-import java.util.Date;
-
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.demo.dto.JobDto;
 import com.example.demo.entities.Job;
 import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.repositories.JobRepository;
 import com.example.demo.services.JobService;
 import com.example.demo.utils.PaginationUsingFromTo;
-
 
 @Service
 public class JobServiceImpl implements JobService {
@@ -26,33 +20,17 @@ public class JobServiceImpl implements JobService {
 	private JobRepository jobRepository;
 	
 	//apply Job
-	public void createJob(String token,JobDto jobDto,Long id) {
+	public void createJob(JobDto jobDto,Long id) {
 		
-		DecodedJWT jwt=JWT.decode(token);
-		
-		Date CurrentDate = new Date(System.currentTimeMillis());
-			if (CurrentDate.before(jwt.getExpiresAt())) {
-			
-			//if(token.equals(loggerEntity.getToken())) {
-				String jwtToken = null;
-				//jwtToken = loggerEntity.getToken();
 		Job job=new Job();
 		job.setName(jobDto.getName());
 		job.setLocation(jobDto.getLocation());
 		job.setPostTime(jobDto.getPostTime());
 		job.setApply(jobDto.getApply());
-		
 		jobRepository.save(job);
-					
-					} else {
-
-						throw new ResourceNotFoundException("token same");					
-					}
+							
 			}
-					//else {
-						//throw new ResourceNotFoundException("token not same");
-					//}
-	//}
+			
 	
 	
 	
@@ -120,7 +98,7 @@ public class JobServiceImpl implements JobService {
 	
 	//update job details
 	@Override
-	public JobDto updateJobDetails(JobDto job, Long id,String token) {
+	public JobDto updateJobDetails(JobDto job, Long id) {
 		Job jobs = this.jobRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("job", "id", id));
 		jobs.setName(job.getName());
 		jobs.setLocation(job.getLocation());
@@ -187,6 +165,12 @@ public class JobServiceImpl implements JobService {
 			
 		}
 	}
+
+
+
+
+
+	
 	
 }
 	

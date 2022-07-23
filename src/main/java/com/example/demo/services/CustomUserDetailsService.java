@@ -15,7 +15,6 @@ import java.util.ArrayList;
 
 
 @Service
-//@Transactional
 public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private CandidateRepository candidateRepository;
@@ -30,7 +29,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     
     public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
     	System.out.println("email>>"+email);
-       Candidate candidate = candidateRepository.findByEmail(email.toString());
+    	String abcd = email.trim().toString();
+       Candidate candidate = candidateRepository.findByEmail(abcd);
        System.out.println("candidate>>"+candidate);
         return new org.springframework.security.core.userdetails.User(candidate.getEmail(), candidate.getPassword(), new ArrayList<>());
       

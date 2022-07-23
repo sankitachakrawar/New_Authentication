@@ -12,18 +12,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import com.example.demo.dto.CandidateDto;
 import com.example.demo.services.CustomUserDetailsService;
 import com.example.demo.utils.JwtTokenUtil;
-import com.example.demo.utils.JwtUtil;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter{
 
-	@Autowired
-	private JwtUtil jwtUtil;
+	
 	
 	@Autowired
 	private JwtTokenUtil jwtToUtil;
@@ -38,7 +35,7 @@ public class JwtRequestFilter extends OncePerRequestFilter{
 		String token=null;
 		String username=null;
 		String authorizationHeader=request.getHeader("Authorization");
-		//MultiReadHttpServletRequest multiReadRequest = new MultiReadHttpServletRequest(request);
+		
 		JsonObject jsonObject = null;
 		
 		
@@ -48,7 +45,7 @@ public class JwtRequestFilter extends OncePerRequestFilter{
 			try {
 			username=jwtToUtil.getEmailFromToken(token);
 			System.out.println("TOKEN "+ JsonParser.parseString(username));
-//			jsonObject = JsonParser.parseString(username).getAsJsonObject();
+
 			} catch (Exception e) {
 
 				new Exception(e.getMessage());
@@ -63,19 +60,12 @@ public class JwtRequestFilter extends OncePerRequestFilter{
 			System.out.println("JSONOBJECT  :"+ jsonObject);
 			UserDetails userDetails=customUserDetailsService.loadUserByEmail(JsonParser.parseString(username).toString());
 			
-//			UserDetails userDetails = this.customUserDetailsService.loadUserByUsername(jsonObject.get("email").getAsString());
-
+			
 			System.out.println("GET EMAIL: "+ userDetails);
 			
 			if(jwtToUtil.validateToken(token, userDetails)) {
 				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-				usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-				
-//				CandidateDto userData = new CandidateDto();
-//				userData.setId((jsonObject.get("id").getAsLong()));
-//				userData.setName(jsonObject.get("name").getAsString());
-//				userData.setEmail(jsonObject.get("email").getAsString());
-//				multiReadRequest.setAttribute("userData", userData);
+				usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));				
 				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 			
 			}

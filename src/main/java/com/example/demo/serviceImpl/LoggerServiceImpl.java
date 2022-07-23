@@ -3,15 +3,11 @@ package com.example.demo.serviceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.example.demo.dto.LoggerDto;
 import com.example.demo.entities.Candidate;
 import com.example.demo.entities.LoggerEntity;
 import com.example.demo.repositories.LoggerRepository;
 import com.example.demo.services.LoggerServiceInterface;
-import com.example.demo.utils.CacheOperation;
-
-import ch.qos.logback.classic.Logger;
 
 @Service("LoggerServiceImpl")
 public class LoggerServiceImpl implements LoggerServiceInterface {
@@ -25,8 +21,7 @@ public class LoggerServiceImpl implements LoggerServiceInterface {
 	@Autowired
 	private LoggerRepository loggerRepository;
 
-	@Autowired
-	private CacheOperation cache;
+
 
 	@Override
 	public LoggerEntity getLoggerDetail(String token) {

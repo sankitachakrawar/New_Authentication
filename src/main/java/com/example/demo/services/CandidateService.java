@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
+import org.springframework.stereotype.Service;
+
 import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ChangePasswordDto;
 import com.example.demo.dto.IPermissionDto;
 import com.example.demo.entities.Candidate;
-
 
 public interface CandidateService {
 

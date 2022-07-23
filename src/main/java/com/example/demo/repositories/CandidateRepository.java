@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Repository;
 
@@ -11,14 +12,16 @@ import com.example.demo.dto.RoleIdListDto;
 import com.example.demo.entities.Candidate;
 import com.example.demo.exceptions.ResourceNotFoundException;
 
+import io.lettuce.core.dynamic.annotation.Param;
 
 @Repository
 @EnableJpaRepositories
 public interface CandidateRepository extends JpaRepository<Candidate, Long>{
-		
-	public Candidate findByEmail(String email);
+	
+	@Query(value="SELECT * FROM candidate c WHERE c.email = :email", nativeQuery = true)
+	public Candidate getCandidateByEmail(@Param("email") String email);
 
-	public Candidate findByEmailAndIsActiveTrue(String username) throws ResourceNotFoundException;
+	public Candidate findByEmail(String email);
 
 	Candidate findByEmailContainingIgnoreCase(String email);
 	Candidate findByEmailContainingIgnoreCaseAndIsActiveTrue(String search);
@@ -28,14 +31,6 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long>{
 	public Optional<Candidate> findByIdAndIsActiveTrue(Long id);
 
 	public ArrayList<RoleIdListDto> findById(Long id, Class<RoleIdListDto> class1);
-
-	
-
-	
-	
-
-	
-
 
 }
 

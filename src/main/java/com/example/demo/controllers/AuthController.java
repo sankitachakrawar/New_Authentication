@@ -1,6 +1,7 @@
 package com.example.demo.controllers;
 import java.util.Calendar;
 
+
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.dto.AuthRequestDto;
 import com.example.demo.dto.AuthResponseDto;
-import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ErrorResponseDto;
 import com.example.demo.dto.ForgotPasswordRequestDto;
 import com.example.demo.dto.LoggerDto;
@@ -25,7 +25,6 @@ import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.serviceImpl.CandidateServiceImpl;
 import com.example.demo.services.*;
 import com.example.demo.utils.JwtTokenUtil;
-import com.example.demo.utils.JwtUtil;
 
 @RestController
 @RequestMapping("/auth")
@@ -47,9 +46,7 @@ public class AuthController {
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
 	 
-	@SuppressWarnings("unused")
-	@Autowired
-	private JwtUtil jwtUtil;
+	
 	
 	@SuppressWarnings("static-access")
 	@PostMapping("/forgot-pass")

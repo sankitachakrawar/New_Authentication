@@ -3,6 +3,7 @@ package com.example.demo.serviceImpl;
 
 import java.io.IOException;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -16,11 +17,9 @@ import com.example.demo.dto.IPermissionDto;
 import com.example.demo.dto.RoleIdListDto;
 import com.example.demo.entities.Candidate;
 import com.example.demo.entities.Job;
-import com.example.demo.entities.RoleEntity;
 import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.repositories.JobRepository;
 import com.example.demo.repositories.RolePermissionRepository;
-import com.example.demo.repositories.RoleRepository;
 import com.example.demo.services.CandidateService;
 import com.example.demo.utils.JwtTokenUtil;
 import com.google.gson.JsonObject;
@@ -44,8 +43,7 @@ public class CandidateServiceImpl implements CandidateService {
 	@Autowired
 	private JobRepository jobRepository;
 	
-	@Autowired
-	  private RoleRepository roleRepository;
+
 
 	public CandidateServiceImpl(CandidateRepository candidateRepository) {
 		this.candidateRepository = candidateRepository;
@@ -117,6 +115,7 @@ public class CandidateServiceImpl implements CandidateService {
 	public Candidate getCandidateById(Long id) {
 		Candidate candidate = this.candidateRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("candidate", "id", id));
+		
 		return candidate;
 	}
 
@@ -134,7 +133,7 @@ public class CandidateServiceImpl implements CandidateService {
 		Candidate candidate = this.candidateRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("candidate", "id", id));
 
-		this.candidateRepository.delete(candidate);
+		this.candidateRepository.deleteById(id);
 	}
 
 	

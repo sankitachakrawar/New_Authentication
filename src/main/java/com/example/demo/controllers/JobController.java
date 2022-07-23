@@ -31,10 +31,10 @@ public class JobController {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping("/jobs")
-	public ResponseEntity<JobDto> createJob(@RequestBody JobDto jobDto,String token) {
+	public ResponseEntity<JobDto> createJob(@RequestBody JobDto jobDto) {
 		
 		
-		jobService.createJob(token,jobDto, jobDto.getId());
+		jobService.createJob(jobDto, jobDto.getId());
 			return new ResponseEntity("Applied to job successfully!!", HttpStatus.CREATED);
 		
 		}
@@ -50,10 +50,10 @@ public class JobController {
 	  
 	  
 	  @PutMapping("/jobs/{id}")
-		public ResponseEntity<?> updateJob(@Valid @RequestBody JobDto jobDto,@PathVariable Long id,String token){
+		public ResponseEntity<?> updateJob(@Valid @RequestBody JobDto jobDto,@PathVariable Long id){
 			
 			@SuppressWarnings("unused")
-			JobDto updatedJob=this.jobService.updateJobDetails(jobDto, id, token);
+			JobDto updatedJob=this.jobService.updateJobDetails(jobDto, id);
 			
 			return new ResponseEntity<>("Data Updated Successfully!!",HttpStatus.OK);	
 			
