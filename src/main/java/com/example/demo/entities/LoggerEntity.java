@@ -36,16 +36,14 @@ public class LoggerEntity implements Serializable {
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long loggerId;
+	private Long loggerid;
 
-	@OneToOne(fetch = FetchType.LAZY)
-    @Fetch(FetchMode.JOIN)
-	@JoinColumn(name = "id")
-	@Cascade({ CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DELETE })
-	private User user_id;
+	@OneToOne(fetch = FetchType.LAZY)   
+	@JoinColumn(name = "c_id")
+	private Candidate id;
 
 	@Column(name = "token", length = 512)
 	private String token;
-
+	private Date expireAt;
 
 }

@@ -31,6 +31,8 @@ public interface RoleServiceInterface {
 
 	void addPermissionsToRole(Long id, Long[] permissions) throws ResourceNotFoundException;
 
-	RoleDto addRole(@Valid RoleDto roleDto);
+	RoleDto addRole(RoleDto roleDto);
+
+	//RoleEntity addRole(RoleEntity roleEntity);
 
 }

@@ -23,7 +23,9 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long>{
 
 	public Candidate findByEmail(String email);
 
-	Candidate findByEmailContainingIgnoreCase(String email);
+	Optional<Candidate> findByEmailContainingIgnoreCase(String email);
+	
+	//Candidate findByEmailContainingIgnoreCase(String email);
 	Candidate findByEmailContainingIgnoreCaseAndIsActiveTrue(String search);
 	
 	public Candidate findByUsername(String username);
@@ -32,6 +34,11 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long>{
 
 	public ArrayList<RoleIdListDto> findById(Long id, Class<RoleIdListDto> class1);
 
+	
+	 @Query("SELECT c FROM Candidate c WHERE c.username = :username")
+	    public Candidate getCandidateByUsername(@Param("username") String username);
+	
+	
 }
 
 

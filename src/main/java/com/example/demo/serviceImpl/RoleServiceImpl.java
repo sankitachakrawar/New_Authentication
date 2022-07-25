@@ -1,6 +1,7 @@
 package com.example.demo.serviceImpl;
 
 import java.util.ArrayList;
+
 import java.util.List;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -11,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.EntityDto;
 import com.example.demo.dto.EntityPermissionDto;
 import com.example.demo.dto.IPermissionDto;
@@ -18,6 +21,7 @@ import com.example.demo.dto.IRoleDetailDto;
 import com.example.demo.dto.IRoleListDto;
 import com.example.demo.dto.RoleDto;
 import com.example.demo.dto.RolePermissionDto;
+import com.example.demo.entities.Candidate;
 import com.example.demo.entities.EntityEntity;
 import com.example.demo.entities.PermissionEntity;
 import com.example.demo.entities.RoleEntity;
@@ -257,11 +261,77 @@ public class RoleServiceImpl implements RoleServiceInterface {
 
 	@Override
 	public RoleDto addRole(@Valid RoleDto roleDto) {
+	
 		RoleEntity roleEntity = new RoleEntity();
 		roleEntity.setRoleName(roleDto.getRoleName());
 		roleEntity.setDescription(roleDto.getDescription());
+		roleEntity.setCandidateId(roleRepository.getById(roleDto.getCandidateId()));
+		System.out.println(roleEntity);
+		
 		roleRepository.save(roleEntity);
 		return roleDto;
+		//return this.addRole(roleDto);
 	}
+//	RoleEntity entity=this.dtoToRole(roleDto);
+//	RoleEntity entity2=this.roleRepository.save(entity);
+//	
+//	return this.roleToDto(entity2);
+	
+	
+	public RoleEntity dtoToRole(RoleDto roleDto) {
+		RoleEntity roleEntity = new RoleEntity();
+		roleEntity.setRoleName(roleDto.getRoleName());
+		roleEntity.setDescription(roleDto.getDescription());
+	
+		
+		
+		return roleEntity;
+	}
+
+	public RoleDto roleToDto(RoleEntity roleEntity) {
+		RoleDto roleDto = new RoleDto();
+		roleDto.setRoleName(roleEntity.getRoleName());
+		roleDto.setDescription(roleEntity.getDescription());
+		
+		return roleDto;
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+//	@Override
+//	public RoleEntity addRole(RoleEntity roleEntity)
+//	{
+//		RoleEntity roleEntity2=new RoleEntity();
+//		roleEntity2.setRoleName(roleEntity.getRoleName());
+//		roleEntity2.setDescription(roleEntity.getDescription());
+//		roleRepository.save(roleEntity2);
+//		return roleEntity;
+//	}
+	
 
 }

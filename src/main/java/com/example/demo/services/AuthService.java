@@ -13,5 +13,4 @@ public interface AuthService {
 	public Candidate loginCandidate(String email,String password)throws Exception;
 	
 	
-	
 }

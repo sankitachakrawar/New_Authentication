@@ -10,4 +10,6 @@ import com.example.demo.entities.Candidate;
 public interface AuthRepository extends JpaRepository<Candidate, Long> {
 
 	Candidate findByEmail(String email);
+	
+	
 }

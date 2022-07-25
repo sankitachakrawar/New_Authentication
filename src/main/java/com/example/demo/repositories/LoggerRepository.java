@@ -15,4 +15,6 @@ public interface LoggerRepository extends JpaRepository<LoggerEntity, Long> {
 
 	void removeByToken(String token);
 
+	//void deleteToken(String token);
+
 }

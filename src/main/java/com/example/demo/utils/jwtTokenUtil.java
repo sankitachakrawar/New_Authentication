@@ -1,10 +1,14 @@
 package com.example.demo.utils;
 
 import java.io.Serializable;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -62,11 +66,11 @@ public class JwtTokenUtil implements Serializable{
 	
 
 	// generate token for user
-	public static String generateToken(Candidate candidate) {
+	public static String generateToken(UserDetails userDeatils) {
 
 		Map<String, Object> claims = new HashMap<>();
 		
-		return doGenerateToken(claims, candidate.toString());
+		return doGenerateToken(claims, userDeatils.toString());
 
 	}
 
@@ -106,6 +110,8 @@ public class JwtTokenUtil implements Serializable{
 
 		// throw new ResourceNotFoundException("Timeout for this request");
 	}
+
+	
 	
 	
 	

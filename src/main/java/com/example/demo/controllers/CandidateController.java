@@ -1,7 +1,10 @@
 package com.example.demo.controllers;
 import java.util.List;
 
+
 import java.util.Map;
+import java.util.Optional;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,7 @@ import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.services.AuthService;
 import com.example.demo.services.CandidateService;
 
+
 @RestController
 @RequestMapping("/api")
 public class CandidateController {
@@ -35,23 +39,48 @@ public class CandidateController {
 	private CandidateService candidateService;
 
 	@Autowired
+	private CandidateRepository candidateRepository;
+	
+	@Autowired
 	private AuthService authService;
 	
-	@PostMapping("/candidates") 
-	public ResponseEntity<?> registerCandidate(@Valid @RequestBody Candidate candidate){
+	@PostMapping("/resgister") 
+	public ResponseEntity<?> registerCandidate(@Valid @RequestBody Candidate candidate,HttpServletRequest request){
+		try {
+			String email = candidate.getEmail();
+			Optional<Candidate> dataBaseEmail = candidateRepository.findByEmailContainingIgnoreCase(email);
+			if ((dataBaseEmail == null) || dataBaseEmail.isEmpty()) {
+				candidateService.addCandidate(candidate);
+				return new ResponseEntity<>(new SuccessResponseDto("Candidate Created", "candidateCreated", candidate),
+						HttpStatus.CREATED);
+			} else {
+				return new ResponseEntity<>(
+						new ErrorResponseDto("Candidate Email Id Already Exist", "candidateEmailIdAlreadyExist"),
+						HttpStatus.BAD_REQUEST);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(new ErrorResponseDto("Candidate Not Added", "candidateNotAdded"),
+					HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+		
+		
+		
+		
+		
+		//candidateService.addCandidate(candidate);
 
-		candidateService.addCandidate(candidate);
-
-		return new ResponseEntity("Candidate Registered Successfully ",HttpStatus.OK);
+		//return new ResponseEntity<>("Candidate Registered Successfully ",HttpStatus.OK);
 	 }
 	
 
 	@PutMapping("/candidates/{id}")
-	public ResponseEntity<Candidate> updateCandidate(@Valid @RequestBody Candidate candidate,@PathVariable Long id){
+	public ResponseEntity<?> updateCandidate(@Valid @RequestBody Candidate candidate,@PathVariable Long id){
 		
 		candidateService.updateCandidate(candidate, id);
 		
-		return new ResponseEntity("candidate updated successfully",HttpStatus.OK);	
+		return new ResponseEntity<>("candidate updated successfully",HttpStatus.OK);	
 		
 	}
 	
@@ -64,7 +93,9 @@ public class CandidateController {
 	
 	@GetMapping("/candidates")
 	public ResponseEntity<List<Candidate>> getAllCandidates(){
-		return ResponseEntity.ok(this.candidateService.getAllCandidates());
+		List<Candidate> data=this.candidateService.getAllCandidates();
+		
+		return new ResponseEntity(new SuccessResponseDto("Success", "success", data),HttpStatus.OK);
 		
 	}
 	@GetMapping("/candidates/{id}")

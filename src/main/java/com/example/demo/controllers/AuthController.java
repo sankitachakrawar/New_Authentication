@@ -2,7 +2,8 @@ package com.example.demo.controllers;
 import java.util.Calendar;
 
 
-import java.util.List;
+
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.dto.AuthRequestDto;
 import com.example.demo.dto.AuthResponseDto;
+import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ErrorResponseDto;
 import com.example.demo.dto.ForgotPasswordRequestDto;
 import com.example.demo.dto.LoggerDto;
@@ -113,19 +115,37 @@ public class AuthController {
 				return new ResponseEntity<>(new ErrorResponseDto(e.getMessage(), "userNotFound"), HttpStatus.NOT_FOUND);
 
 			}
-
-		}
+	 }
+	
+	
+	 
+	 
+	 
+	 
+	 
 	 
 	 
 	 @GetMapping("/logout")
-		public ResponseEntity<?> logout(@RequestHeader("Authorization") String token, HttpServletRequest request) throws Exception {
+	 public ResponseEntity<?> logoutCandiadte(@RequestHeader("Authorization") String token, HttpServletRequest request)throws Exception{
+		 loggerServiceInterface.logoutCandidate(token);
+		return new ResponseEntity<> (new ErrorResponseDto("Logout Successfully", "logoutSuccess"), HttpStatus.OK);
+	 }
 
-		  System.out.println("&&&&@&&&&&&&&logout1");
-			loggerServiceInterface.logout(token);
-			System.out.println("logout2");
-			return new ResponseEntity<>(new ErrorResponseDto("Logout Successfully", "logoutSuccess"), HttpStatus.OK);
-
-		}
-	 
 	 
 }
+
+
+
+
+
+
+
+//	 @GetMapping("/logout")
+//public ResponseEntity<?> logout(@RequestHeader("Authorization") String token, HttpServletRequest request) throws Exception {
+//
+//  System.out.println("&&&&@&&&&&&&&logout1");
+//	loggerServiceInterface.logout(token);
+//	System.out.println("logout2");
+//	return new ResponseEntity<>(new ErrorResponseDto("Logout Successfully", "logoutSuccess"), HttpStatus.OK);
+//
+//}

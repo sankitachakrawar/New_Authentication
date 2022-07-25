@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -63,5 +64,19 @@ public class RoleEntity implements Serializable {
 	@UpdateTimestamp
 	private Date updatedAt;
 	
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="candidate_id")
+	private Candidate candidateId;
 
+
+	public void setCandidateId(RoleEntity byId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+//	@ManyToMany(cascade = CascadeType.ALL)
+//	private List<PermissionEntity> permission;
+	
 }

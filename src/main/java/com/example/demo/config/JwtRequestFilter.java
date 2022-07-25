@@ -58,7 +58,7 @@ public class JwtRequestFilter extends OncePerRequestFilter{
 		}
 		if(username != null && SecurityContextHolder.getContext().getAuthentication()== null) {
 			System.out.println("JSONOBJECT  :"+ jsonObject);
-			UserDetails userDetails=customUserDetailsService.loadUserByEmail(JsonParser.parseString(username).toString());
+			UserDetails userDetails=customUserDetailsService.loadUserByUsername(JsonParser.parseString(username).toString());
 			
 			
 			System.out.println("GET EMAIL: "+ userDetails);

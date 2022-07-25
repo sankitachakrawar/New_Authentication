@@ -11,7 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +24,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "entities")
+@Where(clause = "is_active = true")
+@SQLDelete(sql="UPDATE entities SET is_active=false WHERE id=?")
 public class EntityEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;

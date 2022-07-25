@@ -4,10 +4,19 @@ package com.example.demo.serviceImpl;
 import java.io.IOException;
 
 
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +26,7 @@ import com.example.demo.dto.IPermissionDto;
 import com.example.demo.dto.RoleIdListDto;
 import com.example.demo.entities.Candidate;
 import com.example.demo.entities.Job;
+import com.example.demo.entities.RoleEntity;
 import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.repositories.JobRepository;
 import com.example.demo.repositories.RolePermissionRepository;
@@ -51,22 +61,31 @@ public class CandidateServiceImpl implements CandidateService {
 	}
 
 	@Override
-	public Candidate addCandidate(Candidate candidate) {
+	public void addCandidate(Candidate candidate) {
 
+		
+		String email = candidate.getEmail();
+		candidate.setEmail(email.toLowerCase());
+		String password=passwordEncoder.encode(candidate.getPassword());
+		candidate.setPassword(password);
+		//final char[] delimiters = { ' ' };
+		
+		//candidate.setName(WordUtils.capitalizeFully(candidate.getName(), delimiters));// convert to sentance case
+		candidate.setActive(true);
+		
 //		 CandidateDto candidateDto;
 //		Candidate candidate1 =this.dtoToCandidate(candidateDto);
 //		 return candidate1;
-		Candidate candidate1 = new Candidate();
-		candidate1.setName(candidate.getName());
-		candidate1.setEmail(candidate.getEmail());
-		candidate1.setPassword(passwordEncoder.encode(candidate.getPassword()));
-		candidate1.setAddress(candidate.getAddress());
-		candidate1.setUsername(candidate.getUsername());
-//		candidate1.setJobs(candidate.getJobs());
-//		candidate1.setRecruiters(candidate.getRecruiters());
-		//candidate1.setRoleName(candidate.getRoleName());
-		Candidate savedCandidate = this.candidateRepository.save(candidate1);
-		return savedCandidate;
+		
+		
+//		Candidate candidate1 = new Candidate();
+//		candidate1.setName(candidate.getName());
+//		candidate1.setEmail(candidate.getEmail());
+//		candidate1.setPassword(passwordEncoder.encode(candidate.getPassword()));
+//		candidate1.setAddress(candidate.getAddress());
+//		candidate1.setUsername(candidate.getUsername());
+		
+ candidateRepository.save(candidate);
 		
 
 	}
@@ -139,7 +158,7 @@ public class CandidateServiceImpl implements CandidateService {
 	
 	@Override
 	public Candidate findByEmail(String email) {
-		Candidate candidate = candidateRepository.findByEmailContainingIgnoreCase(email);
+		Candidate candidate = candidateRepository.findByEmail(email);
 		return candidate;
 
 	}
@@ -233,11 +252,11 @@ public class CandidateServiceImpl implements CandidateService {
 
 			return bcryptEncoder.matches(password, hashPassword);
 
-		}	
+		}
+
+	
 	  
-	  
-	 
-	  
+	
 }
 
 

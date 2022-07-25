@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.entities.Candidate;
 import com.example.demo.repositories.CandidateRepository;
+import com.example.demo.serviceImpl.CandidateServiceImpl;
 
 import java.util.ArrayList;
 
@@ -21,11 +22,17 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-       Candidate candidate = candidateRepository.findByUsername(username);
+       
+    	Candidate candidate = candidateRepository.findByUsername(username);
         return new org.springframework.security.core.userdetails.User(candidate.getUsername(), candidate.getPassword(), new ArrayList<>());
+    }
+    	
+    	
+    	
+    	
       
        
-    }
+    
     
     public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
     	System.out.println("email>>"+email);

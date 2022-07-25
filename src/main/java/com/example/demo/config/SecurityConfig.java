@@ -3,6 +3,7 @@ package com.example.demo.config;
 import java.util.Arrays;
 
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.context.annotation.Bean;
@@ -18,7 +19,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -32,8 +32,7 @@ import com.example.demo.services.CustomUserDetailsService;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	@Autowired
-	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+	
 
 	
 	@Autowired
@@ -83,7 +82,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	  @Override 
 	  protected void configure(HttpSecurity http) throws Exception {
 	  http.csrf().disable().authorizeRequests().antMatchers(HttpMethod.OPTIONS,
-	  "/**").permitAll().antMatchers("/auth/login", "/auth/*","/api/candidates","/api/candidates/{id}").permitAll().anyRequest()
+	  "/**").permitAll().antMatchers("/auth/login", "/auth/*","/api/resgister","/api/candidates/{id}","/api/*","/auth/logout").permitAll().anyRequest()
 	  .authenticated().and().httpBasic().and().sessionManagement()
 	  .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 	  .and().exceptionHandling().accessDeniedPage("/err/403");

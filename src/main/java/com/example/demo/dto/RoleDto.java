@@ -4,6 +4,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import com.example.demo.entities.Candidate;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +22,11 @@ public class RoleDto {
 	private String roleName;
 
 	private String description;
+	
+	@NotNull(message = "candidateId is Required*candidateIdRequired")
+	public Long candidateId;
 
 
+	
+	
 }

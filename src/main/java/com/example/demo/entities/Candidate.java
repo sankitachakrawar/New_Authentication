@@ -1,14 +1,24 @@
 package com.example.demo.entities;
 
 
+
+
+import java.util.HashSet;
+
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
-
+import javax.persistence.JoinColumn;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -46,6 +56,17 @@ public class Candidate {
 
 	private String username;
 
+
+	
+//	 @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//	    @JoinTable(
+//	            name = "candidate_roles",
+//	            joinColumns = @JoinColumn(name = "user_id"),
+//	            inverseJoinColumns = @JoinColumn(name = "role_id")
+//	            )
+//	    private Set<RoleEntity> roles = new HashSet<>();
+//	
+	
 }
 
 

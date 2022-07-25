@@ -24,6 +24,7 @@ import com.example.demo.dto.RoleDto;
 import com.example.demo.dto.RolePermissionDto;
 import com.example.demo.dto.SuccessResponseDto;
 import com.example.demo.dto.UserDataDto;
+import com.example.demo.entities.RoleEntity;
 import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.services.RoleServiceInterface;
 import com.example.demo.dto.ListResponseDto;
@@ -56,19 +57,28 @@ public class RoleController {
 
 	
 	@PostMapping("/role")
-	public ResponseEntity<?> addRole(@Valid @RequestBody RoleDto roleDto, HttpServletRequest request) {
-		try {
-			this.roleServiceInterface.addRole(roleDto);
-			return new ResponseEntity<>("Role Added Successfully!!",HttpStatus.OK);
-		}catch(Exception e) {
-				return new ResponseEntity<>("Role Not Added",HttpStatus.BAD_REQUEST);
-		}
+	public ResponseEntity<?> addRole(@RequestBody RoleDto roleDto, HttpServletRequest request) {
+		
+		RoleDto dto=this.roleServiceInterface.addRole(roleDto);
+		
+		return new ResponseEntity<>("Role added successfully",HttpStatus.OK);
+		
+		
+		
+		
+//		try {	System.out.println("role1");
+//			this.roleServiceInterface.addRole(roleDto);
+//			return new ResponseEntity<>("Role Added Successfully!!",HttpStatus.OK);
+//		}catch(Exception e) {
+//				return new ResponseEntity<>("Role Not Added",HttpStatus.BAD_REQUEST);
+//		}
 	}
 
 	
 	@PutMapping("/role/{id}")
 	public ResponseEntity<?> editRole(@PathVariable(value = "id") Long roleId, @Valid @RequestBody RoleDto roleDto, HttpServletRequest request) {
 			try {
+			
 		roleServiceInterface.updateRole(roleDto, roleId);
 
 			return new ResponseEntity<>("Role updated successfully", HttpStatus.OK);
