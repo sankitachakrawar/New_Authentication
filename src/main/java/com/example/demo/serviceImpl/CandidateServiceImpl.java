@@ -140,11 +140,11 @@ public class CandidateServiceImpl implements CandidateService {
 
 	@Override
 	public List<Candidate> getAllCandidates() {
-		List<Candidate> candidates = this.candidateRepository.findAll();
+		//List<Candidate> candidates = 
 
 		// List<CandidateDto>
 		// candidateDtos=candidates.stream().map(candidate->this.candidateToDto(candidate)).collect(Collectors.toList());
-		return candidates;
+		return this.candidateRepository.findAll();
 	}
 
 	@Override
@@ -256,25 +256,22 @@ public class CandidateServiceImpl implements CandidateService {
 
 	
 	  
-	
+//	  @Override
+//	  public Candidate logout(String token) throws Exception {
+//
+//		  
+//		  
+//		  		Candidate candidate = candidateRepository.findByEmail(email);
+//		  			if (candidate == null) {
+//		  					throw new Exception("You entered incorrect Email.");
+//		  			} else {
+//		  				if ((candidate.getEmail().equals(email)) && (candidate.getPassword().equals(password))) {
+//		  					return candidate;
+//
+//		  				}
+//		  				throw new Exception("Invalid username and password!!!");
+//
+//		  			}
+//
+//	  }
 }
-
-
-
-
-//@Override
-//public Candidate logout(String email, String password) throws Exception {
-//
-//	Candidate candidate = candidateRepository.findByEmail(email);
-//	if (candidate == null) {
-//		throw new Exception("You entered incorrect Email.");
-//	} else {
-//		if ((candidate.getEmail().equals(email)) && (candidate.getPassword().equals(password))) {
-//			return candidate;
-//
-//		}
-//		throw new Exception("Invalid username and password!!!");
-//
-//	}
-//
-//}

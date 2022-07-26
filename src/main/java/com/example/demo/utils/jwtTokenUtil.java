@@ -9,6 +9,7 @@ import java.util.function.Function;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -22,12 +23,15 @@ public class JwtTokenUtil implements Serializable{
 
 	private static final long serialVersionUID = -2550185165626007488L;
 
-	public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+	public static final long JWT_TOKEN_VALIDITY = 5*60*60;
 
 	public static final long JWT_TOKEN_VALIDITY_FORGOT_PASS = 5 * 60;
 	
 	private static String secret="t>+l:Y%puW~oGl";
 	
+	
+	 @Value("${jwt.token.expiration.in.seconds}")
+	    private Long expiration;
 	
 	public String getEmailFromToken(String token) {
 
@@ -112,7 +116,34 @@ public class JwtTokenUtil implements Serializable{
 	}
 
 	
-	
+	public String refreshToken(String token) {
+        final Date createdDate = new Date();
+        final Date expirationDate = calculateExpirationDate(createdDate);
+
+        final Claims claims = getAllClaimsFromToken(token);
+        claims.setIssuedAt(createdDate);
+        claims.setExpiration(expirationDate);
+
+        return Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS512, secret).compact();
+    }
+
+	private Date calculateExpirationDate(Date createdDate) {
+		 return new Date(createdDate.getTime() + expiration * 1000);
+	}
+
+	public String getUsernameFromToken(String token) {
+		 return getClaimFromToken(token, Claims::getSubject);
+	}
+
+	public boolean canTokenBeRefreshed(String token) {
+		return (!isTokenExpired(token) || ignoreTokenExpiration(token));
+	}
+
+	private boolean ignoreTokenExpiration(String token) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 	
 	
 	

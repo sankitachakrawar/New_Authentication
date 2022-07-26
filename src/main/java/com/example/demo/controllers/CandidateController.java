@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.dto.AssignJob;
 import com.example.demo.dto.AssignRole;
+import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ChangePasswordDto;
 import com.example.demo.dto.ErrorResponseDto;
 import com.example.demo.dto.ForgotPasswordDto;
@@ -92,7 +93,7 @@ public class CandidateController {
 	}
 	
 	@GetMapping("/candidates")
-	public ResponseEntity<List<Candidate>> getAllCandidates(){
+	public ResponseEntity<List<CandidateDto>> getAllCandidates(){
 		List<Candidate> data=this.candidateService.getAllCandidates();
 		
 		return new ResponseEntity(new SuccessResponseDto("Success", "success", data),HttpStatus.OK);

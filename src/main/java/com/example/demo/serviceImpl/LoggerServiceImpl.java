@@ -61,31 +61,19 @@ public class LoggerServiceImpl implements LoggerServiceInterface {
 
 	}
 
-	@Override
-	public void logoutCandidate(String token) {
-		final String token1=token.substring(7);
-		LoggerEntity log = loggerRepository.findByToken(token1);
-		log.setToken(null);
 	
-		loggerRepository.save(log);
-		
-	}
-//	
-//	@Autowired
-//	private JwtTokenUtil jwtTokenUtil;
-//	
-//	
-//	  @Override
-//	    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
-//	                                Authentication authentication) throws IOException {
-//	  
-//	        String token = this.jwtTokenUtil.extractToken(request);
-//	        if (token != null) {
-//	            this.loggerRepository.deleteToken(token);
-//	        }
-//	        response.setStatus(HttpServletResponse.SC_OK);
-//	        response.getWriter().flush();
-//	    }
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }
 
@@ -101,17 +89,3 @@ public class LoggerServiceImpl implements LoggerServiceInterface {
 
 
 
-////logout
-//@Transactional
-//@Override
-//public void logout(String token) {
-//	
-//	final String userToken=token.substring(7);
-////	cache.removeKeyFromCache(userToken);
-////	cache.removeKeyFromCache(id+"");
-////	cache.removeKeyFromCache(email);
-//	LoggerEntity log = loggerRepository.findByToken(userToken);
-//	log.setToken(null);
-//	
-//	loggerRepository.save(log);
-//}

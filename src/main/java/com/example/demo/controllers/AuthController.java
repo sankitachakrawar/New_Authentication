@@ -5,11 +5,16 @@ import java.util.Calendar;
 
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -20,6 +25,7 @@ import com.example.demo.dto.AuthResponseDto;
 import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ErrorResponseDto;
 import com.example.demo.dto.ForgotPasswordRequestDto;
+import com.example.demo.dto.JwtTokenResponse;
 import com.example.demo.dto.LoggerDto;
 import com.example.demo.dto.SuccessResponseDto;
 import com.example.demo.entities.Candidate;
@@ -105,7 +111,7 @@ public class AuthController {
 				LoggerDto logger = new LoggerDto();
 				logger.setToken(token);
 				Calendar calender = Calendar.getInstance();
-				calender.add(Calendar.MINUTE, 15);
+				calender.add(Calendar.HOUR, 1);
 				logger.setExpireAt(calender.getTime());
 				loggerServiceInterface.createLogger(logger,candidate);
 				return new ResponseEntity<>(new SuccessResponseDto("Success", "success", new AuthResponseDto(token,candidate.getEmail(),candidate.getName(),candidate.getId())), HttpStatus.OK);
@@ -117,20 +123,35 @@ public class AuthController {
 			}
 	 }
 	
+	 @Autowired
+	 private CustomUserDetailsService customUserDetailsService;
 	
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 @GetMapping("/logout")
-	 public ResponseEntity<?> logoutCandiadte(@RequestHeader("Authorization") String token, HttpServletRequest request)throws Exception{
-		 loggerServiceInterface.logoutCandidate(token);
-		return new ResponseEntity<> (new ErrorResponseDto("Logout Successfully", "logoutSuccess"), HttpStatus.OK);
-	 }
+	 @GetMapping("/refresh_token")
+	    public ResponseEntity<?> refreshAndGetAuthenticationToken(HttpServletRequest request) {
+	        String authToken = request.getHeader("Authorization");
+	        final String token = authToken.substring(7);
+	        String username = jwtTokenUtil.getUsernameFromToken(token);
+	        customUserDetailsService.loadUserByUsername(username);
 
+	        if (jwtTokenUtil.canTokenBeRefreshed(token)) {
+	            String refreshedToken = jwtTokenUtil.refreshToken(token);
+	            return ResponseEntity.ok(new JwtTokenResponse(refreshedToken));
+	        } else {
+	            return ResponseEntity.badRequest().body(null);
+	        }
+	    }
+	 
+//	  @GetMapping("/logout")  
+//	    public String logoutPage(HttpServletRequest request, HttpServletResponse response) {  
+//	        Authentication auth = SecurityContextHolder.getContext().getAuthentication();  
+//	        if (auth != null){      
+//	           new SecurityContextLogoutHandler().logout(request, response, auth);  
+//	        }  
+//	         return "redirect:/";  
+//	     }  
+//	
+	 
+	
 	 
 }
 

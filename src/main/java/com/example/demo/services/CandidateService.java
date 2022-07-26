@@ -28,8 +28,6 @@ public interface CandidateService {
 	
 	void deleteCandidate(Long id);
 
-	//public Candidate logout(String email,String password) throws Exception;
-
 	Candidate findByEmail(String email);
 
 	void changePassword(Long id, @Valid ChangePasswordDto userBody, HttpServletRequest request);
@@ -39,6 +37,8 @@ public interface CandidateService {
 	void addJobToCandidate(String email,String name);
 	
 	List<IPermissionDto> getCandidatePermission(Long id) throws IOException;
+
+	
 
 	
 	

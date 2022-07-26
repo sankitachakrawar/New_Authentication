@@ -82,7 +82,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	  @Override 
 	  protected void configure(HttpSecurity http) throws Exception {
 	  http.csrf().disable().authorizeRequests().antMatchers(HttpMethod.OPTIONS,
-	  "/**").permitAll().antMatchers("/auth/login", "/auth/*","/api/resgister","/api/candidates/{id}","/api/*","/auth/logout").permitAll().anyRequest()
+	  "/**").permitAll().antMatchers("/auth/login","/api/resgister","/api/candidates/{id}","/auth/logout").permitAll().anyRequest()
 	  .authenticated().and().httpBasic().and().sessionManagement()
 	  .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 	  .and().exceptionHandling().accessDeniedPage("/err/403");
