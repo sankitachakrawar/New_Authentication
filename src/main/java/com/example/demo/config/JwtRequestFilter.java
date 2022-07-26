@@ -39,27 +39,29 @@ public class JwtRequestFilter extends OncePerRequestFilter{
 		JsonObject jsonObject = null;
 		
 		
-		if(authorizationHeader != null && authorizationHeader.startsWith("Bearer")) {
+		if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
 			token=authorizationHeader.substring(7);
-			
-			try {
+			//username=jwtToUtil.extractUsername(token);
 			username=jwtToUtil.getEmailFromToken(token);
-			System.out.println("TOKEN "+ JsonParser.parseString(username));
-
-			} catch (Exception e) {
-
-				new Exception(e.getMessage());
-
-			}	
-		}else {
-
-			logger.warn("JWT Token does not begin with Bearer String");
-
+//			try {
+//			username=jwtToUtil.getEmailFromToken(token);
+//			System.out.println("TOKEN "+ JsonParser.parseString(username));
+//
+//			} catch (Exception e) {
+//
+//				new Exception(e.getMessage());
+//
+//			}	
+//		}else {
+//
+//			logger.warn("JWT Token does not begin with Bearer String");
+//
+//		}
 		}
 		if(username != null && SecurityContextHolder.getContext().getAuthentication()== null) {
 			System.out.println("JSONOBJECT  :"+ jsonObject);
-			UserDetails userDetails=customUserDetailsService.loadUserByUsername(JsonParser.parseString(username).toString());
-			
+			UserDetails userDetails=this.customUserDetailsService.loadUserByUsername(username);
+			//JsonParser.parseString(username).toString()
 			
 			System.out.println("GET EMAIL: "+ userDetails);
 			
