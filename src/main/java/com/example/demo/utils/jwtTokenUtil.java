@@ -143,48 +143,4 @@ public class JwtTokenUtil implements Serializable{
 		// TODO Auto-generated method stub
 		return false;
 	}
-
-//	public String extractUsername(String token) {
-//		
-//		return extractClaim(token,Claims::getSubject);
-//	}
-//
-//	public <T>  String extractClaim(String token, Function<Claims,T> claimsResolver) {
-//		final Claims claims = extractAllClaims(token);
-//		return null; //claimsResolver.apply(claims);
-//	}
-//
-//	private Claims extractAllClaims(String token) {
-//		return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
-//	}
-
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	/*
-	 * public static String generateTokenOnForgotPass(String email) { // TODO
-	 * Auto-generated method stub return null; }
-	 * 
-	 * public static String getEmailFromToken(String jwtToken) { // TODO
-	 * Auto-generated method stub return null; }
-	 */
-
 }

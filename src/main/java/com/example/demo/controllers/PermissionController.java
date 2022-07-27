@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.dto.ErrorResponseDto;
 import com.example.demo.dto.PermissionRequestDto;
 import com.example.demo.dto.SuccessResponseDto;
-import com.example.demo.exceptions.ResourceNotFoundException;
+import com.example.demo.exceptionHandling.ResourceNotFoundException;
 import com.example.demo.services.PermissionServiceInterface;
 
 

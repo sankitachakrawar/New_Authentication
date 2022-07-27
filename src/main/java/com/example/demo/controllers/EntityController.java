@@ -18,7 +18,7 @@ import com.example.demo.dto.EntityRequestDto;
 import com.example.demo.dto.ErrorResponseDto;
 import com.example.demo.dto.SuccessResponseDto;
 import com.example.demo.entities.EntityEntity;
-import com.example.demo.exceptions.ResourceNotFoundException;
+import com.example.demo.exceptionHandling.ResourceNotFoundException;
 import com.example.demo.services.EntityServiceInterface;
 
 

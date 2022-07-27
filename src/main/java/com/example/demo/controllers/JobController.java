@@ -1,6 +1,5 @@
 package com.example.demo.controllers;
 
-import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.dto.ErrorResponseDto;
+import com.example.demo.dto.IJobDto;
 import com.example.demo.dto.JobDto;
 import com.example.demo.dto.ListResponseDto;
 import com.example.demo.dto.SuccessResponseDto;
-import com.example.demo.entities.Job;
 import com.example.demo.services.JobService;
 
 @RestController
@@ -66,36 +65,21 @@ public class JobController {
 		}
 	
 		  
-		  @GetMapping("/jobs")
-			public ResponseEntity<List<JobDto>> getAllJobs(){
-				return ResponseEntity.ok(this.jobService.getAllJobs());
-				
-			}
+
 		  //Pagination of job list
-		  @GetMapping("/jobs/sort")
+		  @GetMapping("/jobs")
 			public ResponseEntity<?> getAllJobs(@RequestParam(defaultValue = "") String search,
 					@RequestParam(defaultValue = "1") String pageNo, @RequestParam(defaultValue = "25") String size) {
-				Page<Job> users = jobService.getAllJobs(search, pageNo, size);
-				if (users.getTotalElements() != 0) {
+				Page<IJobDto> jobs = jobService.getAllJobs(search, pageNo, size);
+				if (jobs.getTotalElements() != 0) {
 					return new ResponseEntity<>(new SuccessResponseDto("Success", "success",
-							new ListResponseDto(users.getContent(), users.getTotalElements())), HttpStatus.OK);
+							new ListResponseDto(jobs.getContent(), jobs.getTotalElements())), HttpStatus.OK);
 				}
 				return new ResponseEntity<>(new ErrorResponseDto("Data Not Found", "dataNotFound"), HttpStatus.NOT_FOUND);
 			}
 	  
 		
 		  
-		  //Pagination of Applied jobs
-		  @GetMapping("/jobs/applied")
-			public ResponseEntity<?> getAllJobsApplied(@RequestParam(defaultValue = "") String search,
-					@RequestParam(defaultValue = "1") String pageNo, @RequestParam(defaultValue = "25") String size) {
-				Page<Job> users = jobService.getAllJobsApplied(search, pageNo, size);
-				if (users.getTotalElements() != 0) {
-					return new ResponseEntity<>(new SuccessResponseDto("Success", "success",
-							new ListResponseDto(users.getContent(), users.getTotalElements())), HttpStatus.OK);
-				}
-				return new ResponseEntity<>(new ErrorResponseDto("Data Not Found", "dataNotFound"), HttpStatus.NOT_FOUND);
-			}
 }
 	  
 	  
@@ -111,29 +95,4 @@ public class JobController {
 	  
 	  
 	  
-	/*
-	 * @GetMapping("/jobs/{j_id}") public ResponseEntity<JobDto>
-	 * getSingleJob(@PathVariable Integer j_id){ return
-	 * ResponseEntity.ok(this.jobService.getJobById(j_id));
-	 * 
-	 * }
-	 */
-	 
-	 /* 
-	 * @GetMapping("/getinfo") public List<ViewResponse> getJoinInformation(){
-	 * return jobRepository.getJoinInformation(); }
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * }
-	 */
-
-
-		/*
-		 * @GetMapping("/jobs/{pageNo}/{pageSize}") public List<Job>
-		 * getPaginated(@PathVariable int pageNo, @PathVariable int pageSize){
-		 * 
-		 * return jobService.findPaginated(pageNo, pageSize); }
-		 */
+	

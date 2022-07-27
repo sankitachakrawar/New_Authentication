@@ -27,7 +27,7 @@ import com.example.demo.entities.PermissionEntity;
 import com.example.demo.entities.RoleEntity;
 import com.example.demo.entities.RolePermissionEntity;
 import com.example.demo.entities.RolePermissionId;
-import com.example.demo.exceptions.ResourceNotFoundException;
+import com.example.demo.exceptionHandling.ResourceNotFoundException;
 import com.example.demo.repositories.AuthRepository;
 import com.example.demo.repositories.EntityRepository;
 import com.example.demo.repositories.PermissionRepository;

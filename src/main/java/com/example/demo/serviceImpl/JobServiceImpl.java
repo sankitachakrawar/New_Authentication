@@ -1,14 +1,13 @@
 package com.example.demo.serviceImpl;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import com.example.demo.dto.IJobDto;
 import com.example.demo.dto.JobDto;
 import com.example.demo.entities.Job;
-import com.example.demo.exceptions.ResourceNotFoundException;
+import com.example.demo.exceptionHandling.ResourceNotFoundException;
 import com.example.demo.repositories.JobRepository;
 import com.example.demo.services.JobService;
 import com.example.demo.utils.PaginationUsingFromTo;
@@ -19,72 +18,38 @@ public class JobServiceImpl implements JobService {
 	@Autowired
 	private JobRepository jobRepository;
 	
-	//apply Job
+	//add Job
 	public void createJob(JobDto jobDto,Long id) {
 		
 		Job job=new Job();
 		job.setName(jobDto.getName());
 		job.setLocation(jobDto.getLocation());
-		job.setPostTime(jobDto.getPostTime());
-		job.setApply(jobDto.getApply());
 		jobRepository.save(job);
 							
-			}
-			
+	}
 	
 	
 	
 	
-//	@Override
-//	public void createJob(JobDto jobDto, Long id) {
-//		Job job=new Job();
-//		job.setName(jobDto.getName());
-//		job.setLocation(jobDto.getLocation());
-//		job.setPostTime(jobDto.getPostTime());
-//		job.setApply(jobDto.getApply());
-//		//job.setCandidate(jobDto.getCandidate());
-//		
-//		jobRepository.save(job);
-		
-	 
-		
-		/*
-		 * String email=candidateDto.getEmail();
-		 * if(candidateDto.getEmail().equals(email)) { final String uri=
-		 * "http://localhost:8088/api/sendmail"; RestTemplate restTemplate=new
-		 * RestTemplate(); String result=restTemplate.getForObject(uri, String.class);
-		 * 
-		 * return null;
-		 * 
-		 * 
-		 * }else {
-		 */
-		
-		
-		
-		
-	//}
 
 	public Job dtoToJob(JobDto jobDto)
-	{ Job job=new Job();
+	{
+	  Job job=new Job();
 	  job.setId(jobDto.getId()); 
 	  job.setName(jobDto.getName());
 	  job.setLocation(jobDto.getLocation()); 
-	  job.setPostTime(jobDto.getPostTime());
-	  //job.setApply(jobDto.getApply()); job.setCandidate(job.getCandidate());
+
 	 return job; 
-	 } 
+    
+	} 
 	public JobDto jobToDto(Job job) {
-		JobDto jobDto=new JobDto();
+	  JobDto jobDto=new JobDto();
 	  jobDto.setId(job.getId()); 
 	  jobDto.setName(job.getName());
 	  jobDto.setLocation(job.getLocation()); 
-	  jobDto.setApply(job.isApply());
-	  jobDto.setPostTime(job.getPostTime());
-	  //jobDto.setCandidate(job.getCandidate()); 
 	  return jobDto;
 	  
-	  }
+	}
 	
 	//get job details by id
 	@Override
@@ -93,22 +58,35 @@ public class JobServiceImpl implements JobService {
 		Job job=this.jobRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("job", "id", id));
 		 return this.jobToDto(job);
 	}
+	
+	
+	//get all jobs with pagination
+	@Override
+	public Page<IJobDto> getAllJobs(String search, String from, String to) {
+		
+		Pageable paging = new PaginationUsingFromTo().getPagination(from, to);
+		if ((search == "") || (search == null) || (search.length() == 0)) {
+			
+			return jobRepository.findByOrderByIdDesc(paging, IJobDto.class);
+		} else {
+			
+			return jobRepository.findByNameContainingIgnoreCaseOrderByIdDesc(search, paging, IJobDto.class);
+			
+				
+		}
+		
 
-	
-	
+	}
+
 	//update job details
 	@Override
 	public JobDto updateJobDetails(JobDto job, Long id) {
 		Job jobs = this.jobRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("job", "id", id));
 		jobs.setName(job.getName());
 		jobs.setLocation(job.getLocation());
-		jobs.setPostTime(job.getPostTime());
-		jobs.setApply(job.getApply());
-		//jobs.setCandidate(job.getCandidate());
-			Job updatedJob=this.jobRepository.save(jobs);
-			JobDto job2=this.jobToDto(updatedJob);
-			
-			return job2;
+		Job updatedJob=this.jobRepository.save(jobs);
+		JobDto job2=this.jobToDto(updatedJob);			
+		return job2;
 	
 	}
 
@@ -121,51 +99,15 @@ public class JobServiceImpl implements JobService {
 		
 	}
 
-	//get all job details
+
+
+
+
 	@Override
-	public List<JobDto> getAllJobs() {
+	public void findById(Long job_id) {
+		// TODO Auto-generated method stub
 		
-		List<Job> jobs=this.jobRepository.findAll();
-		List<JobDto> jobDtos=jobs.stream().map(job->this.jobToDto(job)).collect(Collectors.toList());
-		return jobDtos;
 	}
-
-	//get all jobs with pagination
-	@Override
-	public Page<Job> getAllJobs(String search, String from, String to) {
-		
-		Pageable paging = new PaginationUsingFromTo().getPagination(from, to);
-		if ((search == "") || (search == null) || (search.length() == 0)) {
-			
-			return jobRepository.findByOrderByIdDesc(paging, Job.class);
-		} else {
-			
-			return jobRepository.findByNameContainingIgnoreCaseOrderByIdDesc(search, paging, Job.class);
-			
-				
-		}
-		
-
-	}
-	
-
-
-	//get all jobs with apply pagination
-	@Override
-	public Page<Job> getAllJobsApplied(String search, String from, String to) {
-		Pageable paging = new PaginationUsingFromTo().getPagination(from, to);
-		if ((search == "") || (search == null) || (search.length() == 0)) {
-			
-			return jobRepository.findByOrderByApply(paging, Job.class);
-		} else {
-			
-			return jobRepository.findByNameContainingIgnoreCaseOrderByApply(search, paging, Job.class);
-			
-			
-			
-		}
-	}
-
 
 
 
@@ -177,12 +119,48 @@ public class JobServiceImpl implements JobService {
 	
 	
 	
+//get all job details
+//@Override
+//public List<JobDto> getAllJobs() {
+//	
+//	List<Job> jobs=this.jobRepository.findAll();
+//	List<JobDto> jobDtos=jobs.stream().map(job->this.jobToDto(job)).collect(Collectors.toList());
+//	return jobDtos;
+//}
 	
 	
 	
 	
 	
+//@Override
+//public void createJob(JobDto jobDto, Long id) {
+//	Job job=new Job();
+//	job.setName(jobDto.getName());
+//	job.setLocation(jobDto.getLocation());
+//	job.setPostTime(jobDto.getPostTime());
+//	job.setApply(jobDto.getApply());
+//	//job.setCandidate(jobDto.getCandidate());
+//	
+//	jobRepository.save(job);
 	
+ 
+	
+	/*
+	 * String email=candidateDto.getEmail();
+	 * if(candidateDto.getEmail().equals(email)) { final String uri=
+	 * "http://localhost:8088/api/sendmail"; RestTemplate restTemplate=new
+	 * RestTemplate(); String result=restTemplate.getForObject(uri, String.class);
+	 * 
+	 * return null;
+	 * 
+	 * 
+	 * }else {
+	 */
+	
+	
+	
+	
+//}	
 	
 	
 	

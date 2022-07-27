@@ -3,6 +3,7 @@ package com.example.demo.services;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.example.demo.dto.ApplyJobDto;
 import com.example.demo.dto.ForgotPasswordDto;
 import com.example.demo.entities.Candidate;
 
@@ -13,4 +14,6 @@ public interface AuthService {
 	public Candidate loginCandidate(String email,String password)throws Exception;
 	
 	
+
+	//void applyToJob(Candidate candidate);
 }

@@ -1,7 +1,7 @@
 package com.example.demo.services;
 
 import com.example.demo.dto.PermissionRequestDto;
-import com.example.demo.exceptions.ResourceNotFoundException;
+import com.example.demo.exceptionHandling.ResourceNotFoundException;
 
 public interface PermissionServiceInterface {
 

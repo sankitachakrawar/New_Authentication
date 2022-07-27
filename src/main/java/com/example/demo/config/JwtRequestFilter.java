@@ -20,8 +20,6 @@ import com.google.gson.JsonParser;
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter{
 
-	
-	
 	@Autowired
 	private JwtTokenUtil jwtToUtil;
 	
@@ -33,7 +31,7 @@ public class JwtRequestFilter extends OncePerRequestFilter{
 			throws ServletException, IOException {
 		
 		String token=null;
-		String username=null;
+		String email=null;
 		String authorizationHeader=request.getHeader("Authorization");
 		
 		JsonObject jsonObject = null;
@@ -41,27 +39,12 @@ public class JwtRequestFilter extends OncePerRequestFilter{
 		
 		if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
 			token=authorizationHeader.substring(7);
-			//username=jwtToUtil.extractUsername(token);
-			username=jwtToUtil.getEmailFromToken(token);
-//			try {
-//			username=jwtToUtil.getEmailFromToken(token);
-//			System.out.println("TOKEN "+ JsonParser.parseString(username));
-//
-//			} catch (Exception e) {
-//
-//				new Exception(e.getMessage());
-//
-//			}	
-//		}else {
-//
-//			logger.warn("JWT Token does not begin with Bearer String");
-//
-//		}
+			email=jwtToUtil.getEmailFromToken(token);
 		}
-		if(username != null && SecurityContextHolder.getContext().getAuthentication()== null) {
+		
+		if(email != null && SecurityContextHolder.getContext().getAuthentication()== null) {
 			System.out.println("JSONOBJECT  :"+ jsonObject);
-			UserDetails userDetails=this.customUserDetailsService.loadUserByUsername(username);
-			//JsonParser.parseString(username).toString()
+			UserDetails userDetails=this.customUserDetailsService.loadUserByUsername(email);
 			
 			System.out.println("GET EMAIL: "+ userDetails);
 			

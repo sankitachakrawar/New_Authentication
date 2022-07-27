@@ -27,6 +27,7 @@ import com.example.demo.dto.RoleIdListDto;
 import com.example.demo.entities.Candidate;
 import com.example.demo.entities.Job;
 import com.example.demo.entities.RoleEntity;
+import com.example.demo.exceptionHandling.*;
 import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.repositories.JobRepository;
 import com.example.demo.repositories.RolePermissionRepository;
@@ -34,7 +35,6 @@ import com.example.demo.services.CandidateService;
 import com.example.demo.utils.JwtTokenUtil;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.example.demo.exceptions.*;
 
 @Service
 public class CandidateServiceImpl implements CandidateService {
@@ -63,32 +63,16 @@ public class CandidateServiceImpl implements CandidateService {
 	@Override
 	public void addCandidate(Candidate candidate) {
 
-		
 		String email = candidate.getEmail();
 		candidate.setEmail(email.toLowerCase());
 		String password=passwordEncoder.encode(candidate.getPassword());
-		candidate.setPassword(password);
-		//final char[] delimiters = { ' ' };
+		candidate.setPassword(password);	
+		candidate.setActive(true);		
+		candidateRepository.save(candidate);
 		
-		//candidate.setName(WordUtils.capitalizeFully(candidate.getName(), delimiters));// convert to sentance case
-		candidate.setActive(true);
-		
-//		 CandidateDto candidateDto;
-//		Candidate candidate1 =this.dtoToCandidate(candidateDto);
-//		 return candidate1;
-		
-		
-//		Candidate candidate1 = new Candidate();
-//		candidate1.setName(candidate.getName());
-//		candidate1.setEmail(candidate.getEmail());
-//		candidate1.setPassword(passwordEncoder.encode(candidate.getPassword()));
-//		candidate1.setAddress(candidate.getAddress());
-//		candidate1.setUsername(candidate.getUsername());
-		
- candidateRepository.save(candidate);
-		
-
 	}
+	
+	
 
 	public Candidate dtoToCandidate(CandidateDto candidateDto) {
 		Candidate candidate2 = new Candidate();
@@ -97,8 +81,7 @@ public class CandidateServiceImpl implements CandidateService {
 		candidate2.setEmail(candidateDto.getEmail());
 		candidate2.setPassword(passwordEncoder.encode(candidateDto.getPassword()));
 		candidate2.setAddress(candidateDto.getAddress());
-		candidate2.setUsername(candidateDto.getUsername());
-		
+		candidate2.setUsername(candidateDto.getUsername());		
 		return candidate2;
 	}
 
@@ -170,16 +153,16 @@ public class CandidateServiceImpl implements CandidateService {
 	}
 
 
-	@Override
-	public void addJobToCandidate(String email, String name) {
-
-		Candidate candidate = candidateRepository.findByEmailContainingIgnoreCaseAndIsActiveTrue(email);
-
-		Job job = jobRepository.findByName(name);
-
-//		candidate.getJobs().add(job);
-
-	}
+//	@Override
+//	public void addJobToCandidate(String email, String name) {
+//
+//		Candidate candidate = candidateRepository.findByEmailContainingIgnoreCaseAndIsActiveTrue(email);
+//
+//		Job job = jobRepository.findByName(name);
+//
+////		candidate.getJobs().add(job);
+//
+//	}
 	
 	
 	
@@ -254,6 +237,16 @@ public class CandidateServiceImpl implements CandidateService {
 
 		}
 
+	@Override
+	public void findById(Long candidate_id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+
+	
+
 	
 	  
 //	  @Override
@@ -275,3 +268,21 @@ public class CandidateServiceImpl implements CandidateService {
 //
 //	  }
 }
+
+
+
+
+
+
+
+//CandidateDto candidateDto;
+//Candidate candidate1 =this.dtoToCandidate(candidateDto);
+//return candidate1;
+
+
+//Candidate candidate1 = new Candidate();
+//candidate1.setName(candidate.getName());
+//candidate1.setEmail(candidate.getEmail());
+//candidate1.setPassword(passwordEncoder.encode(candidate.getPassword()));
+//candidate1.setAddress(candidate.getAddress());
+//candidate1.setUsername(candidate.getUsername());

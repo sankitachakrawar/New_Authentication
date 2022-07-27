@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entities.Forgot_password_request;
-import com.example.demo.exceptions.ResourceNotFoundException;
+import com.example.demo.exceptionHandling.ResourceNotFoundException;
 import com.example.demo.repositories.ForgotPasswordRequestRepository;
 import com.example.demo.services.ForgotPasswordServiceIntf;
 

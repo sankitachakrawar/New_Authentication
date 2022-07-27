@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.PermissionRequestDto;
 import com.example.demo.entities.PermissionEntity;
-import com.example.demo.exceptions.ResourceNotFoundException;
+import com.example.demo.exceptionHandling.ResourceNotFoundException;
 import com.example.demo.repositories.EntityRepository;
 import com.example.demo.repositories.PermissionRepository;
 import com.example.demo.services.PermissionServiceInterface;

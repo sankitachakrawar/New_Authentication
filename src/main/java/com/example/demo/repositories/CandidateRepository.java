@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.dto.RoleIdListDto;
 import com.example.demo.entities.Candidate;
-import com.example.demo.exceptions.ResourceNotFoundException;
+import com.example.demo.exceptionHandling.ResourceNotFoundException;
 
 import io.lettuce.core.dynamic.annotation.Param;
 

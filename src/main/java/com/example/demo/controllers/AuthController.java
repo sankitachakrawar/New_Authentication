@@ -1,8 +1,6 @@
 package com.example.demo.controllers;
 import java.util.Calendar;
-
-
-
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.dto.ApplyJobDto;
 import com.example.demo.dto.AuthRequestDto;
 import com.example.demo.dto.AuthResponseDto;
 import com.example.demo.dto.CandidateDto;
@@ -28,8 +28,9 @@ import com.example.demo.dto.ForgotPasswordRequestDto;
 import com.example.demo.dto.JwtTokenResponse;
 import com.example.demo.dto.LoggerDto;
 import com.example.demo.dto.SuccessResponseDto;
+import com.example.demo.entities.ApplyJob;
 import com.example.demo.entities.Candidate;
-import com.example.demo.exceptions.ResourceNotFoundException;
+import com.example.demo.exceptionHandling.ResourceNotFoundException;
 import com.example.demo.serviceImpl.CandidateServiceImpl;
 import com.example.demo.services.*;
 import com.example.demo.utils.JwtTokenUtil;
@@ -141,6 +142,61 @@ public class AuthController {
 	        }
 	    }
 	 
+	 @Autowired
+	 private AuthService authService;
+	 
+	 @Autowired
+	 private ApplyJobService applyJobService;
+	 
+	 @Autowired
+	 private JobService jobService;
+	 @PostMapping("/apply")
+		public ResponseEntity<?> applyToJob(@Valid @RequestBody ApplyJobDto applyJobDto,HttpServletRequest request){
+			try {
+		 candidateService.findById(applyJobDto.getCandidate_id());
+		
+		 System.out.println("DATA>>"+applyJobDto.getCandidate_id());
+		 
+		 jobService.findById(applyJobDto.getJob_id());
+		 
+		 System.out.println("DATAAAAAAAAA>>"+applyJobDto.getJob_id());
+		 
+			applyJobService.applyToJob(applyJobDto);
+			System.out.println("hello>>"+applyJobDto);
+			
+				return new ResponseEntity<>(new SuccessResponseDto("Job applied", "jobapplied", applyJobDto),
+					HttpStatus.CREATED);
+			}catch(Exception e){
+				return new ResponseEntity<>(new ErrorResponseDto("Job not applied", "jobnotapplied"),
+						HttpStatus.BAD_REQUEST);
+			}
+		}
+	 
+	 @GetMapping("/appliedJob")
+		public ResponseEntity<List<ApplyJobDto>> getAll(){
+		 
+			List<ApplyJob> data=this.applyJobService.getAll();
+			
+			return new ResponseEntity(new SuccessResponseDto("Success", "success", data),HttpStatus.OK);
+			
+		}
+	 
+	 
+	 
+}	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
 //	  @GetMapping("/logout")  
 //	    public String logoutPage(HttpServletRequest request, HttpServletResponse response) {  
 //	        Authentication auth = SecurityContextHolder.getContext().getAuthentication();  
@@ -153,7 +209,7 @@ public class AuthController {
 	 
 	
 	 
-}
+
 
 
 

@@ -2,12 +2,14 @@ package com.example.demo.controllers;
 import java.util.List;
 
 
+
 import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.dto.AssignJob;
 import com.example.demo.dto.AssignRole;
@@ -24,9 +27,10 @@ import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ChangePasswordDto;
 import com.example.demo.dto.ErrorResponseDto;
 import com.example.demo.dto.ForgotPasswordDto;
+import com.example.demo.dto.IJobDto;
 import com.example.demo.dto.SuccessResponseDto;
 import com.example.demo.entities.Candidate;
-import com.example.demo.exceptions.ResourceNotFoundException;
+import com.example.demo.exceptionHandling.ResourceNotFoundException;
 import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.services.AuthService;
 import com.example.demo.services.CandidateService;
@@ -143,30 +147,9 @@ public class CandidateController {
 	  }
 	 
 	  
-	  
-		@PostMapping("/assignJob")
-		public ResponseEntity<?> assignRole(@Valid @RequestBody AssignJob assignRole, HttpServletRequest request)
-				throws Exception {
-			try {
-				String email = assignRole.getEmail();
-				String name = assignRole.getName();
-				System.out.println(email);
-				System.out.println(name);
-			
 
-				candidateService.addJobToCandidate(email, name);
-				return new ResponseEntity<>(new SuccessResponseDto("Role Assign to User", "roleAssignToUser", assignRole),
-						HttpStatus.CREATED);
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				return new ResponseEntity<>(new ErrorResponseDto("Role Not Assign to User", "roleNotAssignToUser"),
-						HttpStatus.NOT_ACCEPTABLE);
-			}
-
-		}
-	  	 	  
-
+			  
+		
 }
  
 	  
@@ -246,3 +229,24 @@ public class CandidateController {
 
 
 
+//@PostMapping("/assignJob")
+//public ResponseEntity<?> assignRole(@Valid @RequestBody AssignJob assignRole, HttpServletRequest request)
+//		throws Exception {
+//	try {
+//		String email = assignRole.getEmail();
+//		String name = assignRole.getName();
+//		System.out.println(email);
+//		System.out.println(name);
+//	
+//
+//		candidateService.addJobToCandidate(email, name);
+//		return new ResponseEntity<>(new SuccessResponseDto("Role Assign to User", "roleAssignToUser", assignRole),
+//				HttpStatus.CREATED);
+//
+//	} catch (Exception e) {
+//		e.printStackTrace();
+//		return new ResponseEntity<>(new ErrorResponseDto("Role Not Assign to User", "roleNotAssignToUser"),
+//				HttpStatus.NOT_ACCEPTABLE);
+//	}
+//
+//}

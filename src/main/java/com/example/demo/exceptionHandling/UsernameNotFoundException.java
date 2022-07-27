@@ -1,4 +1,4 @@
-package com.example.demo.exceptions;
+package com.example.demo.exceptionHandling;
 
 @SuppressWarnings("serial")
 public class UsernameNotFoundException extends Exception {

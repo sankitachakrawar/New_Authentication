@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.AddSettingDto;
 import com.example.demo.entities.AppSettingsEntity;
-import com.example.demo.exceptions.ResourceNotFoundException;
+import com.example.demo.exceptionHandling.ResourceNotFoundException;
 import com.example.demo.repositories.AppSettingsRepository;
 import com.example.demo.services.AppSettingServiceInterface;
 

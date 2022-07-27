@@ -9,7 +9,7 @@ import com.example.demo.dto.IRoleListDto;
 import com.example.demo.dto.RoleDto;
 import com.example.demo.dto.RolePermissionDto;
 import com.example.demo.entities.RoleEntity;
-import com.example.demo.exceptions.ResourceNotFoundException;
+import com.example.demo.exceptionHandling.ResourceNotFoundException;
 
 public interface RoleServiceInterface {
 

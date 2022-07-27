@@ -25,7 +25,7 @@ import com.example.demo.dto.RolePermissionDto;
 import com.example.demo.dto.SuccessResponseDto;
 import com.example.demo.dto.UserDataDto;
 import com.example.demo.entities.RoleEntity;
-import com.example.demo.exceptions.ResourceNotFoundException;
+import com.example.demo.exceptionHandling.ResourceNotFoundException;
 import com.example.demo.services.RoleServiceInterface;
 import com.example.demo.dto.ListResponseDto;
 

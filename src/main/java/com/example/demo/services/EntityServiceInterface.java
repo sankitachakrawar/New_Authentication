@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.example.demo.dto.EntityRequestDto;
 import com.example.demo.entities.EntityEntity;
-import com.example.demo.exceptions.ResourceNotFoundException;
+import com.example.demo.exceptionHandling.ResourceNotFoundException;
 
 public interface EntityServiceInterface {
 

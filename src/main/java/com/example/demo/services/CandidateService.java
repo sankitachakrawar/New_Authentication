@@ -13,6 +13,7 @@ import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ChangePasswordDto;
 import com.example.demo.dto.IPermissionDto;
 import com.example.demo.entities.Candidate;
+import com.example.demo.entities.Job;
 
 public interface CandidateService {
 
@@ -34,12 +35,15 @@ public interface CandidateService {
 	
 	Boolean comparePassword(String password, String hashPassword);
 	
-	void addJobToCandidate(String email,String name);
+	//void addJobToCandidate(Candidate candidate);
 	
 	List<IPermissionDto> getCandidatePermission(Long id) throws IOException;
 
+	void findById(Long candidate_id);
+
 	
 
+	
 	
 	
 	

@@ -10,10 +10,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.example.demo.dto.ApplyJobDto;
 import com.example.demo.dto.ForgotPasswordDto;
 import com.example.demo.entities.Candidate;
 import com.example.demo.entities.Forgot_password_request;
-import com.example.demo.exceptions.ResourceNotFoundException;
+import com.example.demo.exceptionHandling.ResourceNotFoundException;
 import com.example.demo.repositories.AuthRepository;
 import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.repositories.ForgotPasswordRequestRepository;
@@ -93,7 +94,7 @@ public class AuthServiceImpl implements AuthService{
 
 	}
 
-	
+	     
 	
 
 }

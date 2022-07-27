@@ -27,16 +27,17 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.example.demo.services.CustomUserDetailsService;
 
+@SuppressWarnings("deprecation")
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	
-
-	
 	@Autowired
 	private CustomUserDetailsService customUserDetailsService;
+	
+	@Autowired
+	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 	
 	@Autowired
 	private JwtRequestFilter filter;
@@ -57,21 +58,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	  }
 	 
 		
-		  @Bean public PasswordEncoder passwordEncoder() {
+	  @Bean public PasswordEncoder passwordEncoder() {
+		  return new BCryptPasswordEncoder();	  
+	  }
 		  
-		  return new BCryptPasswordEncoder();
-		  
-		  }
-		  
-		 
-		 
-	  
-			/*
-			 * @Bean public PasswordEncoder passwordEncoder() { return
-			 * NoOpPasswordEncoder.getInstance(); }
-			 */
-	
-	  
     @Override
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -81,19 +71,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	  @Override 
 	  protected void configure(HttpSecurity http) throws Exception {
-	  http.csrf().disable().authorizeRequests().antMatchers(HttpMethod.OPTIONS,
-	  "/**").permitAll().antMatchers("/auth/login","/api/resgister","/api/candidates/{id}","/auth/logout").permitAll().anyRequest()
-	  .authenticated().and().httpBasic().and().sessionManagement()
-	  .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-	  .and().exceptionHandling().accessDeniedPage("/err/403");
-	  http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+		  http.cors().configurationSource(corsConfigurationSource()).and().csrf().disable()
+			.authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/**").permitAll().antMatchers("/auth/login", "/auth/forgot-pass", "/api/resgister", "/public/**", "/file/downloadFile/**", "/user/forgot-pass-confirm").permitAll().
+			anyRequest().authenticated().and().httpBasic().and().
+			exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+		  http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 	  
 	  }
   
 		@Bean
 		public CorsConfigurationSource corsConfigurationSource() {
 
-			//System.out.println("corsConfigurationSource");
 			CorsConfiguration configuration = new CorsConfiguration();
 			configuration.setAllowedOrigins(Arrays.asList("*"));
 			configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
@@ -105,3 +94,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		}
 }
+
+
+
+
+
+
+//http.csrf().disable().authorizeRequests().antMatchers(HttpMethod.OPTIONS,
+//"/**").permitAll().antMatchers("/auth/login","/api/resgister","/api/candidates/{id}","/auth/logout","/api/jobs/sort").permitAll().anyRequest()
+//.authenticated().and().httpBasic().and().sessionManagement()
+//.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//.and().exceptionHandling().accessDeniedPage("/err/403");
+//http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);

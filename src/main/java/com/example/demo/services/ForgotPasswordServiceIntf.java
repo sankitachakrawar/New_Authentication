@@ -3,7 +3,7 @@ package com.example.demo.services;
 import java.util.Date;
 
 import com.example.demo.entities.Forgot_password_request;
-import com.example.demo.exceptions.ResourceNotFoundException;
+import com.example.demo.exceptionHandling.ResourceNotFoundException;
 
 public interface ForgotPasswordServiceIntf {
 
