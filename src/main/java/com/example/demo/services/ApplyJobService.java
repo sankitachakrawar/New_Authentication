@@ -12,9 +12,10 @@ import com.example.demo.entities.ApplyJob;
 import com.example.demo.entities.Candidate;
 
 public interface ApplyJobService {
+	
 	void applyToJob(ApplyJobDto applyJobDto);
 	
-	//Page<IJobDto> getAllJobs(String search, String from, String to);
-	
 	List<ApplyJob> getAll();
+	
+	List<Candidate> getAllCandidates();
 }

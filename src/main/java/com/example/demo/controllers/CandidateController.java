@@ -118,7 +118,7 @@ public class CandidateController {
 
 		try {
 
-			candidateService.changePassword(id, userBody, request);
+		candidateService.changePassword(id, userBody, request);
 			return new ResponseEntity<>(new SuccessResponseDto("password Updated", "password Updated succefully", null),
 					HttpStatus.OK);
 
@@ -137,6 +137,7 @@ public class CandidateController {
 	  try {
 	 
 	 authService.forgotPasswordConfirm(userBody.getToken(), userBody, request);
+	 
 	  return new ResponseEntity<>("password Updated",HttpStatus.OK);
 	  
 	  } catch (ResourceNotFoundException e) {
@@ -145,86 +146,28 @@ public class CandidateController {
 	  
 	 }
 	  }
-	 
-	  
 
-			  
 		
 }
  
 	  
 	  
 	 
-	  
-/*
- * @PostMapping("/candidates") public ResponseEntity<?>
- * addCandidate(@Valid @RequestBody Candidate candidate){ Candidate
- * createdCandidate=this.candidateService.registerCandidate(candidate);
- * 
- * 
- * return new ResponseEntity("Candidate Register Successfully",HttpStatus.OK); }
- */  
+
 	  
 	  
-//@PostMapping("/logout")
-//	 public ResponseEntity<?> logoutCandidate(@RequestBody Candidate candidate) throws Exception{
-//		String email=candidate.getEmail();
-//		String password=candidate.getPassword();
-//		
-//				candidate=candidateService.logout(email, password,token);
-//				return new ResponseEntity<>("Candidate logout successfully!!",HttpStatus.OK);
-//	}	  
+ 
 	  
 	  
 	  
 	  
 	  
-//@SuppressWarnings({ "rawtypes", "unchecked", "static-access" })
-//	@PostMapping("/login")
-//	public ResponseEntity<Candidate> loginCandidate(@RequestBody Candidate candidate) throws Exception {
-//		
-//	try {
-//		System.out.println("login...............");
-//		String email =candidate.getEmail() ;
-//		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();  
-//		System.out.println("login!!!!!!!!!!!!!!!");
-//		String password = candidate.getPassword();
-//		System.out.println("login $$$$$$$$$$$$$");
-//		//if(candidate.equals(candidate.getEmail()) && encoder.matches(password, candidate.getPassword())) {
-//			System.out.println("login1");
-//			final String token = jwtTokenUtil.generateToken(candidate);
-//			candidate.setToken(token);
-//			Calendar calender = Calendar.getInstance();
-//			calender.add(Calendar.MINUTE, 15);
-//			System.out.println("login2");
-//			candidate = candidateService.loginCandidate(email, password);
-//			System.out.println("login3");
-//			return new ResponseEntity(new SuccessResponseDto("Login successfully","loginSuccess",token), HttpStatus.OK);
-//		}
-//		//else {
-//catch(Exception e) {
-//		return new  ResponseEntity(new ErrorResponseDto("Candidate not found", "candidateNotFound"), HttpStatus.NOT_FOUND);
-//		}
-//}
+
   
 	  
 	  
 	  
-//	  @PostMapping("/authenticate")
-//public String generateToken(@RequestBody AuthRequest authRequest) throws Exception {
-//    try {
-//    	System.out.println("token01");
-//
-//    	authenticationManager.authenticate(	    		 
-//        new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
-//    	
-//    	System.out.println("token1");
-//    } catch (Exception ex) {
-//        throw new Exception("inavalid username/password");
-//    }
-//    return jwtUtil.generateToken(authRequest.getUsername());
-//}
-	
+
 
 
 

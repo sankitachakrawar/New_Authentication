@@ -18,6 +18,8 @@ import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import com.example.demo.dto.LoggerDto;
 
@@ -29,6 +31,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "logger")
+@Where(clause = "is_active = true")
+@SQLDelete(sql="UPDATE logger SET is_active=false WHERE id=?")
 public class LoggerEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -44,6 +48,9 @@ public class LoggerEntity implements Serializable {
 
 	@Column(name = "token", length = 512)
 	private String token;
+	
 	private Date expireAt;
 
+	@Column(name = "is_active")
+	private boolean isActive = true;
 }

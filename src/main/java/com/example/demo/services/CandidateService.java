@@ -39,7 +39,8 @@ public interface CandidateService {
 	
 	List<IPermissionDto> getCandidatePermission(Long id) throws IOException;
 
-	void findById(Long candidate_id);
+	Candidate findById(Long candidate_id);
+
 
 	
 

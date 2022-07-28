@@ -3,17 +3,16 @@ package com.example.demo.serviceImpl;
 
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.example.demo.dto.ApplyJobDto;
-import com.example.demo.dto.IJobDto;
+import com.example.demo.dto.CandidateDto;
 import com.example.demo.entities.ApplyJob;
+import com.example.demo.entities.Candidate;
 import com.example.demo.repositories.ApplyJobRepository;
+import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.services.ApplyJobService;
-import com.example.demo.utils.PaginationUsingFromTo;
+
 
 @Service
 public class ApplyJobServiceImpl implements ApplyJobService{
@@ -21,6 +20,9 @@ public class ApplyJobServiceImpl implements ApplyJobService{
 	@Autowired
 	private ApplyJobRepository applyJobRepository;
 	
+	//@Autowired
+	private CandidateDto candidateDto;
+	 
 	 //apply to job
 	@Override
 	public void applyToJob(ApplyJobDto applyJobDto) {
@@ -35,6 +37,15 @@ public class ApplyJobServiceImpl implements ApplyJobService{
 	public List<ApplyJob> getAll() {
 	
 		return (List<ApplyJob>) this.applyJobRepository.findAll();
+	}
+
+	@Autowired
+	private CandidateRepository candidateRepository;
+	
+	@Override
+	public List<Candidate> getAllCandidates() {
+		Candidate candidate =(Candidate) this.candidateRepository.findAll();
+		return (List<Candidate>) candidate;
 	}
 
 //	//get all jobs with pagination

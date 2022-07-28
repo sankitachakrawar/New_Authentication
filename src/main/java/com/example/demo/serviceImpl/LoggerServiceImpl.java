@@ -1,6 +1,7 @@
 package com.example.demo.serviceImpl;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,31 +25,8 @@ public class LoggerServiceImpl implements LoggerServiceInterface {
 
 	}
 
-
 	@Autowired
 	private LoggerRepository loggerRepository;
-
-
-
-	@Override
-	public LoggerEntity getLoggerDetail(String token) {
-
-		LoggerEntity logger = null;
-
-//		if (!cache.isKeyExist(token, token)) {
-//
-//			logger = loggerRepository.findByToken(token);
-//			cache.addInCache(token, token, logger);
-//
-//		} else {
-//
-//			logger = (LoggerEntity) cache.getFromCache(token, token);
-//
-//		}
-
-		return logger;// loggerRepository.findByToken(token);
-
-	}
 
 	@Override
 	public void createLogger(LoggerDto loggerDto, Candidate candidate) {
@@ -61,9 +39,21 @@ public class LoggerServiceImpl implements LoggerServiceInterface {
 
 	}
 
-	
+	@Transactional
+	@Override
+	public void logoutUser(String token) {
 
+		final String token1 = token.substring(7);
 
+		loggerRepository.removeByToken(token1);
+
+	}
+
+	@Override
+	public List<LoggerEntity> getAllDetails() {
+		
+		return this.loggerRepository.findAll();
+	}
 	
 	
 	

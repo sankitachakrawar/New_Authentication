@@ -19,11 +19,15 @@ public class JobServiceImpl implements JobService {
 	private JobRepository jobRepository;
 	
 	//add Job
-	public void createJob(JobDto jobDto,Long id) {
+	public void createJob(JobDto jobDto) {
 		
 		Job job=new Job();
 		job.setName(jobDto.getName());
 		job.setLocation(jobDto.getLocation());
+		job.setDescription(jobDto.getDescription());
+		job.setCTC(jobDto.getCTC());
+		job.setRecruiterId(jobDto.getRecruiterId());
+		System.out.println("JOb!!!"+jobDto.getRecruiterId());
 		jobRepository.save(job);
 							
 	}
@@ -35,27 +39,31 @@ public class JobServiceImpl implements JobService {
 	public Job dtoToJob(JobDto jobDto)
 	{
 	  Job job=new Job();
-	  job.setId(jobDto.getId()); 
 	  job.setName(jobDto.getName());
 	  job.setLocation(jobDto.getLocation()); 
-
+	  job.setDescription(jobDto.getDescription());
+	  job.setCTC(jobDto.getCTC());
+	  job.setRecruiterId(jobDto.getRecruiterId());
+	  
 	 return job; 
     
 	} 
 	public JobDto jobToDto(Job job) {
 	  JobDto jobDto=new JobDto();
-	  jobDto.setId(job.getId()); 
 	  jobDto.setName(job.getName());
 	  jobDto.setLocation(job.getLocation()); 
+	  jobDto.setDescription(job.getDescription());
+	  jobDto.setCTC(job.getCTC());
+  jobDto.setRecruiterId(job.getRecruiterId());
 	  return jobDto;
 	  
 	}
 	
 	//get job details by id
 	@Override
-	public JobDto getJobById(Long id) {
+	public JobDto getJobById(Long id) throws ResourceNotFoundException {
 		
-		Job job=this.jobRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("job", "id", id));
+		Job job=this.jobRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("hello","hello1", id));
 		 return this.jobToDto(job);
 	}
 	
@@ -84,6 +92,8 @@ public class JobServiceImpl implements JobService {
 		Job jobs = this.jobRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("job", "id", id));
 		jobs.setName(job.getName());
 		jobs.setLocation(job.getLocation());
+		jobs.setDescription(job.getDescription());
+		jobs.setCTC(job.getCTC());
 		Job updatedJob=this.jobRepository.save(jobs);
 		JobDto job2=this.jobToDto(updatedJob);			
 		return job2;
@@ -105,6 +115,16 @@ public class JobServiceImpl implements JobService {
 
 	@Override
 	public void findById(Long job_id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+
+
+	@Override
+	public void findAll() {
 		// TODO Auto-generated method stub
 		
 	}
@@ -211,82 +231,14 @@ public class JobServiceImpl implements JobService {
 	
 	
 	
-	/*
-	 * @Autowired private JobRepository jobRepository;
-	 * 
-	 * @Override public List<JobDto> getAllJobs() {
-	 * 
-	 * List<Job> job=this.jobRepository.findAll();
-	 * 
-	 * List<JobDto>
-	 * jobDtos=job.stream().map(jobs->this.jobToDto(jobs)).collect(Collectors.toList
-	 * ());
-	 * 
-	 * 
-	 * return jobDtos;
-	 * 
-	 * 
-	 * 
-	 * }
-	 * 
-	 * public Job dtoToJob(JobDto jobDto) { Job job=new Job();
-	 * job.setJ_id(jobDto.getJ_id()); job.setTitle(jobDto.getTitle());
-	 * job.setLocation(jobDto.getLocation()); job.setPostTime(jobDto.getPostTime());
-	 * //job.setApply(jobDto.getApply()); job.setCandidate(job.getCandidate());
-	 * return job; } public JobDto jobToDto(Job job) { JobDto jobDto=new JobDto();
-	 * jobDto.setJ_id(job.getJ_id()); jobDto.setTitle(job.getTitle());
-	 * jobDto.setLocation(job.getLocation()); //jobDto.setApply(job.getApply());
-	 * jobDto.setPostTime(job.getPostTime());
-	 * jobDto.setCandidate(job.getCandidate()); return jobDto;
-	 * 
-	 * }
-	 * 
+	 /* 
 	 * @Override public JobDto createJob(JobDto jobDto) { Job
 	 * job=this.dtoToJob(jobDto); Job savedJobs=this.jobRepository.save(job);
 	 * 
 	 * return this.jobToDto(savedJobs); }
 	 * 
 	 * 
-	 * @Override public List<Job> findAppliedPaginated(int pageNo, int pageSize) {
-	 * Sort applySort=Sort.by("apply").descending();
-	 * 
-	 * Pageable paging1=PageRequest.of(pageNo-1, pageSize,applySort); Page<Job>
-	 * pagedResult1=jobRepository.findAll(paging1);
-	 * 
-	 * 
-	 * return pagedResult1.toList(); }
-	 * 
-	 * 
-	 * 
-	 * 
-	 * @Override public List<Job> findPaginated(int pageNo, int pageSize) {
-	 * 
-	 * 
-	 * Sort idSort=Sort.by("postTime").descending();
-	 * 
-	 * Pageable paging=PageRequest.of(pageNo-1, pageSize,idSort); Page<Job>
-	 * pagedResult=jobRepository.findAll(paging);
-	 * 
-	 * 
-	 * return pagedResult.toList();
-	 * 
-	 * }
-	 * 
-	 * @Override public JobDto getJobById(Integer j_id) { Job job =
-	 * this.jobRepository.findById(j_id).orElseThrow(()->new
-	 * ResourceNotFoundException("job", "j_id", j_id)); return this.jobToDto(job);
-	 * 
-	 * }
-	 * 
-	 * @Override public List<Job> findPaginatedByApply(int pageNo, int pageSize) {
-	 * 
-	 * Sort sort=Sort.by("apply").descending(); Pageable
-	 * paging1=PageRequest.of(pageNo-1, pageSize, sort); Page<Job>
-	 * pageResult1=jobRepository.findAll(paging1);
-	 * 
-	 * return pageResult1.toList(); }
-	 * 
-	 * 
-	 */
+	 */ 
+
 
 

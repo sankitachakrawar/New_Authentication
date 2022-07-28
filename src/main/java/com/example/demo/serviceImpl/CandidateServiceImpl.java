@@ -76,7 +76,7 @@ public class CandidateServiceImpl implements CandidateService {
 
 	public Candidate dtoToCandidate(CandidateDto candidateDto) {
 		Candidate candidate2 = new Candidate();
-		candidate2.setId(candidateDto.getId());
+		candidate2.setId(candidateDto.getCandidateId());
 		candidate2.setName(candidateDto.getName());
 		candidate2.setEmail(candidateDto.getEmail());
 		candidate2.setPassword(passwordEncoder.encode(candidateDto.getPassword()));
@@ -87,7 +87,7 @@ public class CandidateServiceImpl implements CandidateService {
 
 	public CandidateDto candidateToDto(Candidate candidate) {
 		CandidateDto candidateDto = new CandidateDto();
-		candidateDto.setId(candidate.getId());
+		candidateDto.setCandidateId(candidate.getId());
 		candidateDto.setName(candidate.getName());
 		candidateDto.setEmail(candidate.getEmail());
 		candidateDto.setPassword(candidate.getPassword());
@@ -123,10 +123,7 @@ public class CandidateServiceImpl implements CandidateService {
 
 	@Override
 	public List<Candidate> getAllCandidates() {
-		//List<Candidate> candidates = 
-
-		// List<CandidateDto>
-		// candidateDtos=candidates.stream().map(candidate->this.candidateToDto(candidate)).collect(Collectors.toList());
+		
 		return this.candidateRepository.findAll();
 	}
 
@@ -170,19 +167,22 @@ public class CandidateServiceImpl implements CandidateService {
 	public void changePassword(Long id, ChangePasswordDto userBody, HttpServletRequest request)
 			throws ResourceNotFoundException {
 
-		Candidate candidate = candidateRepository.findByIdAndIsActiveTrue(id)
+		Candidate candidate = candidateRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Candidate Not Found"));
 		final String requestTokenHeader = request.getHeader("Authorization");
-		String username = null;
+		String email = null;
 		String jwtToken = null;
-		JsonObject jsonObj = null;
+		//JsonObject jsonObj = null;
 		jwtToken = requestTokenHeader.substring(7);
-		username = jwttokenUtil.getEmailFromToken(jwtToken);
-		jsonObj = JsonParser.parseString(username).getAsJsonObject();
+		email = jwttokenUtil.getEmailFromToken(jwtToken);
+		System.out.println("objcet>>"+email);
+		//jsonObj = JsonParser.parseString(email).getAsJsonObject();
 		CandidateDto candidatedata = new CandidateDto();
-		candidatedata.setId((jsonObj.get("id").getAsLong()));
-		if (candidatedata.getId() == candidate.getId()) {
-
+		candidatedata.setEmail(email.toString());
+		System.out.println("data>>>"+candidatedata);
+		
+		if (candidatedata.getEmail()!= candidate.getEmail()) {
+			System.out.println("dto>>"+candidatedata.getEmail()+"entity>>"+candidate.getEmail());
 			if (!bcryptEncoder.matches(userBody.getNewPassword(), candidate.getPassword())) {
  
 				if (bcryptEncoder.matches(userBody.getPassword(), candidate.getPassword())) {
@@ -206,6 +206,7 @@ public class CandidateServiceImpl implements CandidateService {
 		} else {
 			throw new ResourceNotFoundException("Access Denied");
 		}
+		
 	}
 
 
@@ -238,7 +239,8 @@ public class CandidateServiceImpl implements CandidateService {
 		}
 
 	@Override
-	public void findById(Long candidate_id) {
+	public Candidate findById(Long candidate_id) {
+		return null;
 		// TODO Auto-generated method stub
 		
 	}
@@ -249,24 +251,6 @@ public class CandidateServiceImpl implements CandidateService {
 
 	
 	  
-//	  @Override
-//	  public Candidate logout(String token) throws Exception {
-//
-//		  
-//		  
-//		  		Candidate candidate = candidateRepository.findByEmail(email);
-//		  			if (candidate == null) {
-//		  					throw new Exception("You entered incorrect Email.");
-//		  			} else {
-//		  				if ((candidate.getEmail().equals(email)) && (candidate.getPassword().equals(password))) {
-//		  					return candidate;
-//
-//		  				}
-//		  				throw new Exception("Invalid username and password!!!");
-//
-//		  			}
-//
-//	  }
 }
 
 
@@ -275,14 +259,3 @@ public class CandidateServiceImpl implements CandidateService {
 
 
 
-//CandidateDto candidateDto;
-//Candidate candidate1 =this.dtoToCandidate(candidateDto);
-//return candidate1;
-
-
-//Candidate candidate1 = new Candidate();
-//candidate1.setName(candidate.getName());
-//candidate1.setEmail(candidate.getEmail());
-//candidate1.setPassword(passwordEncoder.encode(candidate.getPassword()));
-//candidate1.setAddress(candidate.getAddress());
-//candidate1.setUsername(candidate.getUsername());

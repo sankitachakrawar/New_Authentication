@@ -19,6 +19,7 @@ import com.example.demo.dto.IJobDto;
 import com.example.demo.dto.JobDto;
 import com.example.demo.dto.ListResponseDto;
 import com.example.demo.dto.SuccessResponseDto;
+import com.example.demo.entities.Job;
 import com.example.demo.services.JobService;
 
 @RestController
@@ -28,13 +29,11 @@ public class JobController {
 	@Autowired
 	private JobService jobService;
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping("/jobs")
-	public ResponseEntity<JobDto> createJob(@RequestBody JobDto jobDto) {
+	public ResponseEntity<?> createJob(@RequestBody JobDto jobDto) {
 		
-		
-		jobService.createJob(jobDto, jobDto.getId());
-			return new ResponseEntity("Applied to job successfully!!", HttpStatus.CREATED);
+		jobService.createJob(jobDto);
+			return new ResponseEntity("Job added successfully!!", HttpStatus.CREATED);
 		
 		}
 		
@@ -42,16 +41,15 @@ public class JobController {
 
 	  @GetMapping("/jobs/{id}")
 	  public ResponseEntity<?> getSingleJob(@PathVariable ("id") Long id){
-		  return ResponseEntity.ok(this.jobService.getJobById(id));
+		 JobDto job= jobService.getJobById(id);
+		  return new ResponseEntity(new SuccessResponseDto("success","success",job),HttpStatus.OK);
 		  
 	  }
-	  
-	  
 	  
 	  @PutMapping("/jobs/{id}")
 		public ResponseEntity<?> updateJob(@Valid @RequestBody JobDto jobDto,@PathVariable Long id){
 			
-			@SuppressWarnings("unused")
+			
 			JobDto updatedJob=this.jobService.updateJobDetails(jobDto, id);
 			
 			return new ResponseEntity<>("Data Updated Successfully!!",HttpStatus.OK);	

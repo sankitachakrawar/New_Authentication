@@ -3,9 +3,12 @@ package com.example.demo.entities;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -22,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name="job")
 @Where(clause = "is_active = true")
-@SQLDelete(sql="UPDATE Job SET is_active=false WHERE id=?")
+@SQLDelete(sql="UPDATE job SET is_active=false WHERE id=?")
 public class Job {
 
 	@Id
@@ -38,7 +41,7 @@ public class Job {
 	
 	private String location;
 	
-	private String ExpectedCTC;
+	private String CTC;
 	
 	@UpdateTimestamp
 	private Date postTime;
@@ -46,7 +49,9 @@ public class Job {
 	@Column(name = "is_active")
 	private boolean isActive = true;
 
-	
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "recruiter_id")
+	private Recruiter recruiterId;
 
 	
 }

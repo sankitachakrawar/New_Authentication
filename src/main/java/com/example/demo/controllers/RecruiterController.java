@@ -21,16 +21,12 @@ public class RecruiterController {
 	@Autowired
 	private RecruiterService recruiterService;
 	
-	@Autowired
-	private EmailService emailService;
 	
 	  @SuppressWarnings({ "unused", "rawtypes", "unchecked" })
 	@PostMapping("/recruiter") 
 	  public ResponseEntity<?> addRecruiter(@Valid @RequestBody Recruiter recruiter){
 		  Recruiter createdrecruiter=this.recruiterService.addRecruiter(recruiter);
-		  final String url="Job applied successfully!!";
-			emailService.sendSimpleMessage(recruiter.getEmail(), "subject", url);
-	  
+		
 	  return new ResponseEntity("Recruiter Register Successfully",HttpStatus.OK); }
 	 
 	

@@ -8,17 +8,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CandidateDto {
 
-	private Long id;
-	
+	private Long candidateId;
 	
 	private String name;
 	
-	
 	private String email;
 	
-	
 	private String password;
-
 	
 	private String address;
 	

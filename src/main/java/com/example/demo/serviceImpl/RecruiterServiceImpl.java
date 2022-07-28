@@ -20,8 +20,14 @@ public class RecruiterServiceImpl implements RecruiterService{
 		recruiter2.setName(recruiter.getName());
 		recruiter2.setEmail(recruiter.getEmail());
 		
-		Recruiter savedRecruiter=this.recruiterRepository.save(recruiter2);
-		return savedRecruiter;  
+		
+		return this.recruiterRepository.save(recruiter2); 
+	}
+
+	@Override
+	public Recruiter findByEmail(String email) {
+		
+		return null;
 	}
 
 }

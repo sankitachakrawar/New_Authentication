@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -42,8 +43,8 @@ public class ExceptionHandlerControllerAdvice {
 	}
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-	public @ResponseBody ErrorResponseDto handleValidationException(final MethodArgumentNotValidException exception) {
+	//@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	public ResponseEntity <List<String>> handleValidationException(final MethodArgumentNotValidException exception) {
 
 		List<String> details = new ArrayList<>();
 
@@ -53,10 +54,7 @@ public class ExceptionHandlerControllerAdvice {
 
 		}
 
-		ErrorResponseDto error = new ErrorResponseDto();
-		error.setMessage(details.get(0).split("\\*", 2)[0]);
-		error.setMsgKey(details.get(0).split("\\*", 2)[1]);
-		return error;
+		return new ResponseEntity<>(details,HttpStatus.BAD_REQUEST);
 
 	}
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
@@ -69,16 +67,7 @@ public class ExceptionHandlerControllerAdvice {
 		return error;
 
 	}
-	@ExceptionHandler(NoHandlerFoundException.class)
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-	public @ResponseBody ErrorResponseDto noHandlerFoundException(final NoHandlerFoundException exception) {
-
-		ErrorResponseDto error = new ErrorResponseDto();
-		error.setMessage("URL not Found");
-		error.setMsgKey("urlNotFound");
-		return error;
-
-	}
+	
 	@ExceptionHandler(Exception.class)
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 	public @ResponseBody ErrorResponseDto handleException(final Exception exception, HttpServletRequest request) throws IOException {
