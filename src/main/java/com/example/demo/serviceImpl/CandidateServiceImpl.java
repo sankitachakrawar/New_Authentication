@@ -2,39 +2,30 @@ package com.example.demo.serviceImpl;
 
 
 import java.io.IOException;
-
-
-
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
-
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ChangePasswordDto;
+import com.example.demo.dto.ForgotPasswordDto;
 import com.example.demo.dto.IPermissionDto;
 import com.example.demo.dto.RoleIdListDto;
 import com.example.demo.entities.Candidate;
-import com.example.demo.entities.Job;
-import com.example.demo.entities.RoleEntity;
+import com.example.demo.entities.Forgot_password_request;
 import com.example.demo.exceptionHandling.*;
 import com.example.demo.repositories.CandidateRepository;
-import com.example.demo.repositories.JobRepository;
+import com.example.demo.repositories.ForgotPasswordRequestRepository;
 import com.example.demo.repositories.RolePermissionRepository;
 import com.example.demo.services.CandidateService;
 import com.example.demo.utils.JwtTokenUtil;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 @Service
 public class CandidateServiceImpl implements CandidateService {
@@ -49,9 +40,6 @@ public class CandidateServiceImpl implements CandidateService {
 
 	@Autowired
 	private JwtTokenUtil jwttokenUtil;
-
-	@Autowired
-	private JobRepository jobRepository;
 	
 
 
@@ -61,22 +49,29 @@ public class CandidateServiceImpl implements CandidateService {
 	}
 
 	@Override
-	public void addCandidate(Candidate candidate) {
+	public void addCandidate(CandidateDto candidateDto) {
 
-		String email = candidate.getEmail();
-		candidate.setEmail(email.toLowerCase());
-		String password=passwordEncoder.encode(candidate.getPassword());
-		candidate.setPassword(password);	
-		candidate.setActive(true);		
+		Candidate candidate=new Candidate();
+		candidate.setName(candidateDto.getName());
+		candidate.setAddress(candidateDto.getAddress());
+		candidate.setEmail(candidateDto.getEmail());
+		
+//		String password=passwordEncoder.encode(candidate.getPassword());
+//		candidate.setPassword(password);	
+		candidate.setPassword(passwordEncoder.encode(candidateDto.getPassword()));
+		candidate.setUsername(candidateDto.getUsername());
 		candidateRepository.save(candidate);
 		
+		
+		
+
 	}
 	
 	
 
 	public Candidate dtoToCandidate(CandidateDto candidateDto) {
 		Candidate candidate2 = new Candidate();
-		candidate2.setId(candidateDto.getCandidateId());
+		//candidate2.setId(candidateDto.getCandidateId());
 		candidate2.setName(candidateDto.getName());
 		candidate2.setEmail(candidateDto.getEmail());
 		candidate2.setPassword(passwordEncoder.encode(candidateDto.getPassword()));
@@ -87,7 +82,7 @@ public class CandidateServiceImpl implements CandidateService {
 
 	public CandidateDto candidateToDto(Candidate candidate) {
 		CandidateDto candidateDto = new CandidateDto();
-		candidateDto.setCandidateId(candidate.getId());
+		//candidateDto.setCandidateId(candidate.getId());
 		candidateDto.setName(candidate.getName());
 		candidateDto.setEmail(candidate.getEmail());
 		candidateDto.setPassword(candidate.getPassword());
@@ -143,11 +138,7 @@ public class CandidateServiceImpl implements CandidateService {
 
 	}
 
-	@Override
-	public CandidateDto createCandidate(CandidateDto candidate) {
-
-		return null;
-	}
+	
 
 
 //	@Override
@@ -181,7 +172,7 @@ public class CandidateServiceImpl implements CandidateService {
 		candidatedata.setEmail(email.toString());
 		System.out.println("data>>>"+candidatedata);
 		
-		if (candidatedata.getEmail()!= candidate.getEmail()) {
+		if (candidatedata.getEmail().equals(candidate.getEmail()) ) {
 			System.out.println("dto>>"+candidatedata.getEmail()+"entity>>"+candidate.getEmail());
 			if (!bcryptEncoder.matches(userBody.getNewPassword(), candidate.getPassword())) {
  
@@ -207,8 +198,14 @@ public class CandidateServiceImpl implements CandidateService {
 			throw new ResourceNotFoundException("Access Denied");
 		}
 		
+		
 	}
-
+	
+	
+	@Autowired
+	private ForgotPasswordRequestRepository forgotPasswordRequestRepository;
+	
+	
 
 	@Autowired
 	private RolePermissionRepository rolePermissionRepository;
@@ -246,13 +243,44 @@ public class CandidateServiceImpl implements CandidateService {
 	}
 
 	
+//forgot password
+	@Override
+	public void forgotPasswordConfirm(String token, @Valid ForgotPasswordDto userBody, HttpServletRequest request) {
+		DecodedJWT jwt = JWT.decode(token); 
+		Date CurrentDate = new Date(System.currentTimeMillis());
+		
+		if (CurrentDate.before(jwt.getExpiresAt())) {
 
-	
+			if (userBody.getPassword().equals(userBody.getConfirmpassword())) {
+				
+				String email = null;
+				String jwtToken = null; 
+				jwtToken = userBody.getToken();
+				email = jwttokenUtil.getEmailFromToken(jwtToken); 
+				
+				Candidate candidate = candidateRepository.getCandidateByEmail(email);
+
+				candidate.setPassword(bcryptEncoder.encode(userBody.getPassword()));
+				candidateRepository.save(candidate);
+
+			} else {
+
+				throw new ResourceNotFoundException("password and confirm password must be a same");
+			}
+
+		} else {
+
+			Forgot_password_request forgot_password_request = forgotPasswordRequestRepository
+					.getByTokenOrderByIdDesc(token).orElseThrow(() -> new ResourceNotFoundException("Invalid Request"));
+			forgot_password_request.setIsActive(false);
+			throw new ResourceNotFoundException("Reset the password time out");
+
+		}
+	}
 
 	
 	  
 }
-
 
 
 

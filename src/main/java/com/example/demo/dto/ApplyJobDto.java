@@ -17,5 +17,5 @@ public class ApplyJobDto implements Serializable{
 	
 	private Long candidate_id;
 
-	private String email;
+	//private String email;
 }

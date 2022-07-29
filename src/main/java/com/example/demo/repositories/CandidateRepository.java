@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Repository;
 
+import com.example.demo.dto.ForgotPasswordDto;
 import com.example.demo.dto.RoleIdListDto;
 import com.example.demo.entities.Candidate;
 import com.example.demo.exceptionHandling.ResourceNotFoundException;
@@ -37,6 +38,8 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long>{
 	
 	 @Query("SELECT c FROM Candidate c WHERE c.username = :username")
 	    public Candidate getCandidateByUsername(@Param("username") String username);
+
+
 	
 	
 }

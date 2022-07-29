@@ -28,6 +28,7 @@ import com.example.demo.entities.Job;
 import com.example.demo.entities.LoggerEntity;
 import com.example.demo.entities.Recruiter;
 import com.example.demo.exceptionHandling.ResourceNotFoundException;
+import com.example.demo.repositories.ForgotPasswordRequestRepository;
 import com.example.demo.serviceImpl.CandidateServiceImpl;
 import com.example.demo.services.*;
 import com.example.demo.utils.JwtTokenUtil;
@@ -43,15 +44,15 @@ public class AuthController {
 	@Autowired
 	private EmailService emailService;
 	 
-	@Autowired
-	private ForgotPasswordServiceIntf forgotPasswordServiceIntf;
-	
+
 	@Autowired
 	private LoggerServiceInterface loggerServiceInterface;
 	
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
 	 
+	@Autowired
+	private ForgotPasswordServiceIntf forgotPasswordServiceIntf;
 	
 	
 	@SuppressWarnings("static-access")
@@ -139,48 +140,8 @@ public class AuthController {
 	        }
 	    }
 	 
-	 @Autowired
-	 private AuthService authService;
-	 
-	 @Autowired
-	 private ApplyJobService applyJobService;
-	 
-	 @Autowired
-	 private JobService jobService;
-	 
-	 @Autowired
-	 private RecruiterService recruiterService;
-	 
-	 @PostMapping("/apply")
-		public ResponseEntity<?> applyToJob(@Valid @RequestBody ApplyJobDto applyJobDto,HttpServletRequest request){
-			try {
-				Candidate candidate=candidateService.getCandidateById(applyJobDto.getCandidate_id());
-				
-				JobDto job=jobService.getJobById(applyJobDto.getJob_id());
-					 
-				applyJobService.applyToJob(applyJobDto);	
-		 
-				final String url = "Job applied successfully!!! ";
-			
-			emailService.sendSimpleMessage(candidate.getEmail(),"subject" , url);
-			emailService.sendSimpleMessage(job.getRecruiterId().getEmail(),"subject" , url);
-				return new ResponseEntity<>(new SuccessResponseDto("Job applied !Please chcek your registered email id!!", "jobapplied", applyJobDto),
-					HttpStatus.CREATED);
-			}catch(Exception e){
-				return new ResponseEntity<>(new ErrorResponseDto("Job not applied", "jobnotapplied"),
-						HttpStatus.BAD_REQUEST);
-			}
-		}
 	
-	 
-	 @GetMapping("/appliedJob")
-		public ResponseEntity<List<ApplyJobDto>> getAll(){
-		 
-			List<ApplyJob> data=this.applyJobService.getAll();
-			
-			return new ResponseEntity(new SuccessResponseDto("Success", "success", data),HttpStatus.OK);
-			
-		}
+	
 	 
 	 @GetMapping("/logout")
 		public ResponseEntity<?> logoutUser(@RequestHeader("Authorization") String token, HttpServletRequest request) throws Exception {
@@ -197,14 +158,7 @@ public class AuthController {
 		 return new ResponseEntity<>(data,HttpStatus.OK);
 	 }
 	 
-	 @GetMapping("/candidates/{id}/jobs")
-	 public ResponseEntity<?> getAllCandidates(Candidate candidate,Long id,Job job)throws Exception{
-		
-	candidateService.findById(id);
-	jobService.findAll();
-		 return new ResponseEntity<>(new SuccessResponseDto(" "," ", candidate),HttpStatus.OK);
-		 
-	 }
+	 
 	 
 	 
 }	 

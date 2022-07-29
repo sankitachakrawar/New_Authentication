@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.dto.ApplyJobDto;
 import com.example.demo.dto.AssignJob;
 import com.example.demo.dto.AssignRole;
 import com.example.demo.dto.CandidateDto;
@@ -28,7 +30,9 @@ import com.example.demo.dto.ChangePasswordDto;
 import com.example.demo.dto.ErrorResponseDto;
 import com.example.demo.dto.ForgotPasswordDto;
 import com.example.demo.dto.IJobDto;
+import com.example.demo.dto.JobDto;
 import com.example.demo.dto.SuccessResponseDto;
+import com.example.demo.entities.ApplyJob;
 import com.example.demo.entities.Candidate;
 import com.example.demo.exceptionHandling.ResourceNotFoundException;
 import com.example.demo.repositories.CandidateRepository;
@@ -49,8 +53,8 @@ public class CandidateController {
 	@Autowired
 	private AuthService authService;
 	
-	@PostMapping("/resgister") 
-	public ResponseEntity<?> registerCandidate(@Valid @RequestBody Candidate candidate,HttpServletRequest request){
+	@PostMapping("/register") 
+	public ResponseEntity<?> registerCandidate(@Valid @RequestBody CandidateDto candidate,HttpServletRequest request){
 		try {
 			String email = candidate.getEmail();
 			Optional<Candidate> dataBaseEmail = candidateRepository.findByEmailContainingIgnoreCase(email);
@@ -119,7 +123,7 @@ public class CandidateController {
 		try {
 
 		candidateService.changePassword(id, userBody, request);
-			return new ResponseEntity<>(new SuccessResponseDto("password Updated", "password Updated succefully", null),
+			return new ResponseEntity<>(new SuccessResponseDto("password Updated", "password Updated successfully", null),
 					HttpStatus.OK);
 
 		} catch (ResourceNotFoundException e) {
@@ -132,12 +136,12 @@ public class CandidateController {
 
 	
 	  @PutMapping("/forgot-pass-confirm")
-	  public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordDto userBody,HttpServletRequest request) throws ResourceNotFoundException {
+	  public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordDto forgotPasswordDto,HttpServletRequest request) throws ResourceNotFoundException {
 	  
 	  try {
 	 
-	 authService.forgotPasswordConfirm(userBody.getToken(), userBody, request);
-	 
+		  candidateService.forgotPasswordConfirm(forgotPasswordDto.getToken(), forgotPasswordDto, request);
+	System.out.println("password>>"+forgotPasswordDto);
 	  return new ResponseEntity<>("password Updated",HttpStatus.OK);
 	  
 	  } catch (ResourceNotFoundException e) {
@@ -147,7 +151,6 @@ public class CandidateController {
 	 }
 	  }
 
-		
 }
  
 	  

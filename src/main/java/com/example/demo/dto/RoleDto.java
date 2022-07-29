@@ -23,8 +23,8 @@ public class RoleDto {
 
 	private String description;
 	
-	@NotNull(message = "candidateId is Required*candidateIdRequired")
-	public Long candidateId;
+	//@NotNull(message = "candidateId is Required*candidateIdRequired")
+	private Candidate candidateId;
 
 
 	

@@ -32,19 +32,19 @@ public class ForgotPasswordRequestServiceImpl implements ForgotPasswordServiceIn
 	}
 
 	@Override
-	public void createForgotPasswordRequest(Long userId, String token, Date expireAt) {
+	public void createForgotPasswordRequest(Long id, String token, Date expireAt) {
 
 		Forgot_password_request newRequest = new Forgot_password_request();
 		newRequest.setToken(token);
-		newRequest.setUserId(userId);
+		newRequest.setId(id);
 		forgotPasswordRequestRepository.save(newRequest);
 
 	}
 
 	@Override
-	public void markRequestAsSuccess(Long userId, String token) throws ResourceNotFoundException {
+	public void markRequestAsSuccess(Long id, String token) throws ResourceNotFoundException {
 
-		Forgot_password_request request = forgotPasswordRequestRepository.getByTokenAndUserIdOrderByIdDesc(token, userId).orElseThrow(() -> new ResourceNotFoundException("Invalid Request"));
+		Forgot_password_request request = forgotPasswordRequestRepository.getByTokenAndIdOrderByIdDesc(token, id).orElseThrow(() -> new ResourceNotFoundException("Invalid Request"));
 		request.setIsActive(false);
 		request.setSuccessAt(new Date());
 		request.setLinkUsedAt(new Date());
@@ -53,9 +53,9 @@ public class ForgotPasswordRequestServiceImpl implements ForgotPasswordServiceIn
 	}
 
 	@Override
-	public void markRequestAsExpire(Long userId, String token) throws ResourceNotFoundException {
+	public void markRequestAsExpire(Long id, String token) throws ResourceNotFoundException {
 
-		Forgot_password_request request = forgotPasswordRequestRepository.getByTokenAndUserIdOrderByIdDesc(token, userId).orElseThrow(() -> new ResourceNotFoundException("Invalid Request"));
+		Forgot_password_request request = forgotPasswordRequestRepository.getByTokenAndIdOrderByIdDesc(token, id).orElseThrow(() -> new ResourceNotFoundException("Invalid Request"));
 		request.setIsActive(false);
 		forgotPasswordRequestRepository.save(request);
 

@@ -1,6 +1,7 @@
 package com.example.demo.entities;
 
 import java.io.Serializable;
+
 import java.util.Date;
 import java.util.List;
 
@@ -12,17 +13,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.ManyToAny;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
+
+import com.example.demo.dto.IRoleDetailDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,14 +34,14 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "roles")
 @Where(clause = "is_active = true")
-@SQLDelete(sql="UPDATE croles SET is_active=false WHERE id=?")
+@SQLDelete(sql="UPDATE roles SET is_active=false WHERE id=?")
 public class RoleEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.TABLE)
 	private Long id;
 
 	@Column(name = "role_name")
@@ -65,15 +65,22 @@ public class RoleEntity implements Serializable {
 	private Date updatedAt;
 	
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="candidate_id")
+	@OneToOne(fetch = FetchType.EAGER)   
+	@JoinColumn(name = "c_id")
 	private Candidate candidateId;
 
 
-	public void setCandidateId(RoleEntity byId) {
-		// TODO Auto-generated method stub
-		
-	}
+	
+	
+//	@ManyToOne(fetch = FetchType.EAGER)
+//	@JoinColumn(name="candidate_id")
+//	private Candidate candidateId;
+
+
+//	public void setCandidateId(RoleEntity byId) {
+//		// TODO Auto-generated method stub
+//		
+//	}
 
 
 //	@ManyToMany(cascade = CascadeType.ALL)

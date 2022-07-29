@@ -12,32 +12,25 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.example.demo.dto.LoggerDto;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "forgot_password_request")
 public class Forgot_password_request implements Serializable {
 
-	
 	private static final long serialVersionUID = 1L;
-
-	
-
-	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long id;
+	private Long fid;
 
-	@Column(name = "userId")
-	private Long userId;
+	@Column(name = "candidate_id")
+	private Long id;
 
 	@Column(name = "token", length = 512)
 	private String token;
@@ -56,4 +49,5 @@ public class Forgot_password_request implements Serializable {
 	private Date createdAt;
 
 	
+
 }

@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import javax.servlet.http.HttpServletRequest;
 
+
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,14 +17,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.demo.dto.AddPermissionRequestDto;
 import com.example.demo.dto.ErrorResponseDto;
+import com.example.demo.dto.IJobDto;
 import com.example.demo.dto.IRoleDetailDto;
 import com.example.demo.dto.IRoleListDto;
 import com.example.demo.dto.RoleDto;
-import com.example.demo.dto.RolePermissionDto;
 import com.example.demo.dto.SuccessResponseDto;
-import com.example.demo.dto.UserDataDto;
 import com.example.demo.entities.RoleEntity;
 import com.example.demo.exceptionHandling.ResourceNotFoundException;
 import com.example.demo.services.RoleServiceInterface;
@@ -40,21 +39,7 @@ public class RoleController {
 	@Autowired
 	private RoleServiceInterface roleServiceInterface;
 	
-	@GetMapping("/role")
-	public ResponseEntity<?> getAllRoles(@RequestParam(defaultValue = "") String search, @RequestParam(defaultValue = "1") String pageNo, @RequestParam(defaultValue = "25") String size) {
-
-		Page<IRoleListDto> roles = roleServiceInterface.getAllRoles(search, pageNo, size);
-
-		if (roles.getTotalElements() != 0) {
-
-			return new ResponseEntity<>(new SuccessResponseDto("Success", "success", new ListResponseDto(roles.getContent(), roles.getTotalElements())), HttpStatus.OK);
-
-		}
-
-		return new ResponseEntity<>(new ErrorResponseDto("Data Not Found", "dataNotFound"), HttpStatus.NOT_FOUND);
-
-	}
-
+	
 	
 	@PostMapping("/role")
 	public ResponseEntity<?> addRole(@RequestBody RoleDto roleDto, HttpServletRequest request) {
@@ -62,16 +47,6 @@ public class RoleController {
 		RoleDto dto=this.roleServiceInterface.addRole(roleDto);
 		
 		return new ResponseEntity<>("Role added successfully",HttpStatus.OK);
-		
-		
-		
-		
-//		try {	System.out.println("role1");
-//			this.roleServiceInterface.addRole(roleDto);
-//			return new ResponseEntity<>("Role Added Successfully!!",HttpStatus.OK);
-//		}catch(Exception e) {
-//				return new ResponseEntity<>("Role Not Added",HttpStatus.BAD_REQUEST);
-//		}
 	}
 
 	
@@ -85,7 +60,6 @@ public class RoleController {
 			}catch(Exception e) {
 				return new ResponseEntity<>("Role not found",HttpStatus.BAD_REQUEST);
 			}
-
 	}
 
 	
@@ -93,67 +67,42 @@ public class RoleController {
 	public ResponseEntity<?> deleteRole(@PathVariable(value = "id") Long roleId, HttpServletRequest request) {
 
 		try {
-
 			roleServiceInterface.deleteRole(roleId);
 			return new ResponseEntity<>(new SuccessResponseDto("Success", "success", null), HttpStatus.OK);
 
 		} catch (ResourceNotFoundException e) {
 
 			return new ResponseEntity<>(new ErrorResponseDto(e.getMessage(), "roleNotFound"), HttpStatus.NOT_FOUND);
-
 		}
-
 	}
 
 	
 	@GetMapping("/role/{id}")
-	public ResponseEntity<?> getRoleById(@PathVariable(value = "id") Long roleId) {
+	public ResponseEntity<?> getRoleById(@PathVariable(value = "id") Long id) {
 
-		try {
+		
 
-			IRoleDetailDto roleEntity = roleServiceInterface.getRoleById(roleId);
+			RoleEntity roleEntity = roleServiceInterface.getRoleById(id);
+			System.out.println("role>>"+roleEntity);
 			return new ResponseEntity<>(new SuccessResponseDto("Success", "success", roleEntity), HttpStatus.OK);
 
-		} catch (ResourceNotFoundException e) {
-
-			return new ResponseEntity<>(new ErrorResponseDto(e.getMessage(), "roleNotFound"), HttpStatus.NOT_FOUND);
-
-		}
-
+		
 	}
 
-
-	@GetMapping("/permission_role/{id}")
-	public ResponseEntity<?> getRoleAndPermissionById(@PathVariable(value = "id") Long roleId) {
-
-		try {
-
-			RolePermissionDto rolePermissionData = roleServiceInterface.getRoleAndPermissionById(roleId);
-			return new ResponseEntity<>(new SuccessResponseDto("Success", "success", rolePermissionData), HttpStatus.OK);
-
-		} catch (ResourceNotFoundException e) {
-
-			return new ResponseEntity<>(new ErrorResponseDto(e.getMessage(), "roleNotFound"), HttpStatus.NOT_FOUND);
-
+	 //Pagination of job list
+	  @GetMapping("/roles")
+		public ResponseEntity<?> getAllJobs(@RequestParam(defaultValue = "") String search,
+				@RequestParam(defaultValue = "1") String pageNo, @RequestParam(defaultValue = "25") String size) {
+			Page<IRoleDetailDto> jobs = roleServiceInterface.getAllRoles(search, pageNo, size);
+			if (jobs.getTotalElements() != 0) {
+				return new ResponseEntity<>(new SuccessResponseDto("Success", "success",
+						new ListResponseDto(jobs.getContent(), jobs.getTotalElements())), HttpStatus.OK);
+			}
+			return new ResponseEntity<>(new ErrorResponseDto("Data Not Found", "dataNotFound"), HttpStatus.NOT_FOUND);
 		}
-
-	}
+	
 
 	
-	@PostMapping("/permission_role/{id}")
-	public ResponseEntity<?> AddPermissionToRole(@PathVariable(value = "id") Long roleId, @Valid @RequestBody AddPermissionRequestDto permissions) {
-
-		try {
-
-			roleServiceInterface.addPermissionsToRole(roleId, permissions.getPermissions());
-			return new ResponseEntity<>(new SuccessResponseDto("Success", "success", null), HttpStatus.OK);
-
-		} catch (ResourceNotFoundException e) {
-
-			return new ResponseEntity<>(new ErrorResponseDto(e.getMessage(), "roleNotFound"), HttpStatus.NOT_FOUND);
-
-		}
-
-	}
+	
 
 }

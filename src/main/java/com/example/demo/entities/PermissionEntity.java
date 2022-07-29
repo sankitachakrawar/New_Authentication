@@ -14,7 +14,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,6 +27,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "permissions")
+@Where(clause = "is_active = true")
+@SQLDelete(sql="UPDATE permissions SET is_active=false WHERE id=?")
 public class PermissionEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
