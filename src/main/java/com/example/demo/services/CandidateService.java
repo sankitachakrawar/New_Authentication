@@ -35,7 +35,7 @@ public interface CandidateService {
 	
 	//void addJobToCandidate(Candidate candidate);
 	
-	List<IPermissionDto> getCandidatePermission(Long id) throws IOException;
+	
 
 	Candidate findById(Long candidate_id);
 
@@ -45,7 +45,7 @@ public interface CandidateService {
 	
 	public void addCandidate(CandidateDto candidateDto);
 
-
+	
 	
 
 	

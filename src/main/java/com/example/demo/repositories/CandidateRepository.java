@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.example.demo.dto.ForgotPasswordDto;
 import com.example.demo.dto.RoleIdListDto;
 import com.example.demo.entities.Candidate;
+import com.example.demo.entities.RoleEntity;
 import com.example.demo.exceptionHandling.ResourceNotFoundException;
 
 import io.lettuce.core.dynamic.annotation.Param;

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.ApplyDto;
 import com.example.demo.dto.ApplyJobDto;
 import com.example.demo.dto.ErrorResponseDto;
 import com.example.demo.dto.IJobDto;
@@ -39,7 +41,16 @@ public class JobController {
 
 	@Autowired
 	private JobService jobService;
+	 @Autowired
+	private CandidateService candidateService;
+			
+	 @Autowired
+	 private ApplyJobService applyJobService;
+		  
+	 @Autowired
+	private EmailService emailService;
 
+	@PreAuthorize("hasRole('createJob')")
 	@PostMapping("/jobs")
 	public ResponseEntity<?> createJob(@RequestBody JobDto jobDto) {
 		
@@ -49,7 +60,7 @@ public class JobController {
 		}
 		
 	
-
+	@PreAuthorize("hasRole('getSingleJob')")
 	  @GetMapping("/jobs/{id}")
 	  public ResponseEntity<?> getSingleJob(@PathVariable ("id") Long id){
 		 JobDto job= jobService.getJobById(id);
@@ -57,6 +68,7 @@ public class JobController {
 		  
 	  }
 	  
+	@PreAuthorize("hasRole('updateJob')")
 	  @PutMapping("/jobs/{id}")
 		public ResponseEntity<?> updateJob(@Valid @RequestBody JobDto jobDto,@PathVariable Long id){
 			
@@ -67,6 +79,7 @@ public class JobController {
 			
 		}
 	  
+	@PreAuthorize("hasRole('deleteJobDetails')")
 	  @DeleteMapping("/jobs/{id}")
 		public ResponseEntity<?> deleteJobDetails(@PathVariable("id")Long id){
 			this.jobService.deleteJobDetails(id);
@@ -74,8 +87,9 @@ public class JobController {
 		}
 	
 		  
-
+		
 		  //Pagination of job list
+		  @PreAuthorize("hasRole('getAllJobs')")
 		  @GetMapping("/jobs")
 			public ResponseEntity<?> getAllJobs(@RequestParam(defaultValue = "") String search,
 					@RequestParam(defaultValue = "1") String pageNo, @RequestParam(defaultValue = "25") String size) {
@@ -87,15 +101,9 @@ public class JobController {
 				return new ResponseEntity<>(new ErrorResponseDto("Data Not Found", "dataNotFound"), HttpStatus.NOT_FOUND);
 			}
 	  
-		  @Autowired
-			private CandidateService candidateService;
-			
-		  @Autowired
-			 private ApplyJobService applyJobService;
+	
 		  
-		  @Autowired
-			private EmailService emailService;
-		  
+		  @PreAuthorize("hasRole('applyToJob')")
 		  @PostMapping("/job/apply")
 			public ResponseEntity<?> applyToJob(@Valid @RequestBody ApplyJobDto applyJobDto,HttpServletRequest request){
 				try {
@@ -118,15 +126,14 @@ public class JobController {
 			}
 		
 		 
-		 
+		  @PreAuthorize("hasRole('getData')")
 		 @GetMapping("/appliedjob/{id}")
-		  public ResponseEntity<ApplyJob> getData(@PathVariable ("id") Long id){
-			 System.out.println("data>>"+applyJobService.getDataById(id).getCandidate_id());
-			 //candidateService.getCandidateById(id);
-			 
-			 applyJobService.getDataById(id);
-			 
-			 return ResponseEntity.ok(this.applyJobService.getDataById(id));
+		  public ResponseEntity<?> getData(@PathVariable ("id") Long id){
+			
+			 System.out.println("data>>"+this.jobService.getJobById(id));
+			 JobDto job=this.jobService.getJobById(id);
+			
+			 return new ResponseEntity(new SuccessResponseDto("success","success",job),HttpStatus.OK);
 			
 			  
 		  }

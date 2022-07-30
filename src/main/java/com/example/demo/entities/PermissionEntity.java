@@ -1,6 +1,8 @@
 package com.example.demo.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -10,6 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -46,10 +50,6 @@ public class PermissionEntity implements Serializable {
 	@Column(name = "description")
 	private String description;
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "entity_id")
-	private EntityEntity entityId;
-
 	@Column(name = "method")
 	private String method;
 	
@@ -70,6 +70,8 @@ public class PermissionEntity implements Serializable {
 	@UpdateTimestamp
 	private Date updatedAt;
 
-	
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "roles_permission", joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "permission_id", referencedColumnName = "id"))
+	private Collection<RoleEntity> roles = new ArrayList<>();
 
 }

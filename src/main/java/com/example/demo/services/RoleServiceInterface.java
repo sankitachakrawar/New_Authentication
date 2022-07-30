@@ -1,12 +1,6 @@
 package com.example.demo.services;
-
-import javax.validation.Valid;
-
 import org.springframework.data.domain.Page;
-
-import com.example.demo.dto.IJobDto;
 import com.example.demo.dto.IRoleDetailDto;
-import com.example.demo.dto.IRoleListDto;
 import com.example.demo.dto.RoleDto;
 import com.example.demo.dto.RolePermissionDto;
 import com.example.demo.entities.RoleEntity;
@@ -25,5 +19,10 @@ public interface RoleServiceInterface {
 	RoleEntity getRoleById(Long id) throws ResourceNotFoundException;
 
 	Page<IRoleDetailDto> getAllRoles(String search, String from, String to);
-
+	
+	 void addRoleToCandidate(String email, String roleName);
+	
+	void addPermissionToRole(String actionName, String roleName);
+	
+	RolePermissionDto getRoleAndPermissionById(Long id) throws ResourceNotFoundException;
 }

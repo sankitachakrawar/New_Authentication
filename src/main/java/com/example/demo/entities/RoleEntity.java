@@ -1,7 +1,8 @@
 package com.example.demo.entities;
 
 import java.io.Serializable;
-
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +14,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -50,8 +53,7 @@ public class RoleEntity implements Serializable {
 	@Column(name = "description")
 	private String description;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.role", cascade = CascadeType.ALL)
-	private List<UserRoleEntity> userRole;
+	
 
 	@Column(name = "is_active")
 	private Boolean isActive = true;
@@ -65,9 +67,10 @@ public class RoleEntity implements Serializable {
 	private Date updatedAt;
 	
 	
-	@OneToOne(fetch = FetchType.EAGER)   
-	@JoinColumn(name = "c_id")
-	private Candidate candidateId;
+	
+//	@OneToOne(fetch = FetchType.EAGER)   
+//	@JoinColumn(name = "c_id")
+//	private Candidate candidateId;
 
 
 	

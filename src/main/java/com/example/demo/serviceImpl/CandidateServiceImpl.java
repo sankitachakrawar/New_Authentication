@@ -20,10 +20,11 @@ import com.example.demo.dto.IPermissionDto;
 import com.example.demo.dto.RoleIdListDto;
 import com.example.demo.entities.Candidate;
 import com.example.demo.entities.Forgot_password_request;
+import com.example.demo.entities.RoleEntity;
 import com.example.demo.exceptionHandling.*;
 import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.repositories.ForgotPasswordRequestRepository;
-import com.example.demo.repositories.RolePermissionRepository;
+import com.example.demo.repositories.RoleRepository;
 import com.example.demo.services.CandidateService;
 import com.example.demo.utils.JwtTokenUtil;
 
@@ -205,29 +206,6 @@ public class CandidateServiceImpl implements CandidateService {
 	@Autowired
 	private ForgotPasswordRequestRepository forgotPasswordRequestRepository;
 	
-	
-
-	@Autowired
-	private RolePermissionRepository rolePermissionRepository;
-
-	
-	  @Override public List<IPermissionDto> getCandidatePermission(Long id) throws
-	  IOException {
-	  
-	  ArrayList<RoleIdListDto> roleIds=candidateRepository.findById(id,RoleIdListDto.class);
-	  ArrayList<Long> roles = new ArrayList<>();
-	  
-	  for (int i = 0; i < roleIds.size(); i++) {
-	  
-	  roles.add(roleIds.get(i).getPkRoleId());
-	  
-	  }
-	  
-	  return rolePermissionRepository.findByPkRoleIdIn(roles,IPermissionDto.class);
-	 
-	 }
-	
-	  
 	  @Override
 		public Boolean comparePassword(String password, String hashPassword) {
 

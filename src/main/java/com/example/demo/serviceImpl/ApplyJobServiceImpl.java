@@ -11,9 +11,11 @@ import com.example.demo.dto.ApplyJobDto;
 import com.example.demo.dto.CandidateDto;
 import com.example.demo.entities.ApplyJob;
 import com.example.demo.entities.Candidate;
+import com.example.demo.entities.Job;
 import com.example.demo.exceptionHandling.ResourceNotFoundException;
 import com.example.demo.repositories.ApplyJobRepository;
 import com.example.demo.repositories.CandidateRepository;
+import com.example.demo.repositories.JobRepository;
 import com.example.demo.services.ApplyJobService;
 
 
@@ -49,6 +51,22 @@ public class ApplyJobServiceImpl implements ApplyJobService{
 	public ApplyJob getDataById(Long id) {
 		
 		ApplyJob job= this.applyJobRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("candidate", "id", id));
+		return job;
+	}
+
+//	@Override
+//	public Optional<Candidate> getCandidateById(Long id) {
+//		Optional<Candidate> candidate=this.candidateRepository.findById(id);
+//		
+//		return candidate;
+//	}
+
+	
+	@Autowired
+	private JobRepository jobRepository;
+	@Override
+	public Optional<Job> getJobById(Long id) {
+		Optional<Job> job=this.jobRepository.findById(id);
 		return job;
 	}
 

@@ -1,26 +1,29 @@
 package com.example.demo.serviceImpl;
 
 
-import java.util.Optional;
-
+import java.util.ArrayList;
+import java.util.List;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
-import com.example.demo.dto.IJobDto;
+import com.example.demo.dto.IPermissionDto;
 import com.example.demo.dto.IRoleDetailDto;
-import com.example.demo.dto.IRoleListDto;
+import com.example.demo.dto.PermissionDto;
 import com.example.demo.dto.RoleDto;
-import com.example.demo.entities.Job;
+import com.example.demo.dto.RolePermissionDto;
+import com.example.demo.entities.Candidate;
+import com.example.demo.entities.PermissionEntity;
 import com.example.demo.entities.RoleEntity;
 import com.example.demo.exceptionHandling.ResourceNotFoundException;
+import com.example.demo.repositories.CandidateRepository;
+import com.example.demo.repositories.PermissionRepository;
 import com.example.demo.repositories.RoleRepository;
 import com.example.demo.services.RoleServiceInterface;
 import com.example.demo.utils.PaginationUsingFromTo;
+
 
 
 @Transactional
@@ -42,7 +45,7 @@ public class RoleServiceImpl implements RoleServiceInterface {
 		RoleEntity roleEntity = new RoleEntity();
 		roleEntity.setRoleName(roleDto.getRoleName());
 		roleEntity.setDescription(roleDto.getDescription());
-		roleEntity.setCandidateId(roleDto.getCandidateId());
+		//roleEntity.setCandidateId(roleDto.getCandidateId());
 		System.out.println(roleEntity);
 		
 		roleRepository.save(roleEntity);
@@ -122,7 +125,59 @@ public class RoleServiceImpl implements RoleServiceInterface {
 	}
 
 
+	@Autowired
+	private PermissionRepository permissionRepository;
+	@Override
+	public void addPermissionToRole(String actionName, String roleName) {
+		PermissionEntity permissionEntity=permissionRepository.findByActionNameContainingIgnoreCase(actionName);
+
+		RoleEntity role = roleRepository.findByRoleNameContainingIgnoreCase(roleName);
+		
+		permissionEntity.getRoles().add(role);
+		System.out.println(permissionEntity.getRoles().add(role));
+		
+	}
+
 	
+	@Autowired
+	private CandidateRepository candidateRepository;
+	
+	@Override
+	public void addRoleToCandidate(String email, String roleName) {
+		Candidate candidate = candidateRepository.findByEmail(email);
+
+		RoleEntity role = roleRepository.findByRoleNameContainingIgnoreCase(roleName);
+		
+		candidate.getRoles().add(role);
+		System.out.println(candidate.getRoles().add(role));
+		
+	}
+
+
+
+	@Override
+	public RolePermissionDto getRoleAndPermissionById(Long id) throws ResourceNotFoundException {
+		
+		RoleEntity roleEntity=roleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Role Not Found"));
+		List<PermissionEntity> permissions=permissionRepository.findAll();
+		ArrayList<IPermissionDto> rolesPermission = PermissionRepository.findByRoleId(id, IPermissionDto.class);
+		
+		for (PermissionEntity permission : permissions) {
+				PermissionDto dto=new PermissionDto();
+				dto.setActionName(permission.getActionName());
+				dto.setDescription(permission.getDescription());
+				 permissionRepository.findAll();
+	
+		}
+		RolePermissionDto rolePermissionDto = new RolePermissionDto();
+		rolePermissionDto.setId(roleEntity.getId());
+		rolePermissionDto.setRoleName(roleEntity.getRoleName());
+		rolePermissionDto.setDescription(roleEntity.getDescription());
+		return rolePermissionDto;
+	}
+	
+
+
 	
 	
 	

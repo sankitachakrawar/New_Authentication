@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,6 +54,7 @@ public class CandidateController {
 	@Autowired
 	private AuthService authService;
 	
+
 	@PostMapping("/register") 
 	public ResponseEntity<?> registerCandidate(@Valid @RequestBody CandidateDto candidate,HttpServletRequest request){
 		try {
@@ -83,7 +85,7 @@ public class CandidateController {
 		//return new ResponseEntity<>("Candidate Registered Successfully ",HttpStatus.OK);
 	 }
 	
-
+	@PreAuthorize("hasRole('updateCandidate')")
 	@PutMapping("/candidates/{id}")
 	public ResponseEntity<?> updateCandidate(@Valid @RequestBody Candidate candidate,@PathVariable Long id){
 		
@@ -93,13 +95,14 @@ public class CandidateController {
 		
 	}
 	
-	
+	@PreAuthorize("hasRole('deleteCandidate')")
 	@DeleteMapping("/candidates/{id}")
 	public ResponseEntity<?> deleteCandidate(@PathVariable("id")Long id){
 		this.candidateService.deleteCandidate(id);
 		return new  ResponseEntity<>(Map.of("message","Candidate delete sucesssfully!!"),HttpStatus.OK);
 	}
 	
+	@PreAuthorize("hasRole('getAllCandidates')")
 	@GetMapping("/candidates")
 	public ResponseEntity<List<CandidateDto>> getAllCandidates(){
 		List<Candidate> data=this.candidateService.getAllCandidates();
@@ -107,6 +110,8 @@ public class CandidateController {
 		return new ResponseEntity(new SuccessResponseDto("Success", "success", data),HttpStatus.OK);
 		
 	}
+	
+	@PreAuthorize("hasRole('getSingleCandidate')")
 	@GetMapping("/candidates/{id}")
 	public ResponseEntity<Candidate> getSingleCandidate(@PathVariable Long id){
 		
@@ -114,7 +119,7 @@ public class CandidateController {
 		
 	}
 	
-	
+	//@PreAuthorize("hasRole('changePasswords')")
 	@PutMapping("/changePass/{id}")
 	public ResponseEntity<?> changePasswords(@PathVariable(value = "id") Long id,
 			@Valid @RequestBody ChangePasswordDto userBody, HttpServletRequest request)
@@ -134,7 +139,7 @@ public class CandidateController {
 
 	}
 
-	
+		
 	  @PutMapping("/forgot-pass-confirm")
 	  public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordDto forgotPasswordDto,HttpServletRequest request) throws ResourceNotFoundException {
 	  
@@ -151,6 +156,8 @@ public class CandidateController {
 	 }
 	  }
 
+	  
+	  
 }
  
 	  

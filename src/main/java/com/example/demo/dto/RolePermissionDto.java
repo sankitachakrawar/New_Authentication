@@ -18,7 +18,7 @@ public class RolePermissionDto {
 
 	private String description;
 
-	private List<EntityDto> entity;
+
 
 	
 

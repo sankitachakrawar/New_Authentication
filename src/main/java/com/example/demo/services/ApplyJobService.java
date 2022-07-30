@@ -12,6 +12,7 @@ import com.example.demo.dto.IJobDto;
 import com.example.demo.dto.JobDto;
 import com.example.demo.entities.ApplyJob;
 import com.example.demo.entities.Candidate;
+import com.example.demo.entities.Job;
 import com.example.demo.exceptionHandling.ResourceNotFoundException;
 
 public interface ApplyJobService {
@@ -21,4 +22,8 @@ public interface ApplyJobService {
 	 ApplyJob getDataById(Long id);
 	
 	List<Candidate> getAllCandidates();
+	
+	//Optional<Candidate> getCandidateById(Long id);
+	
+	Optional<Job> getJobById(Long id); 
 }

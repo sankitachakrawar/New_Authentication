@@ -3,12 +3,12 @@ package com.example.demo.serviceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
+
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.PermissionRequestDto;
 import com.example.demo.entities.PermissionEntity;
 import com.example.demo.exceptionHandling.ResourceNotFoundException;
-import com.example.demo.repositories.EntityRepository;
 import com.example.demo.repositories.PermissionRepository;
 import com.example.demo.services.PermissionServiceInterface;
 
@@ -25,8 +25,6 @@ public class PermissionServiceImpl implements PermissionServiceInterface {
 	@Autowired
 	private PermissionRepository permissionRepository;
 
-	@Autowired
-	private EntityRepository entityRepository;
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -36,7 +34,6 @@ public class PermissionServiceImpl implements PermissionServiceInterface {
 		newPermission.setActionName(permissionBody.getActionName());
 		newPermission.setBaseUrl(permissionBody.getBaseUrl());
 		newPermission.setDescription(permissionBody.getDescription());
-		newPermission.setEntityId(entityRepository.getById(permissionBody.getEntityId()));
 		newPermission.setMethod(permissionBody.getMethod());
 		newPermission.setPath(permissionBody.getPath());
 		permissionRepository.save(newPermission);
@@ -52,7 +49,6 @@ public class PermissionServiceImpl implements PermissionServiceInterface {
 		permissionData.setActionName(permissionBody.getActionName());
 		permissionData.setBaseUrl(permissionBody.getBaseUrl());
 		permissionData.setDescription(permissionBody.getDescription());
-		permissionData.setEntityId(entityRepository.getById(permissionBody.getEntityId()));
 		permissionData.setMethod(permissionBody.getMethod());
 		permissionData.setPath(permissionBody.getPath());
 		permissionRepository.save(permissionData);
