@@ -95,8 +95,8 @@ public class RoleController {
 		
 	}
 
-	 //Pagination of job list
-	@PreAuthorize("hasRole('getAllRoles')")
+	 //Pagination of role list
+	//@PreAuthorize("hasRole('getAllRoles')")
 	  @GetMapping("/roles")
 		public ResponseEntity<?> getAllRoles(@RequestParam(defaultValue = "") String search,
 				@RequestParam(defaultValue = "1") String pageNo, @RequestParam(defaultValue = "25") String size) {
@@ -109,7 +109,7 @@ public class RoleController {
 		}
 	
 
-		@PreAuthorize("hasRole('AllPermissionToRole')")
+		//@PreAuthorize("hasRole('AllPermissionToRole')")
 		@PostMapping("/roles/assignPermission")
 		public ResponseEntity<?> AddPermissionToRole(@Valid @RequestBody AssignPermission assignPermission, HttpServletRequest request) {
 			try {

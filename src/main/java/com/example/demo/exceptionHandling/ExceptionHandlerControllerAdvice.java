@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -40,6 +41,16 @@ public class ExceptionHandlerControllerAdvice {
 		error.callerURL(request.getRequestURI());
 		return error;
 		
+	}
+	@ExceptionHandler(AccessDeniedException.class)
+	@ResponseStatus(value = HttpStatus.FORBIDDEN)
+	public @ResponseBody ErrorResponseDto handleAccessDeniedException(final AccessDeniedException exception) {
+
+		ErrorResponseDto error = new ErrorResponseDto();
+		error.setMessage("Access Denied");
+		error.setMsgKey("accessDenied");
+		return error;
+
 	}
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)

@@ -1,5 +1,7 @@
 package com.example.demo.dto;
 
+
+
 public interface IPermissionDto {
 
 	// @Value("#{target.pk.permission.id}")
@@ -8,10 +10,10 @@ public interface IPermissionDto {
 	// @Value("#{target.pk.permission.actionName}")
 	public String getPkPermissionActionName();
 
-	// @Value("#{target.pk.permission.description}")
+	 //@Value("#{target.pk.permission.description}")
 	public String getPkPermissionDescription();
 
 	// @Value("#{target.pk.permission.entityId.id}")
-	public Long getPkPermissionEntityIdId();
+		public Long getPkPermissionEntityIdId();
 
 }

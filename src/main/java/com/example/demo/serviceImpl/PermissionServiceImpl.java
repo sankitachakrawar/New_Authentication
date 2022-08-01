@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.dto.PermissionRequestDto;
 import com.example.demo.entities.PermissionEntity;
 import com.example.demo.exceptionHandling.ResourceNotFoundException;
+import com.example.demo.repositories.EntityRepository;
 import com.example.demo.repositories.PermissionRepository;
 import com.example.demo.services.PermissionServiceInterface;
 
@@ -25,6 +26,8 @@ public class PermissionServiceImpl implements PermissionServiceInterface {
 	@Autowired
 	private PermissionRepository permissionRepository;
 
+	@Autowired
+	private EntityRepository entityRepository;
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -36,6 +39,7 @@ public class PermissionServiceImpl implements PermissionServiceInterface {
 		newPermission.setDescription(permissionBody.getDescription());
 		newPermission.setMethod(permissionBody.getMethod());
 		newPermission.setPath(permissionBody.getPath());
+		newPermission.setEntityId(entityRepository.getById(permissionBody.getEntityId()));
 		permissionRepository.save(newPermission);
 		return;
 

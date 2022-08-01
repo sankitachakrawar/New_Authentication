@@ -2,6 +2,7 @@ package com.example.demo.serviceImpl;
 
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.demo.dto.ApplyJobDto;
 import com.example.demo.dto.CandidateDto;
+import com.example.demo.dto.IPermissionDto;
 import com.example.demo.entities.ApplyJob;
 import com.example.demo.entities.Candidate;
 import com.example.demo.entities.Job;
@@ -69,6 +71,18 @@ public class ApplyJobServiceImpl implements ApplyJobService{
 		Optional<Job> job=this.jobRepository.findById(id);
 		return job;
 	}
+
+//	@Override
+//	public ApplyJobDto getJobAndCandidateById(Long id) throws ResourceNotFoundException {
+//		
+//		List<Candidate> candidate=(List<Candidate>) candidateRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(null));
+//		Job job=(Job) jobRepository.findAll();
+//		
+//		ArrayList<ApplyJobDto> applyJob=applyJobRepository.findByJobId(id, IApplyDto.class);
+//		
+//		
+//		return null;
+//	}
 
 	
 

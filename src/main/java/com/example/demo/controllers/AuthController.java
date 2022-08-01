@@ -1,6 +1,10 @@
 package com.example.demo.controllers;
 import java.util.Calendar;
+
+
 import java.util.List;
+import java.util.Optional;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +22,7 @@ import com.example.demo.dto.AuthResponseDto;
 import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ErrorResponseDto;
 import com.example.demo.dto.ForgotPasswordRequestDto;
+import com.example.demo.dto.IPermissionDto;
 import com.example.demo.dto.JobDto;
 import com.example.demo.dto.JwtTokenResponse;
 import com.example.demo.dto.LoggerDto;
@@ -28,6 +33,7 @@ import com.example.demo.entities.Job;
 import com.example.demo.entities.LoggerEntity;
 import com.example.demo.entities.Recruiter;
 import com.example.demo.exceptionHandling.ResourceNotFoundException;
+import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.repositories.ForgotPasswordRequestRepository;
 import com.example.demo.serviceImpl.CandidateServiceImpl;
 import com.example.demo.services.*;
@@ -53,6 +59,35 @@ public class AuthController {
 	 
 	@Autowired
 	private ForgotPasswordServiceIntf forgotPasswordServiceIntf;
+	
+	@Autowired
+	private CandidateRepository candidateRepository;
+	
+	@PostMapping("/register") 
+	public ResponseEntity<?> registerCandidate(@Valid @RequestBody CandidateDto candidate,HttpServletRequest request){
+		try {
+			String email = candidate.getEmail();
+			Optional<Candidate> dataBaseEmail = candidateRepository.findByEmailContainingIgnoreCase(email);
+			if ((dataBaseEmail == null) || dataBaseEmail.isEmpty()) {
+				candidateService.addCandidate(candidate);
+				return new ResponseEntity<>(new SuccessResponseDto("Candidate Created", "candidateCreated", candidate),
+						HttpStatus.CREATED);
+			} else {
+				return new ResponseEntity<>(
+						new ErrorResponseDto("Candidate Email Id Already Exist", "candidateEmailIdAlreadyExist"),
+						HttpStatus.BAD_REQUEST);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(new ErrorResponseDto("Candidate Not Added", "candidateNotAdded"),
+					HttpStatus.NOT_ACCEPTABLE);
+		}	
+		
+	 }
+	
+	
+	
+	
 	
 	
 	@SuppressWarnings("static-access")
@@ -107,6 +142,8 @@ public class AuthController {
 				
 				System.out.println("DATA>>"+candidate.getEmail());
 				final String token = jwtTokenUtil.generateTokenOnLogin(candidate.getEmail(), candidate.getPassword());
+				
+				//List<IPermissionDto> permissions = candidateService.getUserPermission(candidate.getId());
 				LoggerDto logger = new LoggerDto();
 				logger.setToken(token);
 				Calendar calender = Calendar.getInstance();

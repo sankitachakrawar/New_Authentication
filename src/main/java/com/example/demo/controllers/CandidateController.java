@@ -55,36 +55,7 @@ public class CandidateController {
 	private AuthService authService;
 	
 
-	@PostMapping("/register") 
-	public ResponseEntity<?> registerCandidate(@Valid @RequestBody CandidateDto candidate,HttpServletRequest request){
-		try {
-			String email = candidate.getEmail();
-			Optional<Candidate> dataBaseEmail = candidateRepository.findByEmailContainingIgnoreCase(email);
-			if ((dataBaseEmail == null) || dataBaseEmail.isEmpty()) {
-				candidateService.addCandidate(candidate);
-				return new ResponseEntity<>(new SuccessResponseDto("Candidate Created", "candidateCreated", candidate),
-						HttpStatus.CREATED);
-			} else {
-				return new ResponseEntity<>(
-						new ErrorResponseDto("Candidate Email Id Already Exist", "candidateEmailIdAlreadyExist"),
-						HttpStatus.BAD_REQUEST);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(new ErrorResponseDto("Candidate Not Added", "candidateNotAdded"),
-					HttpStatus.NOT_ACCEPTABLE);
-		}
-		
-		
-		
-		
-		
-		
-		//candidateService.addCandidate(candidate);
 
-		//return new ResponseEntity<>("Candidate Registered Successfully ",HttpStatus.OK);
-	 }
-	
 	@PreAuthorize("hasRole('updateCandidate')")
 	@PutMapping("/candidates/{id}")
 	public ResponseEntity<?> updateCandidate(@Valid @RequestBody Candidate candidate,@PathVariable Long id){
@@ -119,7 +90,7 @@ public class CandidateController {
 		
 	}
 	
-	//@PreAuthorize("hasRole('changePasswords')")
+	@PreAuthorize("hasRole('changePasswords')")
 	@PutMapping("/changePass/{id}")
 	public ResponseEntity<?> changePasswords(@PathVariable(value = "id") Long id,
 			@Valid @RequestBody ChangePasswordDto userBody, HttpServletRequest request)

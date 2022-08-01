@@ -1,6 +1,8 @@
 package com.example.demo.entities;
 
 import java.io.Serializable;
+
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -24,9 +26,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
-
 import com.example.demo.dto.IRoleDetailDto;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -53,7 +53,8 @@ public class RoleEntity implements Serializable {
 	@Column(name = "description")
 	private String description;
 
-	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.role", cascade = CascadeType.ALL)
+	private List<UserRoleEntity> userRole;
 
 	@Column(name = "is_active")
 	private Boolean isActive = true;

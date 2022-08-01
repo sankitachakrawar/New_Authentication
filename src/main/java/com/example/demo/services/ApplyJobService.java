@@ -26,4 +26,6 @@ public interface ApplyJobService {
 	//Optional<Candidate> getCandidateById(Long id);
 	
 	Optional<Job> getJobById(Long id); 
+	
+	//ApplyJobDto getJobAndCandidateById(Long id)throws ResourceNotFoundException;
 }

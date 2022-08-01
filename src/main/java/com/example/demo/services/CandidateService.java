@@ -46,6 +46,8 @@ public interface CandidateService {
 	public void addCandidate(CandidateDto candidateDto);
 
 	
+
+	
 	
 
 	

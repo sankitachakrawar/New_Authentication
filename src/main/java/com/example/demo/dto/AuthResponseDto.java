@@ -1,7 +1,7 @@
 package com.example.demo.dto;
 
 import java.io.Serializable;
-
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,15 +15,15 @@ public class AuthResponseDto implements Serializable {
 
 	private final String token;
 
-	//private List<IPermissionDto> permission;
-
-	/*
-	 * public List<IPermissionDto> getPermission() {
-	 * 
-	 * return permission;
-	 * 
-	 * }
-	 */
+//	private List<IPermissionDto> permission;
+//
+//	
+//	  public List<IPermissionDto> getPermission() {
+//	  
+//	  return permission;
+//	  
+//	  }
+	 
 	private String email;
 
 	private String name;

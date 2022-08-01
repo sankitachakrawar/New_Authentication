@@ -1,11 +1,17 @@
 package com.example.demo.serviceImpl;
 
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
+
 import com.example.demo.entities.Candidate;
 import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.services.AuthService;
+import com.example.demo.services.RoleServiceInterface;
+import com.example.demo.utils.CacheOperation;
 
 
 @Service
@@ -29,7 +35,7 @@ public class AuthServiceImpl implements AuthService{
 
 	}
 
-	     
+	
 	
 
 }

@@ -1,5 +1,7 @@
 package com.example.demo.repositories;
 
+import java.util.ArrayList;
+
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -10,12 +12,16 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.example.demo.dto.ApplyJobDto;
 import com.example.demo.dto.IJobDto;
 import com.example.demo.entities.ApplyJob;
 import com.example.demo.entities.Candidate;
 
+
 @Repository
 public interface ApplyJobRepository extends CrudRepository<ApplyJob, Long>{
+
+	//ArrayList<ApplyJobDto> findByJobId(Long id, Class<IApplyDto> class1);
 
 	//Page<> findByOrderByIdDesc(Pageable paging, Class<> class1);
 

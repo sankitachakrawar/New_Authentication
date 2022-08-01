@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.context.annotation.Bean;
@@ -27,7 +28,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.example.demo.services.CustomUserDetailsService;
 
-@SuppressWarnings("deprecation")
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -73,7 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	  @Override 
 	  protected void configure(HttpSecurity http) throws Exception {
 		  http.cors().configurationSource(corsConfigurationSource()).and().csrf().disable()
-			.authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/**").permitAll().antMatchers("/auth/login", "/auth/forgot-pass", "/api/register", "/api/forgot-pass-confirm").permitAll().
+			.authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/**").permitAll().antMatchers("/auth/login", "/auth/forgot-pass", "/auth/register", "/api/forgot-pass-confirm").permitAll().
 			anyRequest().authenticated().and().httpBasic().and().
 			exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
@@ -97,13 +98,3 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 }
 
 
-
-
-
-
-//http.csrf().disable().authorizeRequests().antMatchers(HttpMethod.OPTIONS,
-//"/**").permitAll().antMatchers("/auth/login","/api/resgister","/api/candidates/{id}","/auth/logout","/api/jobs/sort").permitAll().anyRequest()
-//.authenticated().and().httpBasic().and().sessionManagement()
-//.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//.and().exceptionHandling().accessDeniedPage("/err/403");
-//http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);

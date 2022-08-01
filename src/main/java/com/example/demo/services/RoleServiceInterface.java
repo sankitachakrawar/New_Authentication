@@ -1,4 +1,6 @@
 package com.example.demo.services;
+import java.util.ArrayList;
+
 import org.springframework.data.domain.Page;
 import com.example.demo.dto.IRoleDetailDto;
 import com.example.demo.dto.RoleDto;
@@ -25,4 +27,6 @@ public interface RoleServiceInterface {
 	void addPermissionToRole(String actionName, String roleName);
 	
 	RolePermissionDto getRoleAndPermissionById(Long id) throws ResourceNotFoundException;
+
+	ArrayList<String> getPermissionById(Long id);
 }

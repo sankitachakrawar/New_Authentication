@@ -2,6 +2,7 @@ package com.example.demo.serviceImpl;
 
 
 import java.util.ArrayList;
+
 import java.util.List;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -10,9 +11,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.example.demo.dto.IPermissionDto;
+import com.example.demo.dto.IPermissionIdList;
 import com.example.demo.dto.IRoleDetailDto;
 import com.example.demo.dto.PermissionDto;
 import com.example.demo.dto.RoleDto;
+import com.example.demo.dto.RoleIdListDto;
 import com.example.demo.dto.RolePermissionDto;
 import com.example.demo.entities.Candidate;
 import com.example.demo.entities.PermissionEntity;
@@ -20,14 +23,16 @@ import com.example.demo.entities.RoleEntity;
 import com.example.demo.exceptionHandling.ResourceNotFoundException;
 import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.repositories.PermissionRepository;
+import com.example.demo.repositories.RolePermissionRepository;
 import com.example.demo.repositories.RoleRepository;
+import com.example.demo.repositories.UserRoleRepository;
 import com.example.demo.services.RoleServiceInterface;
 import com.example.demo.utils.PaginationUsingFromTo;
 
 
 
 @Transactional
-@Service("roleServiceImpl")
+@Service
 public class RoleServiceImpl implements RoleServiceInterface {
 
 	public RoleServiceImpl() {
@@ -130,11 +135,12 @@ public class RoleServiceImpl implements RoleServiceInterface {
 	@Override
 	public void addPermissionToRole(String actionName, String roleName) {
 		PermissionEntity permissionEntity=permissionRepository.findByActionNameContainingIgnoreCase(actionName);
-
+		
 		RoleEntity role = roleRepository.findByRoleNameContainingIgnoreCase(roleName);
 		
+		
 		permissionEntity.getRoles().add(role);
-		System.out.println(permissionEntity.getRoles().add(role));
+		
 		
 	}
 
@@ -149,7 +155,7 @@ public class RoleServiceImpl implements RoleServiceInterface {
 		RoleEntity role = roleRepository.findByRoleNameContainingIgnoreCase(roleName);
 		
 		candidate.getRoles().add(role);
-		System.out.println(candidate.getRoles().add(role));
+		
 		
 	}
 
@@ -174,6 +180,37 @@ public class RoleServiceImpl implements RoleServiceInterface {
 		rolePermissionDto.setRoleName(roleEntity.getRoleName());
 		rolePermissionDto.setDescription(roleEntity.getDescription());
 		return rolePermissionDto;
+	}
+
+
+	@Autowired
+	private RolePermissionRepository rolePermissionRepository;
+	
+	@Autowired
+	private UserRoleRepository userRoleRepository;
+	
+	@Override
+	public ArrayList<String> getPermissionById(Long id) {
+		ArrayList<RoleIdListDto> roleIds = userRoleRepository.findByPkUserId(id, RoleIdListDto.class);
+		ArrayList<Long> roles = new ArrayList<>();
+
+		for (int i = 0; i < roleIds.size(); i++) {
+
+			roles.add(roleIds.get(i).getPkRoleId());
+
+		}
+
+		List<IPermissionIdList> rolesPermission = rolePermissionRepository.findPkPermissionByPkRoleIdIn(roles, IPermissionIdList.class);
+		ArrayList<String> permissions = new ArrayList<>();
+
+		for (IPermissionIdList element : rolesPermission) {
+
+			permissions.add(element.getPkPermissionActionName());
+
+		}
+
+		return permissions;
+		
 	}
 	
 

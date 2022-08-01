@@ -37,7 +37,8 @@ public class PermissionRequestDto {
 
 	public String path;
 
-
+	@NotNull(message = "EntityId is Required*entityIdRequired")
+	public Long entityId;
 
 
 }

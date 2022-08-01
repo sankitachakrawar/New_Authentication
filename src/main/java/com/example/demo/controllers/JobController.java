@@ -1,6 +1,7 @@
 package com.example.demo.controllers;
 
 import java.util.List;
+
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,12 +51,13 @@ public class JobController {
 	 @Autowired
 	private EmailService emailService;
 
-	@PreAuthorize("hasRole('createJob')")
+	
 	@PostMapping("/jobs")
+	@PreAuthorize("hasRole('createJob')")
 	public ResponseEntity<?> createJob(@RequestBody JobDto jobDto) {
 		
 		jobService.createJob(jobDto);
-			return new ResponseEntity("Job added successfully!!", HttpStatus.CREATED);
+			return new ResponseEntity<>("Job added successfully!!", HttpStatus.CREATED);
 		
 		}
 		
@@ -103,7 +105,7 @@ public class JobController {
 	  
 	
 		  
-		  @PreAuthorize("hasRole('applyToJob')")
+		 @PreAuthorize("hasRole('applyToJob')")
 		  @PostMapping("/job/apply")
 			public ResponseEntity<?> applyToJob(@Valid @RequestBody ApplyJobDto applyJobDto,HttpServletRequest request){
 				try {
@@ -125,18 +127,13 @@ public class JobController {
 				}
 			}
 		
+		
 		 
-		  @PreAuthorize("hasRole('getData')")
-		 @GetMapping("/appliedjob/{id}")
-		  public ResponseEntity<?> getData(@PathVariable ("id") Long id){
-			
-			 System.out.println("data>>"+this.jobService.getJobById(id));
-			 JobDto job=this.jobService.getJobById(id);
-			
-			 return new ResponseEntity(new SuccessResponseDto("success","success",job),HttpStatus.OK);
-			
-			  
-		  }
+		 
+		 
+		 
+		 
+		
 }
 	  
 	  
@@ -152,4 +149,14 @@ public class JobController {
 	  
 	  
 	  
-	
+//@PreAuthorize("hasRole('getData')")
+//@GetMapping("/appliedjob/{id}")
+// public ResponseEntity<?> getData(@PathVariable ("id") Long id){
+//	
+//	 System.out.println("data>>"+this.jobService.getJobById(id));
+//	 JobDto job=this.jobService.getJobById(id);
+//	
+//	 return new ResponseEntity(new SuccessResponseDto("success","success",job),HttpStatus.OK);
+//	
+//	  
+// }

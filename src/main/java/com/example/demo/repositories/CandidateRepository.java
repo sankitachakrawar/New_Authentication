@@ -1,11 +1,13 @@
 package com.example.demo.repositories;
 
 import java.util.ArrayList;
+
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.dto.ForgotPasswordDto;
@@ -14,7 +16,6 @@ import com.example.demo.entities.Candidate;
 import com.example.demo.entities.RoleEntity;
 import com.example.demo.exceptionHandling.ResourceNotFoundException;
 
-import io.lettuce.core.dynamic.annotation.Param;
 
 @Repository
 @EnableJpaRepositories
