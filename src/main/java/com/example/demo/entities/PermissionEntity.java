@@ -68,12 +68,16 @@ public class PermissionEntity implements Serializable {
 	@UpdateTimestamp
 	private Date updatedAt;
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "roles_permission", joinColumns = @JoinColumn(name = "permission_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-	private Collection<RoleEntity> roles = new ArrayList<>();
+	
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "entity_id")
-	private EntityEntity entityId;
+//	@ManyToMany(fetch = FetchType.EAGER)
+//	@JoinTable(name = "roles_permission", joinColumns = @JoinColumn(name = "permission_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+//	private Collection<RoleEntity> roles = new ArrayList<>();
+
+	
+
+//	@OneToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "entity_id")
+//	private EntityEntity entityId;
 	
 }

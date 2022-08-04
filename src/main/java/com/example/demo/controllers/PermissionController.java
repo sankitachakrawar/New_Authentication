@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,8 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.dto.ErrorResponseDto;
 import com.example.demo.dto.PermissionRequestDto;
 import com.example.demo.dto.SuccessResponseDto;
+import com.example.demo.entities.PermissionEntity;
 import com.example.demo.exceptionHandling.ResourceNotFoundException;
 import com.example.demo.services.PermissionServiceInterface;
+import com.example.demo.services.RoleServiceInterface;
 
 
 
@@ -37,7 +40,7 @@ public class PermissionController {
 	@Autowired
 	private PermissionServiceInterface permissionServiceInterface;
 
-	//@PreAuthorize("hasRole('addPermission')")
+	@PreAuthorize("hasRole('addPermission')")
 	@PostMapping("/permission")
 	public ResponseEntity<?> addPermission(@Valid @RequestBody PermissionRequestDto permissionBody) {
 
@@ -46,7 +49,7 @@ public class PermissionController {
 
 	}
 
-	//@PreAuthorize("hasRole('editPermission')")
+	@PreAuthorize("hasRole('editPermission')")
 	@PutMapping("/permission/{id}")
 	public ResponseEntity<?> editPermission(@PathVariable(value = "id") Long permissionId, @Valid @RequestBody PermissionRequestDto permissionBody) throws ResourceNotFoundException {
 
@@ -63,7 +66,7 @@ public class PermissionController {
 
 	}
 
-	//@PreAuthorize("hasRole('deletePermission')")
+	@PreAuthorize("hasRole('deletePermission')")
 	@DeleteMapping("/permission/{id}")
 	public ResponseEntity<?> editEntity(@PathVariable(value = "id") Long permissionId) throws ResourceNotFoundException {
 
@@ -79,5 +82,7 @@ public class PermissionController {
 		}
 
 	}
+	
+	
 
 }

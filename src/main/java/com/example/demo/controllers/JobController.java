@@ -51,9 +51,8 @@ public class JobController {
 	 @Autowired
 	private EmailService emailService;
 
-	
-	@PostMapping("/jobs")
 	@PreAuthorize("hasRole('createJob')")
+	@PostMapping("/jobs")
 	public ResponseEntity<?> createJob(@RequestBody JobDto jobDto) {
 		
 		jobService.createJob(jobDto);

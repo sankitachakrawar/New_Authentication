@@ -5,30 +5,58 @@ import java.util.Objects;
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-
 @SuppressWarnings("serial")
 @Embeddable
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class RolePermissionId implements java.io.Serializable {
 
-
+	/**
+	 *
+	 */
 	private static final long serialVersionUID = 1L;
 
+	public RolePermissionId() {
 
-	@ManyToOne
+		// TODO Auto-generated constructor stub
+	}
+
+	public RolePermissionId(RoleEntity role, PermissionEntity permission) {
+
+		super();
+		this.role = role;
+		this.permission = permission;
+
+	}
+
 	private RoleEntity role;
-	
-	@ManyToOne
+
 	private PermissionEntity permission;
 
-	
-	
+	@ManyToOne
+	public RoleEntity getRole() {
+
+		return role;
+
+	}
+
+	public void setRole(RoleEntity role) {
+
+		this.role = role;
+
+	}
+
+	@ManyToOne
+	public PermissionEntity getPermission() {
+
+		return permission;
+
+	}
+
+	public void setPermission(PermissionEntity permission) {
+
+		this.permission = permission;
+
+	}
+
 	@Override
 	public int hashCode() {
 

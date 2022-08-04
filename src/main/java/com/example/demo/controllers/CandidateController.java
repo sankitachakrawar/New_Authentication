@@ -3,41 +3,30 @@ import java.util.List;
 
 
 
+
 import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.example.demo.dto.ApplyJobDto;
-import com.example.demo.dto.AssignJob;
-import com.example.demo.dto.AssignRole;
 import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ChangePasswordDto;
 import com.example.demo.dto.ErrorResponseDto;
 import com.example.demo.dto.ForgotPasswordDto;
-import com.example.demo.dto.IJobDto;
-import com.example.demo.dto.JobDto;
 import com.example.demo.dto.SuccessResponseDto;
-import com.example.demo.entities.ApplyJob;
 import com.example.demo.entities.Candidate;
 import com.example.demo.exceptionHandling.ResourceNotFoundException;
-import com.example.demo.repositories.CandidateRepository;
-import com.example.demo.services.AuthService;
 import com.example.demo.services.CandidateService;
 
 
@@ -48,12 +37,6 @@ public class CandidateController {
 	@Autowired
 	private CandidateService candidateService;
 
-	@Autowired
-	private CandidateRepository candidateRepository;
-	
-	@Autowired
-	private AuthService authService;
-	
 
 
 	@PreAuthorize("hasRole('updateCandidate')")
@@ -73,7 +56,7 @@ public class CandidateController {
 		return new  ResponseEntity<>(Map.of("message","Candidate delete sucesssfully!!"),HttpStatus.OK);
 	}
 	
-	@PreAuthorize("hasRole('getAllCandidates')")
+	//@PreAuthorize("hasRole('getAllCandidates')")
 	@GetMapping("/candidates")
 	public ResponseEntity<List<CandidateDto>> getAllCandidates(){
 		List<Candidate> data=this.candidateService.getAllCandidates();

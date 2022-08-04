@@ -1,16 +1,12 @@
 package com.example.demo.serviceImpl;
 
 
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.demo.dto.ApplyJobDto;
 import com.example.demo.dto.CandidateDto;
-import com.example.demo.dto.IPermissionDto;
 import com.example.demo.entities.ApplyJob;
 import com.example.demo.entities.Candidate;
 import com.example.demo.entities.Job;

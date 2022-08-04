@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import com.example.demo.dto.IPermissionDto;
 import com.example.demo.dto.IPermissionIdList;
 import com.example.demo.entities.RolePermissionEntity;
 
-
-
+@Repository
 public interface RolePermissionRepository extends JpaRepository<RolePermissionEntity, Long> {
 
 	ArrayList<IPermissionDto> findByPkRoleId(Long roleId, Class<IPermissionDto> IPermissionDto);

@@ -1,9 +1,5 @@
 package com.example.demo.serviceImpl;
 
-
-import java.io.IOException;
-
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -17,15 +13,11 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ChangePasswordDto;
 import com.example.demo.dto.ForgotPasswordDto;
-import com.example.demo.dto.IPermissionDto;
-import com.example.demo.dto.RoleIdListDto;
 import com.example.demo.entities.Candidate;
 import com.example.demo.entities.Forgot_password_request;
-import com.example.demo.entities.RoleEntity;
 import com.example.demo.exceptionHandling.*;
 import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.repositories.ForgotPasswordRequestRepository;
-import com.example.demo.repositories.RoleRepository;
 import com.example.demo.services.CandidateService;
 import com.example.demo.utils.JwtTokenUtil;
 

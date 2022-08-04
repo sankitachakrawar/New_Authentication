@@ -16,7 +16,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "candidate_role")
-@AssociationOverrides({ @AssociationOverride(name = "pk.candidate", joinColumns = @JoinColumn(name = "candidate_id")), @AssociationOverride(name = "pk.role", joinColumns = @JoinColumn(name = "role_id")) })
+@AssociationOverrides({ @AssociationOverride(name = "pk.user", joinColumns = @JoinColumn(name = "candidate_id")), @AssociationOverride(name = "pk.role", joinColumns = @JoinColumn(name = "role_id")) })
 public class UserRoleEntity implements java.io.Serializable {
 
 	/**

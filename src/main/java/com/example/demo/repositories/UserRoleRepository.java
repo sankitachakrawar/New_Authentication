@@ -9,6 +9,8 @@ import com.example.demo.dto.IUserRoleDetailDto;
 import com.example.demo.dto.RoleIdListDto;
 import com.example.demo.entities.UserRoleEntity;
 
+
+
 public interface UserRoleRepository extends JpaRepository<UserRoleEntity, Long> {
 
 	ArrayList<RoleIdListDto> findByPkUserId(Long userId, Class<RoleIdListDto> RoleIdListDto);
