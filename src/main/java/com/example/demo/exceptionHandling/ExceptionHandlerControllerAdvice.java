@@ -1,12 +1,10 @@
 package com.example.demo.exceptionHandling;
 
 import java.io.IOException;
-
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
-import org.springframework.web.servlet.NoHandlerFoundException;
 import com.example.demo.dto.ErrorResponseDto;
 import com.example.demo.entities.ErrorLoggerEntity;
 import com.example.demo.entities.MethodEnum;

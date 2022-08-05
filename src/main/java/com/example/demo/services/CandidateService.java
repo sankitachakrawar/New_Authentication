@@ -27,8 +27,6 @@ public interface CandidateService {
 	Boolean comparePassword(String password, String hashPassword);
 	
 	//void addJobToCandidate(Candidate candidate);
-	
-	
 
 	Candidate findById(Long candidate_id);
 

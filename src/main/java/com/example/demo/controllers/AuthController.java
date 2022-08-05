@@ -50,7 +50,6 @@ public class AuthController {
 	@Autowired
 	private EmailService emailService;
 	 
-
 	@Autowired
 	private LoggerServiceInterface loggerServiceInterface;
 	
@@ -62,6 +61,12 @@ public class AuthController {
 	
 	@Autowired
 	private CandidateRepository candidateRepository;
+	
+	@Autowired
+	private CandidateServiceImpl candidateServiceImpl;
+	
+	@Autowired
+	 private CustomUserDetailsService customUserDetailsService;
 	
 	@PostMapping("/register") 
 	public ResponseEntity<?> registerCandidate(@Valid @RequestBody CandidateDto candidate,HttpServletRequest request){
@@ -102,11 +107,6 @@ public class AuthController {
 				
 				//final String token = jwtUtil.generateToken(candidate.getEmail());
 				final String token = jwtTokenUtil.generateTokenOnForgotPass(candidate.getEmail());
-				//System.out.println("token2");
-				
-				//final String baseUrl = appSetting.getAllAppSetting().getSettings().get("http://localhost:8088");
-				//final String passUrl = appSetting.getAllAppSetting().getSettings().get("/forgot-password");
-				//final String url = "To confirm your account, please click here : " + baseUrl + passUrl + "?token=" + token;
 				
 				
 				final String url = "To confirm your account, please click here : " + "http://localhost:8088" + "/forgot-pass-confirm" + "?token=" + token;
@@ -124,11 +124,10 @@ public class AuthController {
 			}
 
 		}
-	@Autowired
-	private CandidateServiceImpl candidateServiceImpl;
+		
 	 
-	 @SuppressWarnings("static-access")
-	@PostMapping("/login")
+	 	@SuppressWarnings("static-access")
+	 	@PostMapping("/login")
 		public ResponseEntity<?> createAuthenticationToken(@Valid @RequestBody AuthRequestDto authenticationRequest) throws Exception, ResourceNotFoundException {
 
 			try {
@@ -159,8 +158,7 @@ public class AuthController {
 			}
 	 }
 	
-	 @Autowired
-	 private CustomUserDetailsService customUserDetailsService;
+	 
 	
 	 @GetMapping("/refresh_token")
 	    public ResponseEntity<?> refreshAndGetAuthenticationToken(HttpServletRequest request) {

@@ -18,7 +18,7 @@ public class EmailServiceImpl implements EmailService{
 	  @Override
 	  public String sendMail(String emailTo, String subject, String text, Candidate candidate) {
 		  SimpleMailMessage simpleMailMessage=new SimpleMailMessage();
-	  simpleMailMessage.setFrom("sankitachakrawar6255@gmail.com");
+	  simpleMailMessage.setFrom("abcxyz625500@gmail.com");
 	  simpleMailMessage.setTo(candidate.getEmail());
 	  
 	  simpleMailMessage.setSubject("Apply sucessfully");
@@ -31,7 +31,7 @@ public class EmailServiceImpl implements EmailService{
 		public void sendSimpleMessage(String emailTo, String subject, String text) {
 
 			SimpleMailMessage message = new SimpleMailMessage();
-			 message.setFrom("sankitachakrawar6255@gmail.com");
+			 message.setFrom("abcxyz625500@gmail.com");
 			message.setTo(emailTo);
 			message.setSubject(subject);
 			message.setText(text);

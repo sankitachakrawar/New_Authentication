@@ -15,6 +15,7 @@ public class AssignRole {
 	@NotEmpty(message = "Email is Required*emailRequired")
 	@NotNull(message = "Email is Required*emailRequired")
 	private String email;
+	
 	@NotBlank(message = "Role Name is Required*roleNamelRequired")
 	@NotEmpty(message = "Role Name is Required*roleNameRequired")
 	@NotNull(message = "Role Name is Required*roleNameRequired")

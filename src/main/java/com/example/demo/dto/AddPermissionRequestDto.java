@@ -10,9 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AddPermissionRequestDto {
 
-	
 
-	
 	@NotEmpty(message = "Permission is Required*permissionRequired")
 	@NotNull(message = "Permission is Required*permissionRequired")
 	private Long[] permissions;

@@ -32,9 +32,9 @@ public class Job {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotBlank(message = "Name is Required*nameRequired")
-	@NotEmpty(message = "Name is Required*nameRequired")
-	@NotNull(message = "Name is Required*nameRequired")
+	//@NotBlank(message = "Name is Required*nameRequired")
+	//@NotEmpty(message = "Name is Required*nameRequired")
+	//@NotNull(message = "Name is Required*nameRequired")
 	private String name;
 	
 	private String description;

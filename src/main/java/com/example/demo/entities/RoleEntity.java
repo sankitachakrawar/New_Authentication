@@ -44,7 +44,7 @@ public class RoleEntity implements Serializable {
 	
 	@Id
 	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.TABLE)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(name = "role_name")
@@ -52,9 +52,6 @@ public class RoleEntity implements Serializable {
 
 	@Column(name = "description")
 	private String description;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.role", cascade = CascadeType.ALL)
-	private List<UserRoleEntity> userRole;
 
 	@Column(name = "is_active")
 	private Boolean isActive = true;
@@ -69,25 +66,51 @@ public class RoleEntity implements Serializable {
 	
 	
 	
-//	@OneToOne(fetch = FetchType.EAGER)   
-//	@JoinColumn(name = "c_id")
-//	private Candidate candidateId;
-
-
-	
-	
-//	@ManyToOne(fetch = FetchType.EAGER)
-//	@JoinColumn(name="candidate_id")
-//	private Candidate candidateId;
-
-
-//	public void setCandidateId(RoleEntity byId) {
-//		// TODO Auto-generated method stub
-//		
-//	}
-
-
-//	@ManyToMany(cascade = CascadeType.ALL)
-//	private List<PermissionEntity> permission;
-	
+	//@OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.role", cascade = CascadeType.ALL)
+		//private List<UserRoleEntity> userRole;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//@OneToOne(fetch = FetchType.EAGER)   
+//@JoinColumn(name = "c_id")
+//private Candidate candidateId;
+
+
+
+
+//@ManyToOne(fetch = FetchType.EAGER)
+//@JoinColumn(name="candidate_id")
+//private Candidate candidateId;
+
+
+//public void setCandidateId(RoleEntity byId) {
+//	// TODO Auto-generated method stub
+//	
+//}
+
+
+//@ManyToMany(cascade = CascadeType.ALL)
+//private List<PermissionEntity> permission;

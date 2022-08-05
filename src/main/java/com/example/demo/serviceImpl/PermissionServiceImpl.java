@@ -1,5 +1,7 @@
 package com.example.demo.serviceImpl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.demo.dto.PermissionRequestDto;
@@ -62,6 +64,12 @@ public class PermissionServiceImpl implements PermissionServiceInterface {
 		permissionRepository.save(permissionData);
 		return;
 
+	}
+
+	@Override
+	public List<PermissionEntity> getAllPermissions() {
+		
+		return permissionRepository.findAll();
 	}
 
 }

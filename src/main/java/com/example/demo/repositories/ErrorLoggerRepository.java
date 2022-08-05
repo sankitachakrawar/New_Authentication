@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.demo.entities.ErrorLoggerEntity;
 
-public interface ErrorLoggerRepository extends JpaRepository<ErrorLoggerEntity, Long>{
 
+public interface ErrorLoggerRepository extends JpaRepository<ErrorLoggerEntity, Long> {
 }

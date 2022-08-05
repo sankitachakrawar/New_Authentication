@@ -70,9 +70,9 @@ public class PermissionEntity implements Serializable {
 
 	
 
-//	@ManyToMany(fetch = FetchType.EAGER)
-//	@JoinTable(name = "roles_permission", joinColumns = @JoinColumn(name = "permission_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-//	private Collection<RoleEntity> roles = new ArrayList<>();
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "roles_permission", joinColumns = @JoinColumn(name = "permission_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+	private Collection<RoleEntity> roles = new ArrayList<>();
 
 	
 

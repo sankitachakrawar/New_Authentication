@@ -15,9 +15,11 @@ import com.example.demo.dto.ChangePasswordDto;
 import com.example.demo.dto.ForgotPasswordDto;
 import com.example.demo.entities.Candidate;
 import com.example.demo.entities.Forgot_password_request;
+import com.example.demo.entities.RoleEntity;
 import com.example.demo.exceptionHandling.*;
 import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.repositories.ForgotPasswordRequestRepository;
+import com.example.demo.repositories.RoleRepository;
 import com.example.demo.services.CandidateService;
 import com.example.demo.utils.JwtTokenUtil;
 
@@ -90,7 +92,7 @@ public class CandidateServiceImpl implements CandidateService {
 	public Candidate updateCandidate(Candidate candidate1, Long id) {
 		Candidate candidate = this.candidateRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("candidate", "id", id));
-		candidate.setId(candidate1.getId());
+		//candidate.setId(candidate1.getId());
 		candidate.setName(candidate1.getName());
 		candidate.setEmail(candidate1.getEmail());
 		candidate.setPassword(candidate1.getPassword());
@@ -131,9 +133,10 @@ public class CandidateServiceImpl implements CandidateService {
 		return candidate;
 
 	}
-
 	
-
+	
+	
+	
 
 //	@Override
 //	public void addJobToCandidate(String email, String name) {

@@ -27,7 +27,7 @@ public class JobServiceImpl implements JobService {
 		job.setDescription(jobDto.getDescription());
 		job.setCTC(jobDto.getCTC());
 		job.setRecruiterId(jobDto.getRecruiterId());
-		System.out.println("JOb!!!"+jobDto.getRecruiterId());
+		System.out.println("Job!!!"+jobDto.getRecruiterId());
 		jobRepository.save(job);
 							
 	}
@@ -88,15 +88,15 @@ public class JobServiceImpl implements JobService {
 
 	//update job details
 	@Override
-	public JobDto updateJobDetails(JobDto job, Long id) {
+	public Job updateJobDetails(Job job1, Long id) {
 		Job jobs = this.jobRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("job", "id", id));
-		jobs.setName(job.getName());
-		jobs.setLocation(job.getLocation());
-		jobs.setDescription(job.getDescription());
-		jobs.setCTC(job.getCTC());
+		jobs.setName(job1.getName());
+		jobs.setLocation(job1.getLocation());
+		jobs.setDescription(job1.getDescription());
+		jobs.setCTC(job1.getCTC());
 		Job updatedJob=this.jobRepository.save(jobs);
-		JobDto job2=this.jobToDto(updatedJob);			
-		return job2;
+		//JobDto job2=this.jobToDto(updatedJob);			
+		return updatedJob;
 	
 	}
 

@@ -25,17 +25,17 @@ public interface RoleServiceInterface {
 
 	Page<IRoleDetailDto> getAllRoles(String search, String from, String to);
 	
-	 //void addRoleToCandidate(String email, String roleName);
+	 void addRoleToCandidate(String email, String roleName);
 	
-	//void addPermissionToRole(String actionName, String roleName);
+	void addPermissionToRole(String actionName, String roleName);
 	
 	RolePermissionDto getRoleAndPermissionById(Long id) throws ResourceNotFoundException;
 
-	//PermissionEntity getPermissionById(Long id)throws ResourceNotFoundException;
+	PermissionEntity getPermissionById(Long id)throws ResourceNotFoundException;
 
-	void addPermissionsToRole(Long id, Long[] permissions) throws ResourceNotFoundException;
+	//void addPermissionsToRole(Long id, Long[] permissions) throws ResourceNotFoundException;
 	
-	ArrayList<String> getPermissionByUserId(Long userId);
+	//ArrayList<String> getPermissionByUserId(Long userId);
 
 
 }

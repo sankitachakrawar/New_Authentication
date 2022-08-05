@@ -3,6 +3,7 @@ package com.example.demo.services;
 import org.springframework.data.domain.Page;
 import com.example.demo.dto.IJobDto;
 import com.example.demo.dto.JobDto;
+import com.example.demo.entities.Job;
 import com.example.demo.exceptionHandling.ResourceNotFoundException;
 
 public interface JobService {
@@ -11,7 +12,7 @@ public interface JobService {
 	
 	public JobDto getJobById(Long id) throws ResourceNotFoundException;
 	
-	JobDto updateJobDetails(JobDto job, Long id);
+	Job updateJobDetails(Job job, Long id);
 	
 	void deleteJobDetails(Long id);
 
