@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import com.example.demo.entities.Candidate;
+import com.example.demo.entities.PermissionEntity;
 import com.example.demo.entities.RoleEntity;
 import com.example.demo.repositories.CandidateRepository;
 import java.util.ArrayList;
@@ -19,57 +20,80 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private CandidateRepository candidateRepository;
 
+  
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
        
     	Candidate candidate = candidateRepository.findByEmail(username);
-        return new org.springframework.security.core.userdetails.User(candidate.getUsername(), candidate.getPassword(),getAuthorities(candidate));
+        return new org.springframework.security.core.userdetails.User(candidate.getUsername(), candidate.getPassword(),getAuthority(candidate));
     }
-    	
+    	       
     
     
-    private Collection<GrantedAuthority> getAuthorities(Candidate candidate){
-    	
-    	Set<RoleEntity> roles=(Set<RoleEntity>) candidate.getRoles();
-    	
-    	Collection<GrantedAuthority> authorities=new ArrayList<>(roles.size());
-    	
-    	for(RoleEntity role:roles) {
+    @Autowired
+   private RoleServiceInterface roleServiceInterface;
+
+ 
+    private ArrayList<SimpleGrantedAuthority> getAuthority(Candidate candidate){
+		
+    	ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
+    	System.out.println("Authority>>"+authorities);
+
+    	if((candidate.getId() + "permission") != null) {
     		
-    		authorities.add(new SimpleGrantedAuthority(role.getRoleName().toLowerCase()));
+    		ArrayList<SimpleGrantedAuthority> authorities1=new ArrayList<>();
+    		System.out.println("Authority 1>>"+authorities1);
+    		
+    		PermissionEntity permissions=roleServiceInterface.getPermissionById(candidate.getId());
+    		System.out.println("Permissions>>"+permissions);
+    		
+    		
+    		authorities1.add(new SimpleGrantedAuthority("Role_"+permissions));
+    		System.out.println("Authority2>>"+authorities1);
+    		
+    		authorities=authorities1;
+    		System.out.println("a>>"+authorities);
     	}
+   	
     	return authorities;
-    }
+   	
+   	
+   }
+    
+
+    	 
     
     
     
     
     
-//    @Autowired
-//    private RoleServiceInterface roleServiceInterface;
-//    
-//    private ArrayList<SimpleGrantedAuthority> getAuthority(Candidate candidate) {
+//    @SuppressWarnings("unchecked")
+//	private ArrayList<SimpleGrantedAuthority> getAuthority(Candidate candidate) {
 //
 //		ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<>();
 //
-//		//if (!cache.isKeyExist(candidate.getId() + "permission", candidate.getId() + "permission")) {
-//
+//		System.out.println("authority>>"+authorities);
+//		if (!cache.isKeyExist(candidate.getId() + "permission", candidate.getId() + "permission")) {
+//		
 //			ArrayList<SimpleGrantedAuthority> authorities1 = new ArrayList<>();
-//			ArrayList<String> permissions = roleServiceInterface.getPermissionByUserId(candidate.getId());
-//			//permissions.forEach(permission -> {
+//			System.out.println("authority2>>"+authorities1);
+//			
+//			PermissionEntity permissions = roleServiceInterface.getPermissionById(candidate.getId());
+//			((Iterable<SimpleGrantedAuthority>) permissions).forEach(permission -> {
 //
 //				authorities1.add(new SimpleGrantedAuthority("ROLE_" + permissions));
-//
-//			//});
+//			});
 //			authorities = authorities1;
-//			//cache.addInCache(candidate.getId() + "permission", candidate.getId() + "permission", authorities1);
 //
-//		//} else {
+//			cache.addInCache(candidate.getId() + "permission", candidate.getId() + "permission", authorities1);
 //
-//			//authorities = (ArrayList<SimpleGrantedAuthority>) cache.getFromCache(candidate.getId() + "permission", candidate.getId() + "permission");
+//		} else {
 //
-//		//}
+//			authorities = (ArrayList<SimpleGrantedAuthority>) cache.getFromCache(candidate.getId() + "permission", candidate.getId() + "permission");
+//
+//		}
 //
 //		return authorities;
 //
@@ -82,7 +106,13 @@ public class CustomUserDetailsService implements UserDetailsService {
       
        
     
-    
+//	private String role;
+//  public Collection<? extends GrantedAuthority> getAuthorities() {
+//  	  Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+//  	  SimpleGrantedAuthority authority = new SimpleGrantedAuthority(this.role);
+//  	  authorities.add(authority);
+//  	  return authorities;
+//  	}
     
 
 
@@ -97,7 +127,18 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 
 
-
+//  private Collection<GrantedAuthority> getAuthorities(Candidate candidate){
+//	
+//	Collection<RoleEntity> roles= candidate.getRoles();
+//	
+//	Collection<GrantedAuthority> authorities=new ArrayList<>(roles.size());
+//	
+//	for(RoleEntity role:roles) {
+//		
+//		authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+//	}
+//	return authorities;
+//}
 
 
 

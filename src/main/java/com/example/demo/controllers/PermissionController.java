@@ -42,7 +42,7 @@ public class PermissionController {
 	@Autowired
 	private PermissionServiceInterface permissionServiceInterface;
 
-	//@PreAuthorize("hasRole('addPermission')")
+	@PreAuthorize("hasRole('addPermission')")
 	@PostMapping("/permission")
 	public ResponseEntity<?> addPermission(@Valid @RequestBody PermissionRequestDto permissionBody) {
 
@@ -51,7 +51,7 @@ public class PermissionController {
 
 	}
 
-	//@PreAuthorize("hasRole('editPermission')")
+	@PreAuthorize("hasRole('editPermission')")
 	@PutMapping("/permission/{id}")
 	public ResponseEntity<?> editPermission(@PathVariable(value = "id") Long permissionId, @Valid @RequestBody PermissionRequestDto permissionBody) throws ResourceNotFoundException {
 
@@ -68,7 +68,7 @@ public class PermissionController {
 
 	}
 
-	//@PreAuthorize("hasRole('deletePermission')")
+	@PreAuthorize("hasRole('deletePermission')")
 	@DeleteMapping("/permission/{id}")
 	public ResponseEntity<?> editEntity(@PathVariable(value = "id") Long permissionId) throws ResourceNotFoundException {
 

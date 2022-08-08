@@ -51,7 +51,7 @@ public class JobController {
 	 @Autowired
 	private EmailService emailService;
 
-	//@PreAuthorize("hasRole('createJob')")
+	@PreAuthorize("hasRole('createJob')")
 	@PostMapping("/jobs")
 	public ResponseEntity<?> createJob(@RequestBody JobDto jobDto) {
 		
@@ -61,7 +61,7 @@ public class JobController {
 		}
 		
 	
-	//@PreAuthorize("hasRole('getSingleJob')")
+	@PreAuthorize("hasRole('getSingleJob')")
 	  @GetMapping("/jobs/{id}")
 	  public ResponseEntity<?> getSingleJob(@PathVariable ("id") Long id){
 		 JobDto job= jobService.getJobById(id);
@@ -69,7 +69,7 @@ public class JobController {
 		  
 	  }
 	  
-	//@PreAuthorize("hasRole('updateJob')")
+	@PreAuthorize("hasRole('updateJob')")
 	  @PutMapping("/jobs/{id}")
 		public ResponseEntity<?> updateJob(@Valid @RequestBody Job job,@PathVariable Long id){
 		
@@ -78,7 +78,7 @@ public class JobController {
 			
 		}
 	  
-	//@PreAuthorize("hasRole('deleteJobDetails')")
+	@PreAuthorize("hasRole('deleteJobDetails')")
 	  @DeleteMapping("/jobs/{id}")
 		public ResponseEntity<?> deleteJobDetails(@PathVariable("id")Long id){
 			this.jobService.deleteJobDetails(id);
@@ -88,7 +88,7 @@ public class JobController {
 		  
 		
 		  //Pagination of job list
-		 // @PreAuthorize("hasRole('getAllJobs')")
+		  @PreAuthorize("hasRole('applyToJob')")
 		  @GetMapping("/jobs")
 			public ResponseEntity<?> getAllJobs(@RequestParam(defaultValue = "") String search,
 					@RequestParam(defaultValue = "1") String pageNo, @RequestParam(defaultValue = "25") String size) {
@@ -102,7 +102,7 @@ public class JobController {
 	  
 	
 		  
-		// @PreAuthorize("hasRole('applyToJob')")
+		 @PreAuthorize("hasRole('applyToJob')")
 		  @PostMapping("/job/apply")
 			public ResponseEntity<?> applyToJob(@Valid @RequestBody ApplyJobDto applyJobDto,HttpServletRequest request){
 				try {

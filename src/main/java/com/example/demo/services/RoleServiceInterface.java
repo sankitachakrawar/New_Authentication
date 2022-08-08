@@ -31,11 +31,11 @@ public interface RoleServiceInterface {
 	
 	RolePermissionDto getRoleAndPermissionById(Long id) throws ResourceNotFoundException;
 
-	PermissionEntity getPermissionById(Long id)throws ResourceNotFoundException;
+	//PermissionEntity getPermissionById(Long id)throws ResourceNotFoundException;
 
 	//void addPermissionsToRole(Long id, Long[] permissions) throws ResourceNotFoundException;
 	
-	//ArrayList<String> getPermissionByUserId(Long userId);
+	PermissionEntity getPermissionById(Long id);
 
 
 }

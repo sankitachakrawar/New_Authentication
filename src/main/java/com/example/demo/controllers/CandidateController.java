@@ -43,7 +43,7 @@ public class CandidateController {
 
 
 
-	//@PreAuthorize("hasRole('updateCandidate')")
+	@PreAuthorize("hasRole('updateCandidate')")
 	@PutMapping("/candidates/{id}")
 	public ResponseEntity<?> updateCandidate(@Valid @RequestBody Candidate candidate,@PathVariable Long id){
 		
@@ -53,14 +53,14 @@ public class CandidateController {
 		
 	}
 	
-	//@PreAuthorize("hasRole('deleteCandidate')")
+	@PreAuthorize("hasRole('deleteCandidate')")
 	@DeleteMapping("/candidates/{id}")
 	public ResponseEntity<?> deleteCandidate(@PathVariable("id")Long id){
 		this.candidateService.deleteCandidate(id);
 		return new  ResponseEntity<>(Map.of("message","Candidate delete sucesssfully!!"),HttpStatus.OK);
 	}
 	
-	//@PreAuthorize("hasRole('getAllCandidates')")
+	@PreAuthorize("hasRole('getAllCandidates')")
 	@GetMapping("/candidates")
 	public ResponseEntity<List<CandidateDto>> getAllCandidates(){
 		List<Candidate> data=this.candidateService.getAllCandidates();
@@ -69,7 +69,7 @@ public class CandidateController {
 		
 	}
 	
-	//@PreAuthorize("hasRole('getSingleCandidate')")
+	@PreAuthorize("hasRole('getSingleCandidate')")
 	@GetMapping("/candidates/{id}")
 	public ResponseEntity<Candidate> getSingleCandidate(@PathVariable Long id){
 		
@@ -77,7 +77,7 @@ public class CandidateController {
 		
 	}
 	
-	//@PreAuthorize("hasRole('changePasswords')")
+	@PreAuthorize("hasRole('changePasswords')")
 	@PutMapping("/changePass/{id}")
 	public ResponseEntity<?> changePasswords(@PathVariable(value = "id") Long id,
 			@Valid @RequestBody ChangePasswordDto userBody, HttpServletRequest request)

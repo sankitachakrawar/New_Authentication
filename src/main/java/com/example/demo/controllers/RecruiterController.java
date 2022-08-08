@@ -23,7 +23,7 @@ public class RecruiterController {
 	private RecruiterService recruiterService;
 	
 	
-	// @PreAuthorize("hasRole('addRecruiter')")
+	 @PreAuthorize("hasRole('addRecruiter')")
 	@PostMapping("/recruiter") 
 	  public ResponseEntity<?> addRecruiter(@Valid @RequestBody Recruiter recruiter){
 		  Recruiter createdrecruiter=this.recruiterService.addRecruiter(recruiter);

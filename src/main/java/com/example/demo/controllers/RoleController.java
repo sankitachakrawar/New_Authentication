@@ -45,7 +45,7 @@ public class RoleController {
 	private RoleServiceInterface roleServiceInterface;
 	
 	
-	//@PreAuthorize("hasRole('addRole')")
+	@PreAuthorize("hasRole('addRole')")
 	@PostMapping("/role")
 	public ResponseEntity<?> addRole(@RequestBody RoleDto roleDto, HttpServletRequest request) {
 		
@@ -54,7 +54,7 @@ public class RoleController {
 		return new ResponseEntity<>("Role added successfully",HttpStatus.OK);
 	}
 
-	//@PreAuthorize("hasRole('editRole')")
+	@PreAuthorize("hasRole('editRole')")
 	@PutMapping("/role/{id}")
 	public ResponseEntity<?> editRole(@PathVariable(value = "id") Long roleId, @Valid @RequestBody RoleDto roleDto, HttpServletRequest request) {
 			try {
@@ -67,7 +67,7 @@ public class RoleController {
 			}
 	}
 
-	//@PreAuthorize("hasRole('deleteRole')")
+	@PreAuthorize("hasRole('deleteRole')")
 	@DeleteMapping("/role/{id}")
 	public ResponseEntity<?> deleteRole(@PathVariable(value = "id") Long roleId, HttpServletRequest request) {
 
@@ -81,7 +81,7 @@ public class RoleController {
 		}
 	}
 
-	//@PreAuthorize("hasRole('getRoleById')")
+	@PreAuthorize("hasRole('getRoleById')")
 	@GetMapping("/role/{id}")
 	public ResponseEntity<?> getRoleById(@PathVariable(value = "id") Long id) {
 
@@ -143,7 +143,7 @@ public class RoleController {
 		}
 		
 
-		//@PreAuthorize("hasRole('getSinglePermission')")
+		@PreAuthorize("hasRole('getSinglePermission')")
 		@GetMapping("/role/permission/{id}")
 		public ResponseEntity<PermissionEntity> getSinglePermission(@PathVariable Long id){
 			

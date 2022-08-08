@@ -74,6 +74,9 @@ public class PermissionEntity implements Serializable {
 	@JoinTable(name = "roles_permission", joinColumns = @JoinColumn(name = "permission_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
 	private Collection<RoleEntity> roles = new ArrayList<>();
 
+
+
+
 	
 
 //	@OneToOne(fetch = FetchType.LAZY)

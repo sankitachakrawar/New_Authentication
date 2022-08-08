@@ -1,21 +1,21 @@
 package com.example.demo.serviceImpl;
 
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
-
-
 import java.util.List;
 import java.util.Set;
-
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.example.demo.dto.IPermissionDto;
+import com.example.demo.dto.IPermissionIdList;
 import com.example.demo.dto.IRoleDetailDto;
 import com.example.demo.dto.PermissionDto;
 import com.example.demo.dto.RoleDto;
+import com.example.demo.dto.RoleIdListDto;
 import com.example.demo.dto.RolePermissionDto;
 import com.example.demo.entities.Candidate;
 import com.example.demo.entities.PermissionEntity;
@@ -182,6 +182,8 @@ public class RoleServiceImpl implements RoleServiceInterface {
 		System.out.println(candidate.getRoles().add(role));
 		
 	}
+
+	
 
 	
 
