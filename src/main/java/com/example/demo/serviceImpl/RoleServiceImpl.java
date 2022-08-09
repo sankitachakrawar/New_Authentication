@@ -2,6 +2,7 @@ package com.example.demo.serviceImpl;
 
 
 import java.lang.reflect.Array;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -10,10 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.IPermissionDto;
 import com.example.demo.dto.IPermissionIdList;
 import com.example.demo.dto.IRoleDetailDto;
 import com.example.demo.dto.PermissionDto;
+import com.example.demo.dto.RoleCandidateDto;
 import com.example.demo.dto.RoleDto;
 import com.example.demo.dto.RoleIdListDto;
 import com.example.demo.dto.RolePermissionDto;
@@ -161,12 +165,12 @@ public class RoleServiceImpl implements RoleServiceInterface {
 	}
 	
 
-	@Override
-	public PermissionEntity getPermissionById(Long id) throws ResourceNotFoundException {
-		PermissionEntity entity=permissionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("permission","id",id));
-		
-		return entity;
-	}
+//	@Override
+//	public PermissionEntity getPermissionById(Long id) throws ResourceNotFoundException {
+//		PermissionEntity entity=permissionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("permission","id",id));
+//		
+//		return entity;
+//	}
 
 
 	@Override
@@ -181,6 +185,49 @@ public class RoleServiceImpl implements RoleServiceInterface {
 		candidateRepository.save(candidate);
 		System.out.println(candidate.getRoles().add(role));
 		
+	}
+
+
+	@Override
+	public RoleCandidateDto getRoleAndCandidateById(Long id) throws ResourceNotFoundException {
+		RoleEntity roleEntity=roleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Role Not Found"));
+		List<Candidate> candidate=candidateRepository.findAll();
+		
+		for (Candidate candidates : candidate) {
+			CandidateDto dto=new CandidateDto();
+			dto.setName(candidates.getName());
+			
+			candidateRepository.findAll();
+
+	}
+		RoleCandidateDto roleCandidateDto = new RoleCandidateDto();
+		roleCandidateDto.setId(roleEntity.getId());
+		roleCandidateDto.setRoleName(roleEntity.getRoleName());
+
+		return roleCandidateDto;
+	}
+
+
+	@Override
+	public ArrayList<String> getPermissionById(Long id) {
+		
+		ArrayList<RoleIdListDto> roleIds=roleRepository.findById(id, RoleIdListDto.class);
+		ArrayList<Long> roles = new ArrayList<>();
+		
+		for(int i=0;i<roleIds.size();i++) {
+			roles.add(roleIds.get(i).getRoleId());
+		}
+		
+		List<IPermissionIdList> rolesPermission = permissionRepository.findById(id,IPermissionIdList.class);
+		ArrayList<String> permissions = new ArrayList<>();
+
+		for (IPermissionIdList element : rolesPermission) {
+
+			permissions.add(element.getPermissionActionName());
+
+		}
+		
+		return permissions;
 	}
 
 	

@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.data.domain.Page;
 import com.example.demo.dto.IRoleDetailDto;
+import com.example.demo.dto.RoleCandidateDto;
 import com.example.demo.dto.RoleDto;
 import com.example.demo.dto.RolePermissionDto;
 import com.example.demo.entities.PermissionEntity;
@@ -35,7 +36,11 @@ public interface RoleServiceInterface {
 
 	//void addPermissionsToRole(Long id, Long[] permissions) throws ResourceNotFoundException;
 	
-	PermissionEntity getPermissionById(Long id);
+	//PermissionEntity getPermissionById(Long id);
 
+	RoleCandidateDto getRoleAndCandidateById(Long id) throws ResourceNotFoundException;
+	
+	ArrayList<String> getPermissionById(Long id);
+	
 
 }

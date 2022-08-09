@@ -32,6 +32,7 @@ import com.example.demo.entities.RoleEntity;
 import com.example.demo.exceptionHandling.ResourceNotFoundException;
 import com.example.demo.services.RoleServiceInterface;
 import com.example.demo.dto.ListResponseDto;
+import com.example.demo.dto.RoleCandidateDto;
 
 @RestController
 @RequestMapping("/api")
@@ -143,13 +144,13 @@ public class RoleController {
 		}
 		
 
-		@PreAuthorize("hasRole('getSinglePermission')")
-		@GetMapping("/role/permission/{id}")
-		public ResponseEntity<PermissionEntity> getSinglePermission(@PathVariable Long id){
-			
-			return ResponseEntity.ok(this.roleServiceInterface.getPermissionById(id));
-			
-		}
+//		@PreAuthorize("hasRole('getSinglePermission')")
+//		@GetMapping("/role/permission/{id}")
+//		public ResponseEntity<PermissionEntity> getSinglePermission(@PathVariable Long id){
+//			
+//			return ResponseEntity.ok(this.roleServiceInterface.getPermissionById(id));
+//			
+//		}
 		
 		
 		  
@@ -175,7 +176,21 @@ public class RoleController {
 				
 		}	
 		
-		
+		@GetMapping("/candidate/{id}")
+		public ResponseEntity<?> getRoleAndCandidateById(@PathVariable(value = "id") Long id) {
+
+			try {
+
+				RoleCandidateDto roleCandidateData = roleServiceInterface.getRoleAndCandidateById(id);
+				return new ResponseEntity<>(new SuccessResponseDto("Success", "success", roleCandidateData), HttpStatus.OK);
+
+			} catch (ResourceNotFoundException e) {
+
+				return new ResponseEntity<>(new ErrorResponseDto(e.getMessage(), "roleNotFound"), HttpStatus.NOT_FOUND);
+
+			}
+
+		}
 		
 }
 

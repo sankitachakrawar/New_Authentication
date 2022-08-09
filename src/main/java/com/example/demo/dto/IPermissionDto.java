@@ -14,6 +14,6 @@ public interface IPermissionDto {
 	public String getPkPermissionDescription();
 
 	// @Value("#{target.pk.permission.entityId.id}")
-		public Long getPkPermissionEntityIdId();
+		//public Long getPkPermissionEntityIdId();
 
 }

@@ -46,11 +46,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     		ArrayList<SimpleGrantedAuthority> authorities1=new ArrayList<>();
     		System.out.println("Authority 1>>"+authorities1);
     		
-    		PermissionEntity permissions=roleServiceInterface.getPermissionById(candidate.getId());
-    		System.out.println("Permissions>>"+permissions);
+    		//PermissionEntity permissions=roleServiceInterface.getPermissionById(candidate.getId());
+    	//	System.out.println("Permissions>>"+permissions);
     		
     		
-    		authorities1.add(new SimpleGrantedAuthority("Role_"+permissions));
+    		//authorities1.add(new SimpleGrantedAuthority("Role_"+permissions));
     		System.out.println("Authority2>>"+authorities1);
     		
     		authorities=authorities1;
