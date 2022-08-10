@@ -1,4 +1,5 @@
 package com.example.demo.controllers;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -10,6 +11,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.AssignRole;
@@ -27,8 +30,12 @@ import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ChangePasswordDto;
 import com.example.demo.dto.ErrorResponseDto;
 import com.example.demo.dto.ForgotPasswordDto;
+import com.example.demo.dto.ICandidateDto;
+import com.example.demo.dto.IJobDto;
+import com.example.demo.dto.ListResponseDto;
 import com.example.demo.dto.SuccessResponseDto;
 import com.example.demo.entities.Candidate;
+import com.example.demo.entities.UserRoleEntity;
 import com.example.demo.exceptionHandling.ResourceNotFoundException;
 import com.example.demo.services.CandidateService;
 import com.example.demo.services.RoleServiceInterface;
@@ -60,12 +67,26 @@ public class CandidateController {
 		return new  ResponseEntity<>(Map.of("message","Candidate delete sucesssfully!!"),HttpStatus.OK);
 	}
 	
-	@PreAuthorize("hasRole('getAllCandidates')")
+	//@PreAuthorize("hasRole('getAllCandidates')")
+	@SuppressWarnings("unchecked")
 	@GetMapping("/candidates")
-	public ResponseEntity<List<CandidateDto>> getAllCandidates(){
-		List<Candidate> data=this.candidateService.getAllCandidates();
+	public ResponseEntity<List<CandidateDto>> getAllCandidates(@RequestParam(defaultValue = "") String search,
+			@RequestParam(defaultValue = "1") String pageNo, @RequestParam(defaultValue = "25") String size){
 		
-		return new ResponseEntity(new SuccessResponseDto("Success", "success", data),HttpStatus.OK);
+		Page<ICandidateDto> candidates = candidateService.getAllCandidates(search, pageNo, size);
+		if (candidates.getTotalElements() != 0) {
+			return new ResponseEntity(new SuccessResponseDto("Success", "success",
+					new ListResponseDto(candidates.getContent(), candidates.getTotalElements())), HttpStatus.OK);
+		}
+		return new ResponseEntity(new ErrorResponseDto("Data Not Found", "dataNotFound"), HttpStatus.NOT_FOUND);
+	
+		
+		
+		
+		
+		//List<Candidate> data=this.candidateService.getAllCandidates();
+		
+		//return new ResponseEntity(new SuccessResponseDto("Success", "success", data),HttpStatus.OK);
 		
 	}
 	
@@ -114,8 +135,19 @@ public class CandidateController {
 	 }
 	  }
 
-	
 	  
+	  
+	@PreAuthorize("hasRole('assignRole')")
+		@PostMapping("/candidate/assignRole")
+		public ResponseEntity<?> assignRole(@Valid @RequestBody AssignRole assignRole,HttpServletRequest request){
+		try {					
+			candidateService.addRoleToCandidate(assignRole);
+		return new ResponseEntity<>(new SuccessResponseDto("Role assign to candidate","Roleassigntocandidate",null),HttpStatus.OK);
+				
+		}catch(Exception e) {
+			return new ResponseEntity<>(new ErrorResponseDto("Role not assign to candidate","Rolenotassigntocandidate"),HttpStatus.BAD_REQUEST);
+		}
+		}
 }
  
 	  

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.data.domain.Page;
+
+import com.example.demo.dto.AssignPermission;
 import com.example.demo.dto.IRoleDetailDto;
 import com.example.demo.dto.RoleCandidateDto;
 import com.example.demo.dto.RoleDto;
@@ -26,21 +28,14 @@ public interface RoleServiceInterface {
 
 	Page<IRoleDetailDto> getAllRoles(String search, String from, String to);
 	
-	 void addRoleToCandidate(String email, String roleName);
-	
-	void addPermissionToRole(String actionName, String roleName);
-	
 	RolePermissionDto getRoleAndPermissionById(Long id) throws ResourceNotFoundException;
-
-	//PermissionEntity getPermissionById(Long id)throws ResourceNotFoundException;
-
-	//void addPermissionsToRole(Long id, Long[] permissions) throws ResourceNotFoundException;
-	
-	//PermissionEntity getPermissionById(Long id);
 
 	RoleCandidateDto getRoleAndCandidateById(Long id) throws ResourceNotFoundException;
 	
-	ArrayList<String> getPermissionById(Long id);
+	ArrayList<String> getPermissionByUserId(Long id);
 	
+	void addPermissionToRole(AssignPermission assignPermission);
 
+	
+	
 }

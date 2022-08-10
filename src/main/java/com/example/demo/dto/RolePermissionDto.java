@@ -2,13 +2,6 @@ package com.example.demo.dto;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class RolePermissionDto {
 
 
@@ -17,6 +10,57 @@ public class RolePermissionDto {
 	private String roleName;
 
 	private String description;
+	
+	private List<EntityDto> entity;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getRoleName() {
+		return roleName;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public List<EntityDto> getEntity() {
+		return entity;
+	}
+
+	public void setEntity(List<EntityDto> entity) {
+		this.entity = entity;
+	}
+
+	public RolePermissionDto() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public RolePermissionDto(Long id, String roleName, String description,
+			List<com.example.demo.dto.EntityDto> entity) {
+		super();
+		this.id = id;
+		this.roleName = roleName;
+		this.description = description;
+		this.entity = entity;
+	}
+
+	
+	
 
 
 

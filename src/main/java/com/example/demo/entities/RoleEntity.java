@@ -1,13 +1,10 @@
+
 package com.example.demo.entities;
 
 import java.io.Serializable;
 
-
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,25 +12,16 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
-import com.example.demo.dto.IRoleDetailDto;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+
+
+
 @Entity
 @Table(name = "roles")
 @Where(clause = "is_active = true")
@@ -66,8 +54,122 @@ public class RoleEntity implements Serializable {
 	
 	
 	
-	//@OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.role", cascade = CascadeType.ALL)
-		//private List<UserRoleEntity> userRole;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.role", cascade = CascadeType.ALL)
+	private List<UserRoleEntity> userRole;
+
+
+
+	public Long getId() {
+		return id;
+	}
+
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+
+	public String getRoleName() {
+		return roleName;
+	}
+
+
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+
+
+
+	public String getDescription() {
+		return description;
+	}
+
+
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+
+
+
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+
+
+
+	public Date getUpdatedAt() {
+		return updatedAt;
+	}
+
+
+
+	public void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+
+
+	public List<UserRoleEntity> getUserRole() {
+		return userRole;
+	}
+
+
+
+	public void setUserRole(List<UserRoleEntity> userRole) {
+		this.userRole = userRole;
+	}
+
+
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+
+
+	public RoleEntity() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+
+
+	public RoleEntity(Long id, String roleName, String description, Boolean isActive, Date createdAt, Date updatedAt,
+			List<UserRoleEntity> userRole) {
+		super();
+		this.id = id;
+		this.roleName = roleName;
+		this.description = description;
+		this.isActive = isActive;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+		this.userRole = userRole;
+	}
+	
+	
+	
 }
 
 

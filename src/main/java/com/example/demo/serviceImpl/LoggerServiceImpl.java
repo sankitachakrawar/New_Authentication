@@ -30,6 +30,7 @@ public class LoggerServiceImpl implements LoggerServiceInterface {
 		LoggerEntity logger = new LoggerEntity();
 		logger.setId(candidate);
 		logger.setToken(loggerDto.getToken());
+		logger.setCreatedAt(loggerDto.getCreatedAt());
 		logger.setExpireAt(loggerDto.getExpireAt());
 		loggerRepository.save(logger);
 

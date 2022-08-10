@@ -1,6 +1,7 @@
 package com.example.demo.entities;
 
 import java.io.Serializable;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -9,15 +10,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import com.example.demo.dto.LoggerDto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+
 @Entity
 @Table(name = "email_credential")
 public class EmailCredentialEntity implements Serializable {
@@ -51,6 +46,92 @@ public class EmailCredentialEntity implements Serializable {
 
 	@Column(name = "tls_enable")
 	private Boolean tlsEnable;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getEnv() {
+		return env;
+	}
+
+	public void setEnv(String env) {
+		this.env = env;
+	}
+
+	public String getHost() {
+		return host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
+	}
+
+	public int getPort() {
+		return port;
+	}
+
+	public void setPort(int port) {
+		this.port = port;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public Boolean getSmtpAuth() {
+		return smtpAuth;
+	}
+
+	public void setSmtpAuth(Boolean smtpAuth) {
+		this.smtpAuth = smtpAuth;
+	}
+
+	public Boolean getTlsEnable() {
+		return tlsEnable;
+	}
+
+	public void setTlsEnable(Boolean tlsEnable) {
+		this.tlsEnable = tlsEnable;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public EmailCredentialEntity() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public EmailCredentialEntity(Long id, String env, String host, int port, String username, String password,
+			Boolean smtpAuth, Boolean tlsEnable) {
+		super();
+		this.id = id;
+		this.env = env;
+		this.host = host;
+		this.port = port;
+		this.username = username;
+		this.password = password;
+		this.smtpAuth = smtpAuth;
+		this.tlsEnable = tlsEnable;
+	}
 
 	
 

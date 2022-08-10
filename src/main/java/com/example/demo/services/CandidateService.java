@@ -1,13 +1,23 @@
 package com.example.demo.services;
 
+import java.io.IOException;
 import java.util.List;
+
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+
+import org.springframework.data.domain.Page;
+
+import com.example.demo.dto.AssignRole;
 import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ChangePasswordDto;
 import com.example.demo.dto.ForgotPasswordDto;
+import com.example.demo.dto.ICandidateDto;
+import com.example.demo.dto.IPermissionDto;
 import com.example.demo.entities.Candidate;
+import com.example.demo.exceptionHandling.ResourceNotFoundException;
 
 
 public interface CandidateService {
@@ -16,7 +26,7 @@ public interface CandidateService {
 	
 	Candidate getCandidateById(Long id);
 	
-	List<Candidate> getAllCandidates();
+	Page<ICandidateDto> getAllCandidates(String search, String from, String to);
 	
 	void deleteCandidate(Long id);
 
@@ -26,8 +36,6 @@ public interface CandidateService {
 	
 	Boolean comparePassword(String password, String hashPassword);
 	
-	//void addJobToCandidate(Candidate candidate);
-
 	Candidate findById(Long candidate_id);
 
 	void forgotPasswordConfirm(@NotNull(message = "token is Required*tokenRequired") String token,
@@ -36,10 +44,9 @@ public interface CandidateService {
 	
 	public void addCandidate(CandidateDto candidateDto);
 
+	void addRoleToCandidate(AssignRole assignRole);
 	
-
-	
-	
+	List<IPermissionDto> getUserPermission(Long userId) throws IOException;
 
 	
 	

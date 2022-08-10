@@ -1,14 +1,27 @@
 package com.example.demo.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class JwtTokenResponse {
 
 	
 	private String token;
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public JwtTokenResponse() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public JwtTokenResponse(String token) {
+		super();
+		this.token = token;
+	}
+	
+	
 }

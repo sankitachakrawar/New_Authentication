@@ -6,13 +6,8 @@ import javax.validation.constraints.NotNull;
 
 import com.example.demo.entities.Candidate;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+
 public class RoleDto {
 
 	
@@ -22,6 +17,35 @@ public class RoleDto {
 	private String roleName;
 
 	private String description;
+
+	public String getRoleName() {
+		return roleName;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public RoleDto() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public RoleDto(
+			@NotBlank(message = "Role Name is Required*roleNameRequired") @NotEmpty(message = "Role Name is Required*roleNameRequired") @NotNull(message = "Role Name is Required*roleNameRequired") String roleName,
+			String description) {
+		super();
+		this.roleName = roleName;
+		this.description = description;
+	}
 	
 	
 

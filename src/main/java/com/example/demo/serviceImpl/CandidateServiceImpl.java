@@ -1,27 +1,44 @@
 package com.example.demo.serviceImpl;
 
+import java.io.IOException;
+
+import java.util.ArrayList;
 import java.util.Date;
+
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.example.demo.dto.AssignRole;
 import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ChangePasswordDto;
 import com.example.demo.dto.ForgotPasswordDto;
+import com.example.demo.dto.ICandidateDto;
+import com.example.demo.dto.IJobDto;
+import com.example.demo.dto.IPermissionDto;
+import com.example.demo.dto.RoleIdListDto;
 import com.example.demo.entities.Candidate;
 import com.example.demo.entities.Forgot_password_request;
 import com.example.demo.entities.RoleEntity;
+import com.example.demo.entities.RolePermissionEntity;
+import com.example.demo.entities.UserRoleEntity;
+import com.example.demo.entities.UserRoleId;
 import com.example.demo.exceptionHandling.*;
 import com.example.demo.repositories.CandidateRepository;
 import com.example.demo.repositories.ForgotPasswordRequestRepository;
+import com.example.demo.repositories.RolePermissionRepository;
 import com.example.demo.repositories.RoleRepository;
+import com.example.demo.repositories.UserRoleRepository;
 import com.example.demo.services.CandidateService;
 import com.example.demo.utils.JwtTokenUtil;
+import com.example.demo.utils.PaginationUsingFromTo;
 
 @Service
 public class CandidateServiceImpl implements CandidateService {
@@ -112,11 +129,11 @@ public class CandidateServiceImpl implements CandidateService {
 		return candidate;
 	}
 
-	@Override
-	public List<Candidate> getAllCandidates() {
-		
-		return this.candidateRepository.findAll();
-	}
+//	@Override
+//	public List<Candidate> getAllCandidates() {
+//		
+//		return this.candidateRepository.findAll();
+//	}
 
 	@Override
 	public void deleteCandidate(Long id) {
@@ -133,21 +150,6 @@ public class CandidateServiceImpl implements CandidateService {
 		return candidate;
 
 	}
-	
-	
-	
-	
-
-//	@Override
-//	public void addJobToCandidate(String email, String name) {
-//
-//		Candidate candidate = candidateRepository.findByEmailContainingIgnoreCaseAndIsActiveTrue(email);
-//
-//		Job job = jobRepository.findByName(name);
-//
-////		candidate.getJobs().add(job);
-//
-//	}
 	
 	
 	
@@ -251,6 +253,68 @@ public class CandidateServiceImpl implements CandidateService {
 
 		}
 	}
+
+	@Autowired
+	private RoleRepository roleRepository;
+	
+	@Autowired
+	private UserRoleRepository userRoleRepository;
+	
+	@Override
+	public void addRoleToCandidate(AssignRole assignRole) {
+		
+		try {
+			ArrayList<UserRoleEntity> roles=new ArrayList<>();
+			Candidate email=candidateRepository.findByEmail(assignRole.getEmail());
+			
+			RoleEntity name=roleRepository.findByRoleNameContainingIgnoreCase(assignRole.getRoleName());
+			
+			UserRoleEntity userRoleEntity=new UserRoleEntity();
+			
+			UserRoleId userRoleId=new UserRoleId(email,name);
+			
+			userRoleEntity.setPk(userRoleId);
+			roles.add(userRoleEntity);
+			userRoleRepository.saveAll(roles);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+			
+	}
+
+	@Autowired
+	private RolePermissionRepository rolePermissionRepository;
+	
+	@Override
+	public List<IPermissionDto> getUserPermission(Long userId) throws IOException {
+
+		ArrayList<RoleIdListDto> roleIds = userRoleRepository.findByPkUserId(userId, RoleIdListDto.class);
+		ArrayList<Long> roles = new ArrayList<>();
+
+		for (int i = 0; i < roleIds.size(); i++) {
+
+			roles.add(roleIds.get(i).getPkRoleId());
+
+		}
+
+		return rolePermissionRepository.findByPkRoleIdIn(roles, IPermissionDto.class);
+
+	}
+
+	@Override
+	public Page<ICandidateDto> getAllCandidates(String search, String from, String to) {
+		Pageable paging = new PaginationUsingFromTo().getPagination(from, to);
+		if ((search == "") || (search == null) || (search.length() == 0)) {
+			
+			return candidateRepository.findByOrderById(paging, ICandidateDto.class);
+		} else {
+			
+			return candidateRepository.findByNameContainingIgnoreCaseOrderById(search, paging, ICandidateDto.class);
+			
+				
+		}
+	}
+	
 
 	
 	  

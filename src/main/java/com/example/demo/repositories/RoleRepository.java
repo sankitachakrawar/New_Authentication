@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.example.demo.dto.IRoleDetailDto;
 import com.example.demo.dto.RoleIdListDto;
 import com.example.demo.entities.RoleEntity;
+import com.example.demo.entities.UserRoleEntity;
 
 
 @Repository
@@ -21,11 +22,18 @@ public interface RoleRepository extends JpaRepository<RoleEntity, Long> {
 	
 	Page<IRoleDetailDto> findByRoleNameContainingIgnoreCaseOrderByIdDesc(String title,Pageable paging,Class<IRoleDetailDto> roleDtos);
 	Page<IRoleDetailDto> findByOrderByIdDesc(Pageable paging,Class<IRoleDetailDto> roleDtos);
-	RoleEntity findByRoleNameContainingIgnoreCase(String roleName);
-	ArrayList<RoleIdListDto> findById(Long id, Class<RoleIdListDto> class1);
+	
 	
 	
 	RoleEntity findByRoleName(String roleName);
+	
+	
+	RoleEntity findByRoleNameContainingIgnoreCase(String roleName);
+	
+	ArrayList<RoleIdListDto> findById(Long id, Class<RoleIdListDto> class1);
+	
+	
+	//RoleEntity findByRoleName(String roleName);
 
 	
 	

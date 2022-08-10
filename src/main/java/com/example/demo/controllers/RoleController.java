@@ -3,6 +3,7 @@ package com.example.demo.controllers;
 import javax.servlet.http.HttpServletRequest;
 
 
+
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,18 +19,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.example.demo.dto.AddPermissionRequestDto;
 import com.example.demo.dto.AssignPermission;
-import com.example.demo.dto.AssignRole;
 import com.example.demo.dto.ErrorResponseDto;
 import com.example.demo.dto.IRoleDetailDto;
 import com.example.demo.dto.RoleDto;
 import com.example.demo.dto.RolePermissionDto;
 import com.example.demo.dto.SuccessResponseDto;
-import com.example.demo.entities.PermissionEntity;
 import com.example.demo.entities.RoleEntity;
 import com.example.demo.exceptionHandling.ResourceNotFoundException;
+import com.example.demo.services.PermissionServiceInterface;
 import com.example.demo.services.RoleServiceInterface;
 import com.example.demo.dto.ListResponseDto;
 import com.example.demo.dto.RoleCandidateDto;
@@ -50,7 +48,7 @@ public class RoleController {
 	@PostMapping("/role")
 	public ResponseEntity<?> addRole(@RequestBody RoleDto roleDto, HttpServletRequest request) {
 		
-		RoleDto dto=this.roleServiceInterface.addRole(roleDto);
+		this.roleServiceInterface.addRole(roleDto);
 		
 		return new ResponseEntity<>("Role added successfully",HttpStatus.OK);
 	}
@@ -108,13 +106,17 @@ public class RoleController {
 			return new ResponseEntity<>(new ErrorResponseDto("Data Not Found", "dataNotFound"), HttpStatus.NOT_FOUND);
 		}
 		
+		@Autowired
+		private PermissionServiceInterface permissionServiceInterface;
+		
 		//@PreAuthorize("hasRole('getRoleAndPermissionById')")
 		@GetMapping("/permission/{id}")
-		public ResponseEntity<?> getRoleAndPermissionById(@PathVariable(value = "id") Long id) {
+		public ResponseEntity<?> getRoleAndPermissionById(@PathVariable(value = "id") Long roleId) {
 
 			try {
 
-				RolePermissionDto rolePermissionData = roleServiceInterface.getRoleAndPermissionById(id);
+				RolePermissionDto rolePermissionData = roleServiceInterface.getRoleAndPermissionById(roleId);
+				
 				return new ResponseEntity<>(new SuccessResponseDto("Success", "success", rolePermissionData), HttpStatus.OK);
 
 			} catch (ResourceNotFoundException e) {
@@ -124,57 +126,6 @@ public class RoleController {
 			}
 
 		}
-		
-	//@PreAuthorize("hasRole('AllPermissionToRole')")
-		@PostMapping("/roles/assignPermission")
-		public ResponseEntity<?> AddPermissionToRole(@Valid @RequestBody AssignPermission assignPermission, HttpServletRequest request) {
-			try {
-				String actionName=assignPermission.getActionName();
-				String roleName=assignPermission.getRoleName();
-				
-				roleServiceInterface.addPermissionToRole(actionName, roleName);
-				return new ResponseEntity<>(new SuccessResponseDto("Permission Assign to Role", "PermissionAssigntoRole", assignPermission),
-						HttpStatus.CREATED);
-			}catch(Exception e) {
-				e.printStackTrace();
-				return new ResponseEntity<>(new ErrorResponseDto("Permission Not Assign to Role", "PermissionNotAssigntoRole"),
-						HttpStatus.NOT_ACCEPTABLE);
-			}
-		
-		}
-		
-
-//		@PreAuthorize("hasRole('getSinglePermission')")
-//		@GetMapping("/role/permission/{id}")
-//		public ResponseEntity<PermissionEntity> getSinglePermission(@PathVariable Long id){
-//			
-//			return ResponseEntity.ok(this.roleServiceInterface.getPermissionById(id));
-//			
-//		}
-		
-		
-		  
-		//@PreAuthorize("hasRole('assignRole')")
-		@PostMapping("/candidate/assignRole")
-		public ResponseEntity<?> assignRole(@Valid @RequestBody AssignRole assignRole, HttpServletRequest request)
-						throws Exception {
-		try {
-				String email = assignRole.getEmail();
-				String roleName = assignRole.getRoleName();
-				System.out.println(email);
-				System.out.println(roleName);
-				
-				roleServiceInterface.addRoleToCandidate(email, roleName);
-				return new ResponseEntity<>(new SuccessResponseDto("Role Assign to Candidate", "roleAssignToCandidate", assignRole),
-								HttpStatus.OK);
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-				return new ResponseEntity<>(new ErrorResponseDto("Role Not Assign to Candidate", "roleNotAssignToCandidate"),
-								HttpStatus.BAD_REQUEST);
-			}
-				
-		}	
 		
 		@GetMapping("/candidate/{id}")
 		public ResponseEntity<?> getRoleAndCandidateById(@PathVariable(value = "id") Long id) {
@@ -191,6 +142,18 @@ public class RoleController {
 			}
 
 		}
+	
+		//@PreAuthorize("hasRole('assignPermission')")
+		@PostMapping("/assignPermission")
+		public ResponseEntity<?> assignPermission(@Valid @RequestBody AssignPermission assignPermission,HttpServletRequest request){
+		try {					
+			roleServiceInterface.addPermissionToRole(assignPermission);
+		return new ResponseEntity<>(new SuccessResponseDto("Permission assign to Role","PermissionassigntoRole",null),HttpStatus.OK);
+				
+		}catch(Exception e) {
+			return new ResponseEntity<>(new ErrorResponseDto("Permission not assign to Role","PermissionnotassigntoRole"),HttpStatus.BAD_REQUEST);
+		}
+	}
 		
 }
 
@@ -216,7 +179,13 @@ public class RoleController {
 
 
 
-
+//@PreAuthorize("hasRole('getSinglePermission')")
+//@GetMapping("/role/permission/{id}")
+//public ResponseEntity<PermissionEntity> getSinglePermission(@PathVariable Long id){
+//	
+//	return ResponseEntity.ok(this.roleServiceInterface.getPermissionById(id));
+//	
+//}
 
 
 
@@ -272,4 +241,47 @@ public class RoleController {
 //}
 //
 
+////@PreAuthorize("hasRole('AllPermissionToRole')")
+//@PostMapping("/roles/assignPermission")
+//public ResponseEntity<?> AddPermissionToRole(@Valid @RequestBody AssignPermission assignPermission, HttpServletRequest request) {
+//	try {
+//		String actionName=assignPermission.getActionName();
+//		String roleName=assignPermission.getRoleName();
+//		
+//		roleServiceInterface.addPermissionToRole(actionName, roleName);
+//		return new ResponseEntity<>(new SuccessResponseDto("Permission Assign to Role", "PermissionAssigntoRole", assignPermission),
+//				HttpStatus.CREATED);
+//	}catch(Exception e) {
+//		e.printStackTrace();
+//		return new ResponseEntity<>(new ErrorResponseDto("Permission Not Assign to Role", "PermissionNotAssigntoRole"),
+//				HttpStatus.NOT_ACCEPTABLE);
+//	}
+//
+//}
 
+
+
+
+
+//
+////@PreAuthorize("hasRole('assignRole')")
+//@PostMapping("/candidate/assignRole")
+//public ResponseEntity<?> assignRole(@Valid @RequestBody AssignRole assignRole, HttpServletRequest request)
+//				throws Exception {
+//try {
+//		String email = assignRole.getEmail();
+//		String roleName = assignRole.getRoleName();
+//		System.out.println(email);
+//		System.out.println(roleName);
+//		
+//		roleServiceInterface.addRoleToCandidate(email, roleName);
+//		return new ResponseEntity<>(new SuccessResponseDto("Role Assign to Candidate", "roleAssignToCandidate", assignRole),
+//						HttpStatus.OK);
+//		
+//	} catch (Exception e) {
+//		e.printStackTrace();
+//		return new ResponseEntity<>(new ErrorResponseDto("Role Not Assign to Candidate", "roleNotAssignToCandidate"),
+//						HttpStatus.BAD_REQUEST);
+//	}
+//		
+//}	

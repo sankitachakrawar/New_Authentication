@@ -20,47 +20,43 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private CandidateRepository candidateRepository;
 
-  
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
        
     	Candidate candidate = candidateRepository.findByEmail(username);
-        return new org.springframework.security.core.userdetails.User(candidate.getUsername(), candidate.getPassword(),getAuthority(candidate));
+        return new org.springframework.security.core.userdetails.User(candidate.getUsername(), candidate.getPassword(),new ArrayList<>());
     }
-    	       
-    
-    
-    @Autowired
-   private RoleServiceInterface roleServiceInterface;
-
- 
-    private ArrayList<SimpleGrantedAuthority> getAuthority(Candidate candidate){
-		
-    	ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<>();
-
-    	System.out.println("Authority>>"+authorities);
-
-    	if((candidate.getId() + "permission") != null) {
-    		
-    		ArrayList<SimpleGrantedAuthority> authorities1=new ArrayList<>();
-    		System.out.println("Authority 1>>"+authorities1);
-    		
-    		//PermissionEntity permissions=roleServiceInterface.getPermissionById(candidate.getId());
-    	//	System.out.println("Permissions>>"+permissions);
-    		
-    		
-    		//authorities1.add(new SimpleGrantedAuthority("Role_"+permissions));
-    		System.out.println("Authority2>>"+authorities1);
-    		
-    		authorities=authorities1;
-    		System.out.println("a>>"+authorities);
-    	}
-   	
-    	return authorities;
-   	
-   	
-   }
+//    	          
+//    @Autowired
+//   private RoleServiceInterface roleServiceInterface;
+//
+// 
+//   private ArrayList<SimpleGrantedAuthority> getAuthority(Candidate candidate){
+//		
+//    	ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<>();
+//
+//    	System.out.println("Authority>>"+authorities);
+//
+//    	if((candidate.getId() + "permission") != null) {
+//    		
+//    		ArrayList<SimpleGrantedAuthority> authorities1=new ArrayList<>();
+//    		System.out.println("Authority 1>>"+authorities1);
+//    		
+//    		ArrayList<String> permissions=roleServiceInterface.getPermissionByUserId(candidate.getId());
+//    		System.out.println("Permissions>>"+permissions);
+//    		
+//    		
+//    		authorities1.add(new SimpleGrantedAuthority("Role_"+permissions));
+//    		System.out.println("Authority 2>>"+authorities1);
+//    		
+//    		authorities=authorities1;
+//    		System.out.println("a>>"+authorities);
+//    	}
+//   	
+//    	return authorities;
+//   	
+//   	
+//   }
     
 
     	 

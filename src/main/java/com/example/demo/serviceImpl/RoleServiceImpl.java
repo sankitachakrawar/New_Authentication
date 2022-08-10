@@ -1,8 +1,6 @@
 package com.example.demo.serviceImpl;
 
-
 import java.lang.reflect.Array;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -11,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
+import com.example.demo.dto.AssignPermission;
 import com.example.demo.dto.CandidateDto;
+import com.example.demo.dto.EntityDto;
+import com.example.demo.dto.EntityPermissionDto;
 import com.example.demo.dto.IPermissionDto;
 import com.example.demo.dto.IPermissionIdList;
 import com.example.demo.dto.IRoleDetailDto;
@@ -22,12 +22,18 @@ import com.example.demo.dto.RoleDto;
 import com.example.demo.dto.RoleIdListDto;
 import com.example.demo.dto.RolePermissionDto;
 import com.example.demo.entities.Candidate;
+import com.example.demo.entities.EntityEntity;
 import com.example.demo.entities.PermissionEntity;
 import com.example.demo.entities.RoleEntity;
+import com.example.demo.entities.RolePermissionEntity;
+import com.example.demo.entities.RolePermissionId;
 import com.example.demo.exceptionHandling.ResourceNotFoundException;
 import com.example.demo.repositories.CandidateRepository;
+import com.example.demo.repositories.EntityRepository;
 import com.example.demo.repositories.PermissionRepository;
+import com.example.demo.repositories.RolePermissionRepository;
 import com.example.demo.repositories.RoleRepository;
+import com.example.demo.repositories.UserRoleRepository;
 import com.example.demo.services.RoleServiceInterface;
 import com.example.demo.utils.PaginationUsingFromTo;
 
@@ -130,39 +136,105 @@ public class RoleServiceImpl implements RoleServiceInterface {
 
 	@Autowired
 	private PermissionRepository permissionRepository;
-	@Override
-	public void addPermissionToRole(String actionName, String roleName) {
-		PermissionEntity permissionEntity=permissionRepository.findByActionNameContainingIgnoreCase(actionName);
-		
-		RoleEntity role = roleRepository.findByRoleNameContainingIgnoreCase(roleName);
-		
-		permissionEntity.getRoles().add(role);
-		
-		permissionRepository.save(permissionEntity);
-		
-	}
-
-
+	
+	@Autowired
+	private EntityRepository entityRepository;
+	
 	@Override
 	public RolePermissionDto getRoleAndPermissionById(Long id) throws ResourceNotFoundException {
-		
-		RoleEntity roleEntity=roleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Role Not Found"));
-		List<PermissionEntity> permissions=permissionRepository.findAll();
-		ArrayList<IPermissionDto> rolesPermission = PermissionRepository.findByRoleId(id, IPermissionDto.class);
-		
+
+		RoleEntity roleEntity = roleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Role Not Found"));
+		List<EntityEntity> entities = entityRepository.findAll();
+		List<PermissionEntity> permissions = permissionRepository.findAll();
+		ArrayList<IPermissionDto> rolesPermission = rolePermissionRepository.findByPkRoleId(id, IPermissionDto.class);
+		ArrayList<EntityPermissionDto> entityPermission = new ArrayList<>();
+
 		for (PermissionEntity permission : permissions) {
-				PermissionDto dto=new PermissionDto();
-				dto.setActionName(permission.getActionName());
-				dto.setDescription(permission.getDescription());
-				 permissionRepository.findAll();
-	
+
+			EntityPermissionDto singleEntityPermisson = new EntityPermissionDto();
+			singleEntityPermisson.setActionName(permission.getDescription());
+			singleEntityPermisson.setId(permission.getId());
+			singleEntityPermisson.setEntityId(permission.getEntityId().getId());
+			singleEntityPermisson.setIsSelected(false);
+
+			for (IPermissionDto element : rolesPermission) {
+
+				if (permission.getId() == element.getPkPermissionId()) {
+
+					singleEntityPermisson.setIsSelected(true);
+					break;
+
+				}
+
+			}
+
+			entityPermission.add(singleEntityPermisson);
+
 		}
+
+		ArrayList<EntityDto> entityDto = new ArrayList<>();
+
+		for (EntityEntity element : entities) {
+
+			Boolean isEntityEnabled = false;
+			ArrayList<EntityPermissionDto> entityPermission1 = new ArrayList<>();
+
+			for (int j = 0; j < entityPermission.size(); j++) {
+
+				if (element.getId() == entityPermission.get(j).getEntityId()) {
+
+					if (entityPermission.get(j).getIsSelected()) {
+
+						isEntityEnabled = true;
+
+					}
+
+					entityPermission1.add(entityPermission.get(j));
+
+				}
+
+			}
+
+			EntityDto singleEntityDto = new EntityDto();
+			singleEntityDto.setId(element.getId());
+			singleEntityDto.setEntityName(element.getEntityName());
+			singleEntityDto.setIsSelected(isEntityEnabled);
+			singleEntityDto.setPermissions(entityPermission1);
+			entityDto.add(singleEntityDto);
+
+		}
+
 		RolePermissionDto rolePermissionDto = new RolePermissionDto();
 		rolePermissionDto.setId(roleEntity.getId());
 		rolePermissionDto.setRoleName(roleEntity.getRoleName());
 		rolePermissionDto.setDescription(roleEntity.getDescription());
+		rolePermissionDto.setEntity(entityDto);
 		return rolePermissionDto;
+
 	}
+
+
+//	@Override
+//	public RolePermissionDto getRoleAndPermissionById(Long id) throws ResourceNotFoundException {
+//		
+//		RoleEntity roleEntity=roleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Role Not Found"));
+//		List<PermissionEntity> permissions=permissionRepository.findAll();
+//		ArrayList<IPermissionDto> rolesPermission = PermissionRepository.findByRoleId(id, IPermissionDto.class);
+//		
+//		for (PermissionEntity permission : permissions) {
+//				PermissionDto dto=new PermissionDto();
+//				dto.setActionName(permission.getActionName());
+//				dto.setDescription(permission.getDescription());
+//				 permissionRepository.findAll();
+//	
+//		}
+//		RolePermissionDto rolePermissionDto = new RolePermissionDto();
+//		rolePermissionDto.setId(roleEntity.getId());
+//		rolePermissionDto.setRoleName(roleEntity.getRoleName());
+//		rolePermissionDto.setDescription(roleEntity.getDescription());
+//		rolePermissionDto.getActionName();
+//		return rolePermissionDto;
+//	}
 	
 
 //	@Override
@@ -173,19 +245,7 @@ public class RoleServiceImpl implements RoleServiceInterface {
 //	}
 
 
-	@Override
-	public void addRoleToCandidate(String email, String roleName) {
-		Candidate candidate = candidateRepository.findByEmailContainingIgnoreCaseAndIsActiveTrue(email);
-		System.out.println("candidate>>"+candidate);
-		
-		RoleEntity role = roleRepository.findByRoleNameContainingIgnoreCase(roleName);
-		System.out.println("role>>"+role);
-		candidate.getRoles().add(role);
-		
-		candidateRepository.save(candidate);
-		System.out.println(candidate.getRoles().add(role));
-		
-	}
+
 
 
 	@Override
@@ -208,73 +268,117 @@ public class RoleServiceImpl implements RoleServiceInterface {
 	}
 
 
+	@Autowired
+	private UserRoleRepository userRoleRepository;
+	
 	@Override
-	public ArrayList<String> getPermissionById(Long id) {
-		
-		ArrayList<RoleIdListDto> roleIds=roleRepository.findById(id, RoleIdListDto.class);
+	public ArrayList<String> getPermissionByUserId(Long userId) {
+
+		ArrayList<RoleIdListDto> roleIds = userRoleRepository.findByPkUserId(userId, RoleIdListDto.class);
 		ArrayList<Long> roles = new ArrayList<>();
-		
-		for(int i=0;i<roleIds.size();i++) {
-			roles.add(roleIds.get(i).getRoleId());
+
+		for (int i = 0; i < roleIds.size(); i++) {
+
+			roles.add(roleIds.get(i).getPkRoleId());
+
 		}
-		
-		List<IPermissionIdList> rolesPermission = permissionRepository.findById(id,IPermissionIdList.class);
+
+		List<IPermissionIdList> rolesPermission = rolePermissionRepository.findPkPermissionByPkRoleIdIn(roles, IPermissionIdList.class);
 		ArrayList<String> permissions = new ArrayList<>();
 
 		for (IPermissionIdList element : rolesPermission) {
 
-			permissions.add(element.getPermissionActionName());
+			permissions.add(element.getPkPermissionActionName());
 
 		}
-		
+
 		return permissions;
+
 	}
 
-	
 
 	
-
-
-
-
-
+	@Autowired
+	private RolePermissionRepository rolePermissionRepository;
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-//	@Override
-//	public RoleEntity addRole(RoleEntity roleEntity)
-//	{
-//		RoleEntity roleEntity2=new RoleEntity();
-//		roleEntity2.setRoleName(roleEntity.getRoleName());
-//		roleEntity2.setDescription(roleEntity.getDescription());
-//		roleRepository.save(roleEntity2);
-//		return roleEntity;
-//	}
-	
-
+	@Override
+	public void addPermissionToRole(AssignPermission assignPermission) {
+		try {
+			ArrayList<RolePermissionEntity> roles=new ArrayList<>();
+		
+			PermissionEntity actionName=permissionRepository.findByActionNameContainingIgnoreCase(assignPermission.getActionName());
+			
+			RoleEntity roleName=roleRepository.findByRoleName(assignPermission.getRoleName());
+			
+			RolePermissionEntity rolePermissionEntity=new RolePermissionEntity();
+			
+			RolePermissionId rolePermissionId=new RolePermissionId(roleName,actionName);
+			
+			rolePermissionEntity.setPk(rolePermissionId);
+			roles.add(rolePermissionEntity);
+			rolePermissionRepository.saveAll(roles);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+			
+		}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//@Override
+//public void addPermissionToRole(String actionName, String roleName) {
+//	PermissionEntity permissionEntity=permissionRepository.findByActionNameContainingIgnoreCase(actionName);
+//	
+//	RoleEntity role = roleRepository.findByRoleNameContainingIgnoreCase(roleName);
+//	
+//	permissionEntity.getRoles().add(role);
+//	
+//	permissionRepository.save(permissionEntity);
+//	
+//}
+
+
+
+
+
+
+
+
+
+
+
+//@Override
+//public RoleEntity addRole(RoleEntity roleEntity)
+//{
+//	RoleEntity roleEntity2=new RoleEntity();
+//	roleEntity2.setRoleName(roleEntity.getRoleName());
+//	roleEntity2.setDescription(roleEntity.getDescription());
+//	roleRepository.save(roleEntity2);
+//	return roleEntity;
+//}
+
+//@Override
+//public void addRoleToCandidate(String email, String roleName) {
+//	Candidate candidate = candidateRepository.findByEmailContainingIgnoreCaseAndIsActiveTrue(email);
+//	System.out.println("candidate>>"+candidate);
+//	
+//	RoleEntity role = roleRepository.findByRoleNameContainingIgnoreCase(roleName);
+//	System.out.println("role>>"+role);
+//	candidate.getRoles().add(role);
+//	
+//	candidateRepository.save(candidate);
+//	System.out.println(candidate.getRoles().add(role));
+//	
+//}

@@ -146,7 +146,7 @@ public class AuthController {
 				LoggerDto logger = new LoggerDto();
 				logger.setToken(token);
 				Calendar calender = Calendar.getInstance();
-				calender.add(Calendar.MINUTE, 15);
+				calender.add(Calendar.HOUR_OF_DAY, 5);
 				logger.setExpireAt(calender.getTime());
 				loggerServiceInterface.createLogger(logger,candidate);
 				return new ResponseEntity<>(new SuccessResponseDto("Success", "success", new AuthResponseDto(token,candidate.getEmail(),candidate.getName(),candidate.getId())), HttpStatus.OK);

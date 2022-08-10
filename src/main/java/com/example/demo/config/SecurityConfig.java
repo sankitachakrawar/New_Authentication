@@ -74,7 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	  @Override 
 	  protected void configure(HttpSecurity http) throws Exception {
 		  http.cors().configurationSource(corsConfigurationSource()).and().csrf().disable()
-			.authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/**").permitAll().antMatchers("/auth/login", "/auth/forgot-pass", "/auth/register", "/api/forgot-pass-confirm").permitAll().
+			.authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/**").permitAll().antMatchers("/auth/login", "/auth/forgot-pass","/public/**", "/auth/register", "/api/forgot-pass-confirm").permitAll().
 			anyRequest().authenticated().and().httpBasic().and().
 			exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 

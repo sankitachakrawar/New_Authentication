@@ -1,6 +1,7 @@
 package com.example.demo.entities;
 
 import java.io.Serializable;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -23,12 +24,7 @@ import org.hibernate.annotations.Where;
 
 import com.example.demo.dto.LoggerDto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+
 @Entity
 @Table(name = "logger")
 @Where(clause = "is_active = true")
@@ -49,8 +45,81 @@ public class LoggerEntity implements Serializable {
 	@Column(name = "token", length = 512)
 	private String token;
 	
+	@Column(name="createdAt")
+	@CreationTimestamp
+	private Date createdAt;
+	
 	private Date expireAt;
 
 	@Column(name = "is_active")
 	private boolean isActive = true;
+
+	public Long getLoggerid() {
+		return loggerid;
+	}
+
+	public void setLoggerid(Long loggerid) {
+		this.loggerid = loggerid;
+	}
+
+	public Candidate getId() {
+		return id;
+	}
+
+	public void setId(Candidate id) {
+		this.id = id;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Date getExpireAt() {
+		return expireAt;
+	}
+
+	public void setExpireAt(Date expireAt) {
+		this.expireAt = expireAt;
+	}
+
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public LoggerEntity() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public LoggerEntity(Long loggerid, Candidate id, String token, Date createdAt, Date expireAt, boolean isActive) {
+		super();
+		this.loggerid = loggerid;
+		this.id = id;
+		this.token = token;
+		this.createdAt = createdAt;
+		this.expireAt = expireAt;
+		this.isActive = isActive;
+	}
+	
+	
 }
