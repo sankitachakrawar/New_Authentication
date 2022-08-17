@@ -1,9 +1,5 @@
 package com.example.demo.controllers;
 
-import java.util.List;
-
-import java.util.Optional;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.example.demo.dto.ApplyDto;
 import com.example.demo.dto.ApplyJobDto;
 import com.example.demo.dto.ErrorResponseDto;
 import com.example.demo.dto.IJobDto;
 import com.example.demo.dto.JobDto;
 import com.example.demo.dto.ListResponseDto;
 import com.example.demo.dto.SuccessResponseDto;
-import com.example.demo.entities.ApplyJob;
 import com.example.demo.entities.Candidate;
 import com.example.demo.entities.Job;
 import com.example.demo.services.ApplyJobService;

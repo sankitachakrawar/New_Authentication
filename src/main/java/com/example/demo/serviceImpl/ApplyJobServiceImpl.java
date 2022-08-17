@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.demo.dto.ApplyJobDto;
-import com.example.demo.dto.CandidateDto;
 import com.example.demo.entities.ApplyJob;
 import com.example.demo.entities.Candidate;
 import com.example.demo.entities.Job;
@@ -23,8 +22,7 @@ public class ApplyJobServiceImpl implements ApplyJobService{
 	@Autowired
 	private ApplyJobRepository applyJobRepository;
 	
-	//@Autowired
-	private CandidateDto candidateDto;
+	
 	 
 	 //apply to job
 	@Override

@@ -1,13 +1,8 @@
 package com.example.demo.controllers;
-import java.util.ArrayList;
+
+
 import java.util.List;
-
-
-
-
 import java.util.Map;
-import java.util.Optional;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,21 +19,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.example.demo.dto.AssignRole;
 import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ChangePasswordDto;
 import com.example.demo.dto.ErrorResponseDto;
 import com.example.demo.dto.ForgotPasswordDto;
 import com.example.demo.dto.ICandidateDto;
-import com.example.demo.dto.IJobDto;
 import com.example.demo.dto.ListResponseDto;
 import com.example.demo.dto.SuccessResponseDto;
 import com.example.demo.entities.Candidate;
-import com.example.demo.entities.UserRoleEntity;
 import com.example.demo.exceptionHandling.ResourceNotFoundException;
 import com.example.demo.services.CandidateService;
-import com.example.demo.services.RoleServiceInterface;
 
 
 @RestController

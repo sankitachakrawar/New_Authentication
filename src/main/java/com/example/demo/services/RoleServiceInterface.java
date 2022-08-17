@@ -1,16 +1,11 @@
 package com.example.demo.services;
 import java.util.ArrayList;
-
-import javax.validation.constraints.NotNull;
-
 import org.springframework.data.domain.Page;
-
 import com.example.demo.dto.AssignPermission;
 import com.example.demo.dto.IRoleDetailDto;
 import com.example.demo.dto.RoleCandidateDto;
 import com.example.demo.dto.RoleDto;
 import com.example.demo.dto.RolePermissionDto;
-import com.example.demo.entities.PermissionEntity;
 import com.example.demo.entities.RoleEntity;
 import com.example.demo.exceptionHandling.ResourceNotFoundException;
 

@@ -4,9 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import com.example.demo.entities.RolePermissionEntity;
-import com.example.demo.entities.UserRoleEntity;
 import com.example.demo.repositories.RolePermissionRepository;
 import com.example.demo.services.RolePermissionService;
 import com.example.demo.utils.PaginationUsingFromTo;

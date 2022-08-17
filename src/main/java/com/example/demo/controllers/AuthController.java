@@ -1,10 +1,8 @@
 package com.example.demo.controllers;
+
 import java.util.Calendar;
-
-
 import java.util.List;
 import java.util.Optional;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,25 +14,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.demo.dto.ApplyJobDto;
 import com.example.demo.dto.AuthRequestDto;
 import com.example.demo.dto.AuthResponseDto;
 import com.example.demo.dto.CandidateDto;
 import com.example.demo.dto.ErrorResponseDto;
 import com.example.demo.dto.ForgotPasswordRequestDto;
-import com.example.demo.dto.IPermissionDto;
-import com.example.demo.dto.JobDto;
 import com.example.demo.dto.JwtTokenResponse;
 import com.example.demo.dto.LoggerDto;
 import com.example.demo.dto.SuccessResponseDto;
-import com.example.demo.entities.ApplyJob;
 import com.example.demo.entities.Candidate;
-import com.example.demo.entities.Job;
 import com.example.demo.entities.LoggerEntity;
-import com.example.demo.entities.Recruiter;
 import com.example.demo.exceptionHandling.ResourceNotFoundException;
 import com.example.demo.repositories.CandidateRepository;
-import com.example.demo.repositories.ForgotPasswordRequestRepository;
 import com.example.demo.serviceImpl.CandidateServiceImpl;
 import com.example.demo.services.*;
 import com.example.demo.utils.JwtTokenUtil;
@@ -146,7 +137,7 @@ public class AuthController {
 				LoggerDto logger = new LoggerDto();
 				logger.setToken(token);
 				Calendar calender = Calendar.getInstance();
-				calender.add(Calendar.HOUR_OF_DAY, 5);
+				calender.add(Calendar.MINUTE, 15);
 				logger.setExpireAt(calender.getTime());
 				loggerServiceInterface.createLogger(logger,candidate);
 				return new ResponseEntity<>(new SuccessResponseDto("Success", "success", new AuthResponseDto(token,candidate.getEmail(),candidate.getName(),candidate.getId())), HttpStatus.OK);

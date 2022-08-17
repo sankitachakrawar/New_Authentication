@@ -1,20 +1,13 @@
 package com.example.demo.utils;
 
 import java.io.Serializable;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
-import com.example.demo.entities.Candidate;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -24,7 +17,7 @@ public class JwtTokenUtil implements Serializable{
 
 	private static final long serialVersionUID = -2550185165626007488L;
 
-	public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+	public static final long JWT_TOKEN_VALIDITY = 5  * 60 * 60;
 
 	public static final long JWT_TOKEN_VALIDITY_FORGOT_PASS = 5 * 60;
 	
@@ -116,7 +109,7 @@ public class JwtTokenUtil implements Serializable{
 		// throw new ResourceNotFoundException("Timeout for this request");
 	}
 
-	
+	//refresh token when token is expire
 	public String refreshToken(String token) {
         final Date createdDate = new Date();
         final Date expirationDate = calculateExpirationDate(createdDate);
@@ -129,7 +122,7 @@ public class JwtTokenUtil implements Serializable{
     }
 
 	private Date calculateExpirationDate(Date createdDate) {
-		 return new Date(createdDate.getTime() + expiration * 1000);
+		 return new Date(createdDate.getTime() + expiration * 8000);
 	}
 
 	public String getUsernameFromToken(String token) {
