@@ -1,5 +1,7 @@
 package com.example.demo.controllers;
 
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -25,8 +27,10 @@ import com.example.demo.dto.IRoleDetailDto;
 import com.example.demo.dto.RoleDto;
 import com.example.demo.dto.RolePermissionDto;
 import com.example.demo.dto.SuccessResponseDto;
+import com.example.demo.entities.Candidate;
 import com.example.demo.entities.RoleEntity;
 import com.example.demo.exceptionHandling.ResourceNotFoundException;
+import com.example.demo.services.CandidateService;
 import com.example.demo.services.PermissionServiceInterface;
 import com.example.demo.services.RoleServiceInterface;
 import com.example.demo.dto.ListResponseDto;
@@ -154,7 +158,19 @@ public class RoleController {
 			return new ResponseEntity<>(new ErrorResponseDto("Permission not assign to Role","PermissionnotassigntoRole"),HttpStatus.BAD_REQUEST);
 		}
 	}
+	
 		
+		@Autowired
+		private CandidateService candidateService;
+		
+		@GetMapping("/permission/user/{id}")
+		public ResponseEntity<?> getPermissionByUserId(@PathVariable ("id") Long user_Id){
+			
+			
+			
+			ArrayList<String> roleEntity=roleServiceInterface.getPermissionByUserId(user_Id);
+			return new ResponseEntity<>(new SuccessResponseDto("Success", "success", roleEntity), HttpStatus.OK);
+		}
 }
 
 

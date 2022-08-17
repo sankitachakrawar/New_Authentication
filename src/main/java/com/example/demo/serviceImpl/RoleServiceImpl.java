@@ -271,7 +271,7 @@ public class RoleServiceImpl implements RoleServiceInterface {
 	@Autowired
 	private UserRoleRepository userRoleRepository;
 	
-	@Override
+	@Override 
 	public ArrayList<String> getPermissionByUserId(Long userId) {
 
 		ArrayList<RoleIdListDto> roleIds = userRoleRepository.findByPkUserId(userId, RoleIdListDto.class);

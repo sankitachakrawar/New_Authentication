@@ -5,6 +5,8 @@ import java.util.Objects;
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Embeddable
 
 public class UserRoleId implements java.io.Serializable {
@@ -34,6 +36,7 @@ public class UserRoleId implements java.io.Serializable {
 	private RoleEntity role;
 
 	@ManyToOne
+	@JsonManagedReference
 	public Candidate getUser() {
 		return user;
 	}
@@ -42,6 +45,7 @@ public class UserRoleId implements java.io.Serializable {
 	}
 
 	@ManyToOne
+	@JsonManagedReference
 	public RoleEntity getRole() {
 
 		return role;

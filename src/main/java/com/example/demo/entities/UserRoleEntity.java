@@ -11,11 +11,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 
 
 @Entity
 @Table(name = "candidate_role")
+@Where(clause = "is_active = true")
+@SQLDelete(sql="UPDATE candidate_role SET is_active=false WHERE pk=?")
 @AssociationOverrides({ @AssociationOverride(name = "pk.user", joinColumns = @JoinColumn(name = "user_id")), @AssociationOverride(name = "pk.role", joinColumns = @JoinColumn(name = "role_id")) })
 public class UserRoleEntity implements java.io.Serializable {
 

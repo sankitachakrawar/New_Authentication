@@ -88,7 +88,7 @@ public class JobController {
 		  
 		
 		  //Pagination of job list
-		 // @PreAuthorize("hasRole('getAllJobs')")
+		  @PreAuthorize("hasRole('getAllJobs')")
 		  @GetMapping("/jobs")
 			public ResponseEntity<?> getAllJobs(@RequestParam(defaultValue = "") String search,
 					@RequestParam(defaultValue = "1") String pageNo, @RequestParam(defaultValue = "25") String size) {

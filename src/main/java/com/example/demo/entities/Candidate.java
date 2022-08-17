@@ -24,6 +24,8 @@ import javax.persistence.JoinColumn;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 
 @Entity
 @Table(name="candidate")
@@ -54,7 +56,9 @@ public class Candidate {
 	private String username;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.user", cascade = CascadeType.ALL)
+	@JsonBackReference
 	private List<UserRoleEntity> userRole;
+	
 
 	public Long getId() {
 		return id;
